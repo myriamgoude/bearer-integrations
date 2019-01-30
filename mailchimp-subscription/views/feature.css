@@ -1,0 +1,98 @@
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 14px;
+  letter-spacing: 0.17px;
+  line-height: 17px;
+  box-sizing: border-box;
+  color: #030D36;
+}
+
+form {
+  display: inline-flex;
+}
+ion-icon {
+  padding-right: 5px;
+  margin-bottom: -2px;
+  color: white;
+  font-size: 1.2em;
+}
+
+.form-group input { margin-right: 15px; }
+
+input[type="email"] {
+  width: 188px;
+  border: 1px solid #DCDFE8;
+  border-radius: 2px;
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 4px 0 rgba(3,13,54,0.06);
+  padding: 10px 15px;
+}
+
+button[type="submit"] {
+  height: 40px;
+  width: 188px;
+  border-radius: 4px;
+  background-color: #0FE49B;
+  border-color: #0FE49B;
+  box-shadow: 0 2px 4px 0 rgba(3,13,54,0.06);
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+button:disabled { 
+  /* background-color: #D5E7E1;
+  border-color: #D5E7E1; */
+  color:#FFFFFF;
+  cursor: not-allowed;
+}
+
+button:focus {
+  background-color: #5EB597;
+  border-color: #5EB597;
+  color: #FFF;
+}
+
+button:hover { 
+  background-color: #0EBD81;
+  border-color: #D5E7E1;
+  color: #FFFFFF;
+}
+
+[data-tooltip]{
+  position:relative;
+  outline: none; /* TBC */
+}
+
+[data-tooltip]::before {
+  content: "";
+  position: absolute;
+  top:-10px;
+  left:50%;
+  transform: translateX(-50%);
+  border-width: 6px 15px 0 15px;
+  border-style: solid;
+  border-color: rgba(0,0,0,0.7) transparent transparent transparent;
+  z-index: 100;
+}
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left:50%;
+  top:-10px;
+  transform: translateX(-50%)   translateY(-100%);
+  background: rgba(0,0,0,0.7);
+  text-align: center;
+  color: #fff;
+  padding:8px 15px;
+  font-size: 12px;
+  min-width: 200px;
+  border-radius: 4px;
+  pointer-events: none;
+  font-weight: 600;
+}
+
+[data-tooltip-type="success"]::before { border-top-color: #F0FAF6;}
+[data-tooltip-type="success"]::after {background-color: #F0FAF6; color: #63C995; }
+
+[data-tooltip-type="danger"]::before { border-top-color: #FDF1ED;}
+[data-tooltip-type="danger"]::after { background-color: #FDF1ED; color: #D4562A; }

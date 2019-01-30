@@ -1,0 +1,32 @@
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  line-height: 18px;
+  display: flex;
+  flex: 1;
+  margin-bottom: 10px;
+  justify-content: flex-end;
+}
+
+label {
+  flex:1;
+}
+
+.scroll {
+  max-height: 300px;
+  overflow: scroll;
+  margin: 10px;
+}
+
+.button {
+  border-radius: 4px;
+  color: white;
+  background-color: #0FE49B;
+  font-size: 1.1em;
+  padding: 5px 25px;
+  line-height: 30px;
+  border: none;
+} 

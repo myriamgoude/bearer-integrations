@@ -1,0 +1,23 @@
+.wrapper {
+  position: absolute;
+  background-color: white;
+  min-width: 300px;
+  z-index: 10;
+}
+
+.title {
+  line-height: 33px;
+  display: flex;
+  font-weight: bold;
+}
+
+.menu {
+  color: #AEB2C3;
+  font-size: 1.5em;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transform: rotate(180deg);
+  margin-right: 5px;
+}
