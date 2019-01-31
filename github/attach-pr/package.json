@@ -1,0 +1,41 @@
+{
+  "name": "git-hub-attach-pull-requests-beta4",
+  "version": "0.0.1",
+  "description": "GitHubAttachPullRequestsBeta4",
+  "main": "dist/index.js",
+  "types": "dist/types/components.d.ts",
+  "module": "dist/esm/index.js",
+  "collection": "dist/collection/collection-manifest.json",
+  "scripts": {
+    "start": "bearer start",
+    "test": "jest --no-cache",
+    "push": "bearer push"
+  },
+  "dependencies": {
+    "@bearer/core": "^0.91.5",
+    "@bearer/intents": "^0.91.5",
+    "@bearer/ui": "^0.91.5",
+    "axios": "^0.18.0",
+    "ionicons": "^4.5.0-3"
+  },
+  "devDependencies": {
+    "@bearer/cli": "^0.91.5",
+    "@types/jest": "^23.3.12",
+    "@types/node": "^10.12.18",
+    "jest": "latest"
+  },
+  "license": "MIT",
+  "jest": {
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx"
+    ]
+  }
+}
