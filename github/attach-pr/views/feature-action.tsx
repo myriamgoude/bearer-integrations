@@ -4,14 +4,13 @@ import {
   State, 
   BearerFetch, 
   Intent, 
-  Element,
-  Prop,
-  Listen
+  Element
 } from '@bearer/core'
 
 import '@bearer/ui'
 
 import { PullRequest, Repo } from './types'
+import { Listen } from '@stencil/core';
 
 enum InterfaceState {
   Unauthenticated,
@@ -46,10 +45,6 @@ const PULL_STYLE = {
   role: 'action',
 })
 export class FeatureAction {
-  // automatically close popover when a selection has been made
-  @Prop() autoClose:boolean = true
-  // allow multiple PR be be attached i.e selecting an item will apprend it to the list
-  @Prop() multi:boolean = true
   @Intent('listRepositoryGraph') getRepositoryGraph: BearerFetch
   @Intent('searchPullRequests') searchPullRequests: BearerFetch
 
@@ -128,18 +123,12 @@ export class FeatureAction {
   }
 
   handleAttachPullRequest = (pr: any) => {
-    if(this.multi){
-      const pulls = (this.pullRequests.length) ? this.pullRequests : (this as any).pullRequestsInitial || []
-      this.pullRequests = [
-        ...pulls.filter((elm: PullRequest) => pr.id !== elm.id),
-        (pr as PullRequest)
-      ]
-    }else{
-      this.pullRequests = [pr]
-    }
-    if(this.autoClose){
-      this.ui = InterfaceState.Authenticated
-    }
+    const pulls = (this.pullRequests.length) ? this.pullRequests : (this as any).pullRequestsInitial || []
+    this.pullRequests = [
+      ...pulls.filter((elm: PullRequest) => pr.id !== elm.id),
+      (pr as PullRequest)
+    ]
+    this.ui = InterfaceState.Authenticated
   }
 
   handleMenu = () => {
@@ -171,9 +160,9 @@ export class FeatureAction {
 
   renderAuthorized: any = ({ revoke }) => {
     this.revoke = revoke
-    return (
-      <icon-button onClick={this.handleAttachClick} icon="logo-github" text="Attach Pull Request" />
-    )
+    // return (
+    //   <icon-button onClick={this.handleAttachClick} icon="logo-github" text="Attach Pull Request" />
+    // )
   }
 
   renderWorkflow = () => {
@@ -185,7 +174,6 @@ export class FeatureAction {
         onBack={this.handleWorkflowBack}
         onClose={this.handleExternalClick}
         onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
-        style={{position: 'absolute', paddingLeft: '10px'}}
         >
           {this.renderWorkflowContent()}
         </workflow-box>
@@ -266,6 +254,7 @@ export class FeatureAction {
     const updatedList = this.pullRequests.filter((elm:PullRequest)=> pr.id !== elm.id)
     console.log('remove', pr, updatedList)
   }
+
   render() {
     return (
       <div>
@@ -273,8 +262,20 @@ export class FeatureAction {
           renderUnauthorized={this.renderUnauthoried}
           renderAuthorized={this.renderAuthorized}
         />
-        {this.renderWorkflow()}
+        { (this.ui >= InterfaceState.Authenticated) &&
+            <icon-button
+              onClick={this.handleAttachClick}
+              icon="logo-github" 
+              text="Attach Pull Request"
+              isPopover={true}
+              isPopoverOpened={this.ui > InterfaceState.Authenticated}
+            >
+                {this.renderWorkflow()}
+            </icon-button>
+        }
       </div>
+      
+      
     )
   }
 }
