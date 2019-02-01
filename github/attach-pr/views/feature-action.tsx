@@ -4,13 +4,14 @@ import {
   State, 
   BearerFetch, 
   Intent, 
-  Element
+  Element,
+  Prop,
+  Listen
 } from '@bearer/core'
 
 import '@bearer/ui'
 
 import { PullRequest, Repo } from './types'
-import { Listen } from '@stencil/core';
 
 enum InterfaceState {
   Unauthenticated,
@@ -45,6 +46,10 @@ const PULL_STYLE = {
   role: 'action',
 })
 export class FeatureAction {
+  // automatically close popover when a selection has been made
+  @Prop() autoClose:boolean = true
+  // allow multiple PR be be attached i.e selecting an item will apprend it to the list
+  @Prop() multi:boolean = true
   @Intent('listRepositoryGraph') getRepositoryGraph: BearerFetch
   @Intent('searchPullRequests') searchPullRequests: BearerFetch
 
@@ -123,12 +128,18 @@ export class FeatureAction {
   }
 
   handleAttachPullRequest = (pr: any) => {
-    const pulls = (this.pullRequests.length) ? this.pullRequests : (this as any).pullRequestsInitial || []
-    this.pullRequests = [
-      ...pulls.filter((elm: PullRequest) => pr.id !== elm.id),
-      (pr as PullRequest)
-    ]
-    this.ui = InterfaceState.Authenticated
+    if(this.multi){
+      const pulls = (this.pullRequests.length) ? this.pullRequests : (this as any).pullRequestsInitial || []
+      this.pullRequests = [
+        ...pulls.filter((elm: PullRequest) => pr.id !== elm.id),
+        (pr as PullRequest)
+      ]
+    }else{
+      this.pullRequests = [pr]
+    }
+    if(this.autoClose){
+      this.ui = InterfaceState.Authenticated
+    }
   }
 
   handleMenu = () => {
