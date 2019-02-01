@@ -3,6 +3,7 @@ import {
   Output, 
   State, 
   BearerFetch, 
+  Prop,
   Intent, 
   Element
 } from '@bearer/core'
