@@ -74,7 +74,6 @@ export class FeatureAction {
 
   handleRetry = () => {
     this.ui = InterfaceState.Authenticated
-    //this.handleAttachClick()
   }
 
   handleShowCreate = () => {
@@ -97,13 +96,18 @@ export class FeatureAction {
     this.ui = InterfaceState.Settings
   }
 
+  handleError = (_error:any) => {
+    this.ui = InterfaceState.Error
+    this.errorMessage = "We could not create the reminder!"
+  }
+
   onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
     authenticate()
       .then(()=>{
         this.ui = InterfaceState.Authenticated
         this.handleShowCreate()
       })
-      .catch(console.error)
+      .catch(this.handleError)
   }
 
   handleLogout = () => {
@@ -195,9 +199,7 @@ export class FeatureAction {
       }
       console.log('createReminder data',data)
     })
-    .catch(error => {
-      console.log('createReminder error',error)
-    })
+    .catch(this.handleError)
     this.ui = InterfaceState.Done
   }
 
@@ -207,9 +209,7 @@ export class FeatureAction {
     .then(({data}) => {
       console.log('deleteReminder', data)
       this.handleWorkflowBack()
-    }).catch(error => {
-      console.log('deleteReminder error',error)
-    })
+    }).catch(this.handleError)
     
   }
   
