@@ -31,7 +31,7 @@ export class IconButton {
   render() {
     if (this.isPopover) {
       return (
-      <bearer-button-popover style={style} opened={this.isPopoverOpened} kind="integration">
+      <bearer-button-popover style={style} opened={this.isPopoverOpened}>
           <span slot="btn-content" >
             {(this.icon) ? <ion-icon 
               name={this.icon}
