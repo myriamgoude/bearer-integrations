@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
+  <link href="https://cdn.rawgit.com/tabler/tabler/dev/dist/assets/css/tabler.css" rel="stylesheet" />
+  <title>SlackReminder</title>
+  <script src="/build/localhost.js"></script>
+  <style>
+    #timestamp{
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <div class="page-main">
+      <div class="header py-4">
+        <div class="container">
+          <div class="d-flex">
+            <a class="header-brand" href="#">
+              <img src="https://app.bearer.sh/static/media/logo.5b35e2ab.svg" class="header-brand-img" alt="Bearer Logo">
+            </a>
+            <div class="d-flex order-lg-2 ml-auto">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="my-3 my-md-5">
+        <div class="container">
+          <div class="page-header">
+            <h1 class="page-title">Setup component</h1>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <setup-action>
+              </setup-action>
+              <hr />
+              <setup-display>
+              </setup-display>
+            </div>
+          </div>
+          <div class="page-header">
+            <h1 class="page-title">Action component</h1>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <p>Event timestamp set to: <span id='timestamp'></span></p>
+              <feature-action setup-id="CHANGE_ME">
+              </feature-action>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      setTimeout(() => {
+          const ts = Math.round((new Date()).getTime() / 1000) + (60*60*24)
+          document.querySelector('#timestamp').innerText = (new Date(ts * 1000)).toString()
+          document.querySelector('feature-action').setAttribute('timestamp', ts)
+        }, 100)
+    </script>
+</body>
+
+</html>

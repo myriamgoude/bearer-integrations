@@ -1,0 +1,59 @@
+.donebox {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.donebox p{
+    margin:10px 0px 0px 0px;
+}
+.donebox p.date{
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+form {
+  padding: 10px;
+  display: block;
+}
+.row {
+  display: flex;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+.row input {
+  height: 17px;	
+  font-size: 16px;	
+  line-height: 17px;	
+  text-align: right;
+  border: none;
+  outline:none;
+}
+.row input::placeholder {
+  color: #C2C7DA;	
+}
+.row select {
+  outline:none;
+  border: none;
+  background-color: transparent;
+  font-size: 16px;	
+}
+
+button {
+  background-color: #0FE49B;
+  color: white;
+  border-radius: 4px;
+  font-size: 16px;	
+  padding: 10px 20px;
+  border: none;
+  float:right;
+}
+
+label {
+  flex: 1;
+}
+.check {
+  color:  #0FE49B;
+  font-size: 17px;
+  border-radius: 25px;
+  border: 1px solid;
+  padding: 4px;
+}
+
