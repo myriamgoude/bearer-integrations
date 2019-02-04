@@ -171,11 +171,24 @@ export class FeatureAction {
     />
   )
 
-  renderAuthorized: any = ({ revoke }) => {
+  handleAuthorized: any = ({ revoke }) => {
     this.revoke = revoke
-    // return (
-    //   <icon-button onClick={this.handleAttachClick} icon="logo-github" text="Attach Pull Request" />
-    // )
+  }
+
+  renderAuthorized: any = () => {
+    if(this.ui < InterfaceState.Authenticated){
+      return null
+    }
+
+    return (<icon-button
+              onClick={this.handleAttachClick}
+              icon="logo-github" 
+              text="Attach Pull Request"
+              isPopover={true}
+              isPopoverOpened={this.ui > InterfaceState.Authenticated}
+            >
+        {this.renderWorkflow()}
+      </icon-button>)
   }
 
   renderWorkflow = () => {
@@ -273,19 +286,9 @@ export class FeatureAction {
       <div>
         <bearer-authorized
           renderUnauthorized={this.renderUnauthoried}
-          renderAuthorized={this.renderAuthorized}
+          renderAuthorized={this.handleAuthorized}
         />
-        { (this.ui >= InterfaceState.Authenticated) &&
-            <icon-button
-              onClick={this.handleAttachClick}
-              icon="logo-github" 
-              text="Attach Pull Request"
-              isPopover={true}
-              isPopoverOpened={this.ui > InterfaceState.Authenticated}
-            >
-                {this.renderWorkflow()}
-            </icon-button>
-        }
+        { this.renderAuthorized() }
       </div>
       
       
