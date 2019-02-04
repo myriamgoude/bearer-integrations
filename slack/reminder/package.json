@@ -9,17 +9,18 @@
   "scripts": {
     "start": "bearer start",
     "test": "jest --no-cache",
-    "push": "bearer push"
+    "push": "bearer push",
+    "invoke": "bearer invoke"
   },
   "dependencies": {
-    "@bearer/core": "^0.92.0",
-    "@bearer/intents": "^0.92.0",
-    "@bearer/ui": "^0.92.0",
+    "@bearer/core": "beta5",
+    "@bearer/intents": "beta5",
+    "@bearer/ui": "beta5",
     "axios": "^0.18.0",
     "ionicons": "^4.5.5"
   },
   "devDependencies": {
-    "@bearer/cli": "^0.92.0",
+    "@bearer/cli": "beta5",
     "@types/jest": "latest",
     "@types/node": "latest",
     "jest": "latest"
