@@ -31,8 +31,8 @@ export class IconButton {
   render() {
     if (this.isPopover) {
       return (
-      <bearer-button-popover style={style} opened={this.isPopoverOpened}>
-          <span slot="btn-content">
+      <bearer-button-popover style={style} opened={this.isPopoverOpened} kind="integration">
+          <span slot="btn-content" >
             {(this.icon) ? <ion-icon 
               name={this.icon}
               style={iconStyle}
@@ -42,17 +42,15 @@ export class IconButton {
           <slot/>
       </bearer-button-popover>)
     }
-    else {
-      return (<bearer-button style={style}>
-        <span>
-          {(this.icon) ? <ion-icon 
-            name={this.icon}
-            style={iconStyle}
-          /> : null}
-          {this.text}
-        </span>
-      </bearer-button>)
-    }
-      
+
+    return (<bearer-button style={style} kind="integration">
+      <span>
+        {(this.icon) ? <ion-icon 
+          name={this.icon}
+          style={iconStyle}
+        /> : null}
+        {this.text}
+      </span>
+    </bearer-button>)
   }
 }
