@@ -43,7 +43,7 @@ export class IconButton {
       </bearer-button-popover>)
     }
 
-    return (<bearer-button style={style} kind="integration">
+    return (<bearer-button style={style}>
       <span>
         {(this.icon) ? <ion-icon 
           name={this.icon}
