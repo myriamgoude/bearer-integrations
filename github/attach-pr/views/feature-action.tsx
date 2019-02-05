@@ -73,6 +73,10 @@ export class FeatureAction {
     this.pullRequests = [...updatedList]
   }
 
+  getPullRequests = () => {
+    return (this.pullRequests.length) ? this.pullRequests : (this as any).pullRequestsInitial || []
+  }
+
   handleRetry = () => {
     this.ui = InterfaceState.Authenticated
     this.handleAttachClick()
@@ -129,7 +133,7 @@ export class FeatureAction {
 
   handleAttachPullRequest = (pr: any) => {
     if(this.multi){
-      const pulls = (this.pullRequests.length) ? this.pullRequests : (this as any).pullRequestsInitial || []
+      const pulls = this.getPullRequests()
       this.pullRequests = [
         ...pulls.filter((elm: PullRequest) => pr.id !== elm.id),
         (pr as PullRequest)
@@ -223,8 +227,10 @@ export class FeatureAction {
         return (
           <list-navigation
           options={this.pullRequestSearchResults}
+          disabledOptions={this.getPullRequests()}
           onSearchQuery={this.handleSearchQuery}
           attributeName={'title'}
+          attributeId={'id'}
           formatLabel={
             (pr:any) => {
               const pull = (pr as PullRequest)

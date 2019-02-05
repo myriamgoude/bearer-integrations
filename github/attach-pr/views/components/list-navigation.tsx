@@ -15,8 +15,10 @@ const iconStyle ={
 
 export class ListNavigation {
   @Prop() options: any[] | undefined
+  @Prop() disabledOptions: any[] | undefined
   @Prop() onOptionClicked: (option: any) => void
   @Prop() attributeName: string | undefined
+  @Prop() attributeId: string | undefined
   @Prop() formatLabel: (option: any) => JSX.Element
   @Prop() onSearchQuery: (query: string) => void
   @Prop() showNextIcon: boolean = true
@@ -26,6 +28,21 @@ export class ListNavigation {
       return element[this.attributeName]
     }
     return element
+  }
+
+  getId = (element:any) => {
+    if(this.attributeId){
+      return element[this.attributeId]
+    }
+    return element
+  }
+
+  getIsDisabled = (element:any) => {
+    if(this.disabledOptions){
+      return this.disabledOptions.map(this.getId).indexOf(this.getId(element)) !== -1
+    }
+    return false
+    
   }
 
   getLabel = (element: any) => {
@@ -80,15 +97,19 @@ export class ListNavigation {
           </ul>
       )
     }
+
     return (
       <ul>
-        {this.options.map((data) =>(
-          <li onClick={()=>{this.onOptionClicked(data)}}>
-          {this.getIcon(data)}
-          <span class='label'>{this.getLabel(data)}</span>
-          {this.getNextArrow()}
-          </li>
-        ))}
+        {this.options.map((data) => {
+          const isDisabled = this.getIsDisabled(data)
+          return (
+            <li onClick={()=>{(isDisabled)? null : this.onOptionClicked(data)}} class={`${(isDisabled) ? 'disabledRow' : ''}`}>
+            {this.getIcon(data)}
+            <span class='label'>{this.getLabel(data)}</span>
+            {this.getNextArrow()}
+            </li>
+          )
+        })}
       </ul>
     )
   }
