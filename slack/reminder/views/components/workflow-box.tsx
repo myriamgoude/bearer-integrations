@@ -15,24 +15,22 @@ export class WorkflowBox {
 
   render() {
     return (
-        <div class='wrapper'>
-          <shadow-box styles={{position:'absolute', padding: '15px'}}>
-            <div>
-              <div class='title'>
-              <button onClick={this.onBack} class='back'>
-                  <icon-chevron direction="left"></icon-chevron>
-                </button>
-                <div style={{flex:'1', marginLeft:'10px'}}>
-                  <span>{this.heading}</span>
-                  <span style={{fontSize: '10px', display: 'block', lineHeight:'6px'}}>{this.subHeading}</span>
-                </div>
-                {(this.onMenu) ? <button class='menu' onClick={this.onMenu}>...</button> : null}
-                {(this.onCloseButton) ? <button style={{height: '25px'}} class='menu' onClick={this.onCloseButton}><ion-icon name="close"></ion-icon></button> : null}
+      <div class='wrapper'>
+          <div>
+            <div class='title'>
+              {this.onBack && <button onClick={this.onBack} class='back'><icon-chevron direction="left"></icon-chevron></button>} 
+              <div style={{flex:'1', marginLeft:'10px'}}>
+                <span>{this.heading}</span>
+                <span style={{fontSize: '10px', display: 'block', lineHeight:'6px'}}>{this.subHeading}</span>
               </div>
-              <slot />
+              <div class="menu">
+                {(this.onMenu) && <button onClick={this.onMenu}>...</button>}
+                {(this.onCloseButton) && <button style={{height: '25px'}} onClick={this.onCloseButton}><ion-icon name="close"></ion-icon></button>}
+              </div>
             </div>
-          </shadow-box>
-        </div>
+            <slot />
+          </div>
+      </div>
     )
   }
 }
