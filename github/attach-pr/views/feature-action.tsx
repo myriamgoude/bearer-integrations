@@ -3,15 +3,15 @@ import {
   Output, 
   State, 
   BearerFetch, 
-  Intent, 
-  Element,
   Prop,
-  Listen
+  Intent, 
+  Element
 } from '@bearer/core'
 
 import '@bearer/ui'
 
 import { PullRequest, Repo } from './types'
+import { Listen } from '@stencil/core';
 
 enum InterfaceState {
   Unauthenticated,
@@ -46,10 +46,12 @@ const PULL_STYLE = {
   role: 'action',
 })
 export class FeatureAction {
+
   // automatically close popover when a selection has been made
   @Prop() autoClose:boolean = true
-  // allow multiple PR be be attached i.e selecting an item will apprend it to the list
+  // allow multiple PR to be attached i.e selecting an item will apprend it to the list
   @Prop() multi:boolean = true
+
   @Intent('listRepositoryGraph') getRepositoryGraph: BearerFetch
   @Intent('searchPullRequests') searchPullRequests: BearerFetch
 
@@ -173,11 +175,24 @@ export class FeatureAction {
     />
   )
 
-  renderAuthorized: any = ({ revoke }) => {
+  handleAuthorized: any = ({ revoke }) => {
     this.revoke = revoke
-    return (
-      <icon-button onClick={this.handleAttachClick} icon="logo-github" text="Attach Pull Request" />
-    )
+  }
+
+  renderAuthorized: any = () => {
+    if(this.ui < InterfaceState.Authenticated){
+      return null
+    }
+
+    return (<icon-button
+              onClick={this.handleAttachClick}
+              icon="logo-github" 
+              text="Attach Pull Request"
+              isPopover={true}
+              isPopoverOpened={this.ui > InterfaceState.Authenticated}
+            >
+        {this.renderWorkflow()}
+      </icon-button>)
   }
 
   renderWorkflow = () => {
@@ -189,7 +204,6 @@ export class FeatureAction {
         onBack={this.handleWorkflowBack}
         onClose={this.handleExternalClick}
         onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
-        style={{position: 'absolute', paddingLeft: '10px'}}
         >
           {this.renderWorkflowContent()}
         </workflow-box>
@@ -272,15 +286,18 @@ export class FeatureAction {
     const updatedList = this.pullRequests.filter((elm:PullRequest)=> pr.id !== elm.id)
     console.log('remove', pr, updatedList)
   }
+
   render() {
     return (
       <div>
         <bearer-authorized
           renderUnauthorized={this.renderUnauthoried}
-          renderAuthorized={this.renderAuthorized}
+          renderAuthorized={this.handleAuthorized}
         />
-        {this.renderWorkflow()}
+        { this.renderAuthorized() }
       </div>
+      
+      
     )
   }
 }

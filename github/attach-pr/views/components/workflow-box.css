@@ -1,6 +1,4 @@
 .wrapper {
-  position: absolute;
-  background-color: white;
   min-width: 300px;
   z-index: 10;
 }
