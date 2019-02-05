@@ -153,10 +153,8 @@ export class FeatureAction {
         <workflow-box
           heading={STATE_TITLES[this.ui] || ''}
           subHeading={undefined}
-          // onBack={this.ui > InterfaceState.Authenticated && this.handleWorkflowBack}
           onCloseButton={this.handleClosePopoverClick}
           onMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
-          // style={{ position: 'absolute', paddingLeft: '10px' }}
         >
           {this.renderWorkflowContent()}
         </workflow-box>
