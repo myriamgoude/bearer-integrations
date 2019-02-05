@@ -63,7 +63,8 @@ export class FeatureAction {
   @Element() el: HTMLElement
 
   handleRetry = () => {
-    this.ui = InterfaceState.Authenticated
+    this.ui = InterfaceState.Create
+
   }
 
   handleShowCreate = () => {
@@ -111,7 +112,7 @@ export class FeatureAction {
     this.ui = InterfaceState.Unauthenticated
   }
 
-  renderUnauthoried: any = ({ authenticate }) => (
+  renderUnauthorized: any = ({ authenticate }) => (
     <icon-button
       onClick={() => this.onAuthorizeClick(authenticate)}
       icon="logo-slack"
@@ -119,14 +120,25 @@ export class FeatureAction {
     />
   )
 
-  renderAuthorized: any = ({ revoke }: any) => {
+  handleAuthorized: any = ({ revoke }: any) => {
     this.revoke = revoke
+  }
+
+  renderAuthorized: any = () => {
+    if (this.ui < InterfaceState.Authenticated) {
+      return null;
+    }
+
     return (
       <icon-button
         onClick={this.handleShowCreate}
         icon="logo-slack"
         text={t('buttons.remindMe', 'Remind me on Slack')}
-      />
+        isPopover={true}
+        isPopoverOpened={this.ui > InterfaceState.Authenticated}
+      >
+        {this.renderWorkflow()}
+      </icon-button>
     )
   }
 
@@ -141,10 +153,8 @@ export class FeatureAction {
         <workflow-box
           heading={STATE_TITLES[this.ui] || ''}
           subHeading={undefined}
-          onBack={this.handleWorkflowBack}
-          onCloseButton={this.handleExternalClick}
+          onCloseButton={this.handleClosePopoverClick}
           onMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
-          style={{ position: 'absolute', paddingLeft: '10px' }}
         >
           {this.renderWorkflowContent()}
         </workflow-box>
@@ -187,14 +197,10 @@ export class FeatureAction {
     return null
   }
 
-  handleExternalClick = (_e: Event) => {
+  handleClosePopoverClick = (_e: Event) => {
     if (this.ui != InterfaceState.Unauthenticated) {
       this.ui = InterfaceState.Authenticated
     }
-  }
-
-  handleInternalClick = (e: Event) => {
-    e.stopImmediatePropagation()
   }
 
   handleCreateReminder = (e: Event) => {
@@ -229,16 +235,11 @@ export class FeatureAction {
     this.form.reminderAt = parseInt(e.target.value)
   }
 
-  componentDidLoad() {
-    this.el.addEventListener('click', this.handleInternalClick)
-    document.addEventListener('click', this.handleExternalClick)
-  }
-
   render() {
     return (
       <div>
-        <bearer-authorized renderUnauthorized={this.renderUnauthoried} renderAuthorized={this.renderAuthorized} />
-        {this.renderWorkflow()}
+        <bearer-authorized renderUnauthorized={this.renderUnauthorized} renderAuthorized={this.handleAuthorized} />
+        {this.renderAuthorized()}
       </div>
     )
   }
