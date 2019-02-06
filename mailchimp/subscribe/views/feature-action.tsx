@@ -54,6 +54,7 @@ export class FeatureAction {
   }
 
   handleSubscribeMulti = (subscribe: MailList[]) => {
+    this.lists = undefined
     this.isPopoverOpened = false;
 
     clearTimeout(this.messageTimeout)
@@ -61,7 +62,7 @@ export class FeatureAction {
       email: this.email,
       lists: subscribe
     }
-    this.lists = undefined
+    
     Promise.all(
       subscribe.map((list: MailList) => {
         return this.subscribeUser({
@@ -144,6 +145,7 @@ export class FeatureAction {
 
   handleExternalClick = (_e: Event) => {
     this.lists = undefined
+    this.isPopoverOpened = false;
   }
   handleInternalClick = (e: Event) => {
     e.stopImmediatePropagation()
@@ -189,7 +191,7 @@ export class FeatureAction {
   }
 
   renderSingle = () => (
-    <bearer-button {...this.handleTooltip()} type="submit" onClick={this.handleSubmit}>
+    <bearer-button {...this.handleTooltip()} type="submit" onClick={this.handleSubmit} disabled={this.disabled}>
       <ion-icon name="mail" />
       Join our mailing list
     </bearer-button>
