@@ -34,6 +34,7 @@ export class FeatureAction {
   @State() disabled: boolean = true
   @State() lists: MailList[] = undefined
   @State() messageTimeout:NodeJS.Timeout
+  @State() isPopoverOpened: boolean = false
 
   @Element() el: HTMLElement
 
@@ -53,6 +54,8 @@ export class FeatureAction {
   }
 
   handleSubscribeMulti = (subscribe: MailList[]) => {
+    this.isPopoverOpened = false;
+
     clearTimeout(this.messageTimeout)
     const notification: SubscriptionSucceeded = {
       email: this.email,
@@ -89,7 +92,7 @@ export class FeatureAction {
       email: this.email,
       lists: [
         {
-          name: 'defualt',
+          name: 'default',
           id: this.listId
         }
       ]
@@ -118,8 +121,7 @@ export class FeatureAction {
 
   handleSubscribeErrors = (data: any) => {
     this.subscribed = false
-    //console.log(data)
-    // data.error contians reason that subscription failed could customise further here
+    // data.error contains reason that subscription failed could customise further here
     if (data.error && data.error.title) {
       switch (data.error.title) {
         case 'Member Exists':
@@ -147,14 +149,15 @@ export class FeatureAction {
     e.stopImmediatePropagation()
   }
 
-  handleSubmitMulti = (e: Event) => {
+  handlePopoverOpening = (e: Event) => {
+    this.isPopoverOpened = true;
     e.preventDefault()
     this.fetchMailLists()
       .then(({ data }) => {
         this.lists = data as any
       })
       .catch(err => {
-        console.log(err)
+        console.error(err)
       })
   }
 
@@ -177,38 +180,32 @@ export class FeatureAction {
   }
 
   render() {
-    if (this.isSingleList()) {
-      return this.renderForm(this.handleSubmit)
-    }
-    return (
-      <div>
-        {this.renderForm(this.handleSubmitMulti)}
-        {this.renderSelection()}
-      </div>
-    )
+    return [
+      <form onSubmit={this.isSingleList() ? this.handleSubmit : null} class="form-group">
+        <input type="email" value={this.email} placeholder="email@example.com" onInput={this.handleChange}/>
+        {this.isSingleList() ? this.renderSingle() : this.renderSelection()}
+      </form>
+    ]
   }
 
-  renderForm = (joinHandler: (e: Event) => void) => {
-    const tooltip = this.handleTooltip()
-    return (
-      <form onSubmit={joinHandler} class="form-group">
-        <input type="email" value={this.email} placeholder="email@example.com" onInput={this.handleChange} />
-        <button type="submit" {...tooltip} disabled={this.disabled}>
-          <ion-icon name="mail" />
-          Join our mailing list
-        </button>
-      </form>
-    )
-  }
+  renderSingle = () => (
+    <bearer-button {...this.handleTooltip()} type="submit" onClick={this.handleSubmit}>
+      <ion-icon name="mail" />
+      Join our mailing list
+    </bearer-button>
+  )
 
   renderSelection = () => {
-    if (this.lists === undefined) {
-      return null
-    }
     return (
-      <workflow-box heading="Subscribe" style={{ position: 'absolute', paddingLeft: '10px' }}>
-        <list-select attributeName="name" attributeHash="id" options={this.lists} onSave={this.handleSubscribeMulti} />
-      </workflow-box>
+      <bearer-popover opened={this.isPopoverOpened}>
+        <bearer-button onClick={this.handlePopoverOpening} slot="popover-button" type="submit" {...this.handleTooltip()} disabled={this.disabled}>
+          <ion-icon name="mail" />
+          Join our mailing list
+        </bearer-button>
+        <workflow-box heading="Subscribe">
+          <list-select attributeName="name" attributeHash="id" options={this.lists} handleSubmit={this.handleSubscribeMulti} />
+        </workflow-box>
+      </bearer-popover> 
     )
   }
 
