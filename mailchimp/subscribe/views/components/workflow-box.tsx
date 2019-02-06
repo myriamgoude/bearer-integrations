@@ -13,17 +13,13 @@ export class WorkflowBox {
 
   render() {
     return (
-        <div class='wrapper'>
-          <shadow-box styles={{position:'absolute', padding: '15px'}}>
-            <div>
-              <div class='title'>
-                <span style={{flex:'1', marginLeft:'10px'}}>{this.heading}</span>
-                {(this.onMenu) ? <button class='menu' onClick={this.onMenu}>...</button> : null}
-              </div>
-              <slot />
-            </div>
-          </shadow-box>
-        </div>
+      <div class='wrapper'>
+        <div class='title'>
+          <span style={{flex:'1', marginLeft:'10px'}}>{this.heading}</span>
+            {(this.onMenu) ? <button class='menu' onClick={this.onMenu}>...</button> : null}
+          </div>
+          <slot />
+      </div>
     )
   }
 }
