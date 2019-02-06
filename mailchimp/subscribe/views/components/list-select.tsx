@@ -63,10 +63,11 @@ export class ListSelect {
 
   onSubmit = (e: Event) => {
     e.preventDefault()
-    // console.log("handleSubmit", this.options.filter((opt) => this.selected[this.getHash(opt)]));
     this.handleSubmit(
       this.options.filter((opt) => this.selected[this.getHash(opt)])
     )
+    this.selected = {}
+    this.selectedOptions = []
   }
 
   handleChecked(option:string, checked:boolean){
