@@ -43,7 +43,7 @@ export class ListSelect {
   @Prop() hideOptions: any[] = [] 
   @Prop() attributeName: string | undefined
   @Prop() attributeHash: string | undefined
-  @Prop() onSave: (data:any[])=> void
+  @Prop() handleSubmit: (data:any[])=> void
   @Prop() search: boolean = false
   
   getName = (element:any) =>{
@@ -61,9 +61,10 @@ export class ListSelect {
     }
   }
 
-  handleSubmit(e: Event) {
+  onSubmit = (e: Event) => {
     e.preventDefault()
-    this.onSave(
+    // console.log("handleSubmit", this.options.filter((opt) => this.selected[this.getHash(opt)]));
+    this.handleSubmit(
       this.options.filter((opt) => this.selected[this.getHash(opt)])
     )
   }
@@ -81,10 +82,11 @@ export class ListSelect {
     },{})
   }
 
-  renderItems() {
+  renderItems = () => {
+    const options = this.options || [];
     return (
       <ul style={listStyle}>
-        {this.options.map((option)=>(
+        {options.map((option)=>(
           <li style={itemStyle}>
           <span style={labelStyle}>{this.getName(option)}</span>
           <br-checkbox 
@@ -99,7 +101,7 @@ export class ListSelect {
 
   render() {
     return (
-      <form onSubmit={(e) => this.handleSubmit(e)}>
+      <form onSubmit={(e) => this.onSubmit(e)}>
         {(this.search) ? <br-search/> : null }
         <div style={scrollStyle}>
           {this.renderItems()}
