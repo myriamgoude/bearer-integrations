@@ -182,12 +182,12 @@ export class FeatureAction {
   }
 
   render() {
-    return [
+    return (
       <form onSubmit={this.isSingleList() ? this.handleSubmit : null} class="form-group">
         <input type="email" value={this.email} placeholder="email@example.com" onInput={this.handleChange}/>
         {this.isSingleList() ? this.renderSingle() : this.renderSelection()}
       </form>
-    ]
+    )
   }
 
   renderSingle = () => (
