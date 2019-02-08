@@ -1,0 +1,28 @@
+{
+  "authorizationURL": "https://accounts.google.com/o/oauth2/v2/auth",
+  "tokenURL": "https://www.googleapis.com/oauth2/v4/token",
+  "authType": "OAUTH2",
+  "tokenParams": {
+    "redirect_uri": "{{CALLBACK_URL}}",
+    "grant_type": "authorization_code"
+  },
+  "authorizationParams": {},
+  "config": {
+    "scope": ["https://www.googleapis.com/auth/drive"],
+    "callbackURL": "{{CALLBACK_URL}}",
+    "access_type": "offline",
+    "response_type": "code"
+  },
+  "setupViews": [
+    {
+      "type": "text",
+      "label": "Client ID",
+      "controlName": "clientID"
+    },
+    {
+      "type": "password",
+      "label": "Client Secret",
+      "controlName": "clientSecret"
+    }
+  ]
+}
