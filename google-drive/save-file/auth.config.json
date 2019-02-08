@@ -3,13 +3,13 @@
   "tokenURL": "https://www.googleapis.com/oauth2/v4/token",
   "authType": "OAUTH2",
   "tokenParams": {
-    "redirect_uri": "{{CALLBACK_URL}}",
+    "redirect_uri": "{{CALLBACK_URL_V2}}",
     "grant_type": "authorization_code"
   },
   "authorizationParams": {},
   "config": {
     "scope": ["https://www.googleapis.com/auth/drive"],
-    "callbackURL": "{{CALLBACK_URL}}",
+    "callbackURL": "{{CALLBACK_URL_V2}}",
     "access_type": "offline",
     "response_type": "code"
   },
