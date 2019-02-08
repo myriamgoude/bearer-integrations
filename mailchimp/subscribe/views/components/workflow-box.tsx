@@ -15,7 +15,7 @@ export class WorkflowBox {
     return (
       <div class='wrapper'>
         <div class='title'>
-          <span style={{flex:'1', marginLeft:'10px'}}>{this.heading}</span>
+          <span>{this.heading}</span>
             {(this.onMenu) ? <button class='menu' onClick={this.onMenu}>...</button> : null}
           </div>
           <slot />
