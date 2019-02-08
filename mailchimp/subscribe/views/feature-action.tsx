@@ -53,37 +53,38 @@ export class FeatureAction {
     }
   }
 
-  handleSubscribeMulti = (subscribe: MailList[]) => {
+  // handleSubscribeMulti = (subscribe: MailList[]) => {
+  handleSubscribeMulti = () => {
     this.lists = undefined
     this.isPopoverOpened = false;
 
-    clearTimeout(this.messageTimeout)
-    const notification: SubscriptionSucceeded = {
-      email: this.email,
-      lists: subscribe
-    }
+    // clearTimeout(this.messageTimeout)
+    // const notification: SubscriptionSucceeded = {
+    //   email: this.email,
+    //   lists: subscribe
+    // }
     
-    Promise.all(
-      subscribe.map((list: MailList) => {
-        return this.subscribeUser({
-          list_id: list.id,
-          email: encodeURIComponent(this.email)
-        })
-      })
-    )
-      .then(data => {
-        if (data.length == 0) {
-          this.error = 'No lists selected.'
-          this.subscribed = false
-          this.resetMessages();
-        } else {
-          this.succeeded.emit(notification)
-          this.error = undefined
-          this.subscribed = true
-          this.resetMessages();
-        }
-      })
-      .catch(this.handleSubscribeErrors)
+    // Promise.all(
+    //   subscribe.map((list: MailList) => {
+    //     return this.subscribeUser({
+    //       list_id: list.id,
+    //       email: encodeURIComponent(this.email)
+    //     })
+    //   })
+    // )
+    //   .then(data => {
+    //     if (data.length == 0) {
+    //       this.error = 'No lists selected.'
+    //       this.subscribed = false
+    //       this.resetMessages();
+    //     } else {
+    //       this.succeeded.emit(notification)
+    //       this.error = undefined
+    //       this.subscribed = true
+    //       this.resetMessages();
+    //     }
+    //   })
+    //   .catch(this.handleSubscribeErrors)
   }
   handleSubmit = (e: Event) => {
     e.preventDefault()
@@ -199,15 +200,14 @@ export class FeatureAction {
 
   renderSelection = () => {
     return (
-      <bearer-popover opened={this.isPopoverOpened}>
-        <bearer-button onClick={this.handlePopoverOpening} slot="popover-button" type="submit" {...this.handleTooltip()} disabled={this.disabled}>
+      <bearer-popover opened={this.isPopoverOpened} title="Subscribe">
+        <bearer-button slot="popover-toggler" onClick={this.handlePopoverOpening} type="submit" {...this.handleTooltip()} disabled={this.disabled}>
           <ion-icon name="mail" />
           Join our mailing list
         </bearer-button>
-        <workflow-box heading="Subscribe">
-          <list-select attributeName="name" attributeHash="id" options={this.lists} handleSubmit={this.handleSubscribeMulti} />
-        </workflow-box>
-      </bearer-popover> 
+        <list-select slot="popover-content" attributeName="name" attributeHash="id" options={this.lists} />
+        <bearer-button slot="popover-actions" onClick={this.handleSubscribeMulti}>Subscribe</bearer-button>
+      </bearer-popover>
     )
   }
 

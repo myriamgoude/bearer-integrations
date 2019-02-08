@@ -98,7 +98,6 @@ export class ListSelect {
         <div class="list">
           {this.renderItems(this.options)}
         </div>
-        <bearer-button onClick={this.onSubmit}>Subscribe</bearer-button>
       </form>
     )
   }
