@@ -85,10 +85,6 @@ export class FeatureAction {
   }
   
   handleAttachClick = () => {
-    if(this.ui > InterfaceState.Authenticated){
-      this.ui = InterfaceState.Authenticated
-      return 
-    }
     this.selectedRepo = undefined
     this.errorMessage = undefined
     this.ui = InterfaceState.Repo
@@ -167,7 +163,7 @@ export class FeatureAction {
       .catch(console.error)
   }
 
-  renderUnauthoried: any = ({ authenticate }) => (
+  renderUnauthorized: any = ({ authenticate }) => (
     <icon-button
       onClick={() => this.onAuthorizeClick(authenticate)}
       icon="logo-github"
@@ -180,34 +176,52 @@ export class FeatureAction {
   }
 
   renderAuthorized: any = () => {
-    if(this.ui < InterfaceState.Authenticated){
-      return null
+    if (this.ui < InterfaceState.Authenticated) {
+      return null;
     }
-
-    return (<icon-button
-              onClick={this.handleAttachClick}
-              icon="logo-github" 
-              text="Attach Pull Request"
-              isPopover={true}
-              isPopoverOpened={this.ui > InterfaceState.Authenticated}
-            >
+    
+    return(<bearer-popover opened={this.ui > InterfaceState.Authenticated }>
+      <icon-button
+        onClick={this.handleAttachClick}
+        icon="logo-github"
+        text="Attach Pull Request"
+        slot="popover-toggler"
+      />
         {this.renderWorkflow()}
-      </icon-button>)
+      </bearer-popover>)
   }
 
   renderWorkflow = () => {
-    if(this.ui > InterfaceState.Authenticated){
-      return (
-        <workflow-box
-        heading={StateTitles[this.ui] || ""}
-        subHeading={(this.selectedRepo) ? `From ${this.selectedRepo.nameWithOwner}` : undefined}
-        onBack={this.handleWorkflowBack}
-        onClose={this.handleExternalClick}
-        onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
-        >
-          {this.renderWorkflowContent()}
-        </workflow-box>
-      )
+    if(this.ui > InterfaceState.Authenticated) {
+
+      const heading = StateTitles[this.ui] || "";
+      const subHeading= (this.selectedRepo) ? `From ${this.selectedRepo.nameWithOwner}` : undefined;
+      const handleBack = (this.ui > InterfaceState.Repo) ? this.handleWorkflowBack : undefined;
+      const handleClose = this.handleExternalClick;
+      const handleMenu = this.handleMenu;
+
+      return [
+        <div slot="popover-header">
+          <div class="popover-header">
+            {(handleBack) && <icon-chevron class="popover-back-nav" direction="left" onClick={handleBack} />}
+            <div class="popover-title">
+              <h3>{heading}</h3>
+              {(subHeading) && <span class="popover-subtitle">{subHeading}</span>}
+            </div>
+          </div>
+          <div class="popover-controls">
+           {(handleMenu) && <button class='popover-control' onClick={handleMenu}>{this.getIcon('settings')}</button>}
+           {(handleClose) && <button class='popover-control' onClick={handleClose}><ion-icon name="close"></ion-icon></button>}
+          </div>
+        </div>,
+        <div slot="popover-content">{this.renderWorkflowContent()}</div>
+      ]
+    }
+  }
+
+  getIcon(icon: string) {
+    if (icon === "settings") {
+      return (<svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" ><path d="M23,50c0,5-4,9-9,9s-9-4-9-9c0-5,4-9,9-9S23,45,23,50z M86,41c-5,0-9,4-9,9c0,5,4,9,9,9s9-4,9-9C95,45,91,41,86,41z M51,41  c-5,0-9,4-9,9c0,5,4,9,9,9c5,0,9-4,9-9C60,45,56,41,51,41z"/></svg>)
     }
   }
 
@@ -272,15 +286,6 @@ export class FeatureAction {
       this.ui = InterfaceState.Authenticated
     }
   }
-  
-  handleInternalClick = (e:Event) => {
-    e.stopImmediatePropagation()
-  }
-
-  componentDidLoad() {
-    this.el.addEventListener("click", this.handleInternalClick);
-    document.addEventListener("click", this.handleExternalClick);
-  }
 
   handleRemove = (pr: PullRequest) =>{
     const updatedList = this.pullRequests.filter((elm:PullRequest)=> pr.id !== elm.id)
@@ -291,13 +296,11 @@ export class FeatureAction {
     return (
       <div>
         <bearer-authorized
-          renderUnauthorized={this.renderUnauthoried}
+          renderUnauthorized={this.renderUnauthorized}
           renderAuthorized={this.handleAuthorized}
         />
         { this.renderAuthorized() }
       </div>
-      
-      
     )
   }
 }
