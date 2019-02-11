@@ -38,6 +38,7 @@ export class FeatureAction {
     @State() revoke: any | undefined;
 
     @State() folders: File[] | undefined;
+    @State() data: File[] | undefined;
     @State() selectedFolder: File | undefined;
     @State() selectedFolders: File[] | undefined = [];
     @State() filesSearchResults: File[] | undefined;
@@ -69,13 +70,13 @@ export class FeatureAction {
         this.ui = InterfaceState.Folder;
         this.getData({folderId: 'root'})
             .then(({data}:{data: File[]}) => {
-                this.folders = data
+                this.data = data
             }).catch(this.handleError)
     };
 
     handleSearchQuery = (query: string) => {
         const matcher = query.toLocaleLowerCase();
-        this.filesSearchResults = [...this.folders.filter(c => fuzzysearch(matcher, c.name.toLocaleLowerCase()))];
+        this.filesSearchResults = [...this.data.filter(c => fuzzysearch(matcher, c.name.toLocaleLowerCase()))];
     };
 
     handleFolderSelect = (selectedFolder: File, mainFolder?: boolean) => {
@@ -87,7 +88,7 @@ export class FeatureAction {
         }
         this.getData(params)
             .then(({data}:{data: File[]}) => {
-                this.folders = data
+                this.data = data
             }).catch(this.handleError)
     };
 
@@ -227,7 +228,7 @@ export class FeatureAction {
                 return (
                     <div>
                         <list-navigation
-                            options={this.folders}
+                            options={this.data}
                             onSearchQuery={this.handleSearchQuery}
                             attributeName={'name'}
                             showNextIcon={true}
