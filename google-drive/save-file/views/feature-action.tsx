@@ -32,6 +32,7 @@ export class FeatureAction {
     @Prop() autoClose: boolean = true;
     @Prop() multi: boolean = true;
     @Intent('listData') getData: BearerFetch;
+    @Intent('fetchMainFolder') fetchMainFolder: BearerFetch;
 
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
@@ -68,13 +69,13 @@ export class FeatureAction {
         this.ui = InterfaceState.Folder;
         this.getData({folderId: 'root'})
             .then(({data}:{data: File[]}) => {
-                this.folders = data;
+                this.foldersData = data;
             }).catch(this.handleError)
     };
 
     handleSearchQuery = (query: string) => {
         const matcher = query.toLocaleLowerCase();
-        this.foldersSearchResults = [...this.folders.filter(c => fuzzysearch(matcher, c.name.toLocaleLowerCase()))];
+        this.foldersSearchResults = [...this.foldersData.filter(c => fuzzysearch(matcher, c.name.toLocaleLowerCase()))];
     };
 
     handleFolderSelect = (selectedFolder: File, mainFolder?: boolean) => {
@@ -86,7 +87,7 @@ export class FeatureAction {
         }
         this.getData(params)
             .then(({data}:{data: File[]}) => {
-                this.folders = data
+                this.foldersData = data
             }).catch(this.handleError)
     };
 
@@ -123,10 +124,22 @@ export class FeatureAction {
     };
 
     handleAttachFolder = () => {
+        if (!this.selectedFolder) {
+            this.getMainFolder();
+        }
         this.folders = [this.selectedFolder];
         if(this.autoClose) {
             this.ui = InterfaceState.Authenticated;
         }
+    };
+
+    getMainFolder = () => {
+        let params = {} as {folderId: string};
+        params.folderId = this.foldersData[0]['parents'][0];
+        this.fetchMainFolder(params)
+            .then(({data}:{data: File}) => {
+                this.folders = [data];
+            }).catch(this.handleError)
     };
 
     handleMenu = () => {
@@ -151,7 +164,7 @@ export class FeatureAction {
     renderUnauthorized: any = ({ authenticate }) => (
         <icon-button
             onClick={() => this.onAuthorizeClick(authenticate)}
-            text="Save to Google Drive"
+            text="Connect to Google Drive"
         />
     );
 
@@ -198,27 +211,33 @@ export class FeatureAction {
                         onOptionClicked={this.handleLogout} />
                 );
             case InterfaceState.Folder:
-                if (this.foldersSearchResults) {
+                if (this.foldersSearchResults && this.foldersSearchResults.length !== 0) {
                     return (
+                        <div>
+                            <list-navigation
+                                options={this.foldersSearchResults}
+                                selectedFolder={this.selectedFolder}
+                                attributeName={'name'}
+                                onSearchQuery={this.handleSearchQuery}
+                                showNextIcon={true}
+                                onOptionClicked={this.handleItemSelect}
+                                onSaveClicked={this.handleAttachFolder}/>
+                            <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
+                        </div>
+                    );
+                }
+                return (
+                    <div>
                         <list-navigation
-                            options={this.foldersSearchResults}
+                            options={this.foldersData}
                             selectedFolder={this.selectedFolder}
                             attributeName={'name'}
                             onSearchQuery={this.handleSearchQuery}
                             showNextIcon={true}
                             onOptionClicked={this.handleItemSelect}
                             onSaveClicked={this.handleAttachFolder}/>
-                    );
-                }
-                return (
-                    <list-navigation
-                        options={this.foldersData}
-                        selectedFolder={this.selectedFolder}
-                        attributeName={'name'}
-                        onSearchQuery={this.handleSearchQuery}
-                        showNextIcon={true}
-                        onOptionClicked={this.handleItemSelect}
-                        onSaveClicked={this.handleAttachFolder}/>
+                            <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
+                    </div>
                 );
         }
         return null
@@ -226,6 +245,7 @@ export class FeatureAction {
 
     handleExternalClick = (_e:Event) => {
         this.selectedFolder = undefined;
+        this.foldersSearchResults = [];
         if(this.ui != InterfaceState.Unauthenticated){
             this.ui = InterfaceState.Authenticated
         }

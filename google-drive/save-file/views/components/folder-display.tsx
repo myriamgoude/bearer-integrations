@@ -3,6 +3,7 @@ import {File} from '../types'
 
 @Component({
     tag: 'folder-display',
+    styleUrl: 'folder-display.css',
     shadow: true
 })
 export class FolderDisplay {
@@ -16,6 +17,7 @@ export class FolderDisplay {
         }
 
         if (this.isEditComponent) {
+            console.log(this.items);
             return (
                 this.items.map(folder => {
                     return (

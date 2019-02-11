@@ -2,7 +2,7 @@ import { TOAUTH2AuthContext, FetchData, TFetchActionEvent, TFetchPromise } from 
 import Client from './client'
 import {File} from '../views/types'
 
-export default class RetrieveFolderIntent extends FetchData implements FetchData<ReturnedData, any, TOAUTH2AuthContext> {
+export default class RetrieveFoldersIntent extends FetchData implements FetchData<ReturnedData, any, TOAUTH2AuthContext> {
   async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
     let promises = [];
     const token = event.context.authAccess.accessToken;

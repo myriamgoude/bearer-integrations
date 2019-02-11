@@ -1,0 +1,8 @@
+.footer-text {
+    margin: 0;
+    position: absolute;
+    bottom: 1px;
+    left: 1px;
+    font-size: 0.8em;
+    opacity: 0.3;
+}

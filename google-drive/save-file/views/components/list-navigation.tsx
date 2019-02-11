@@ -58,6 +58,10 @@ export class ListNavigation {
     return (this.onSearchQuery) ? <br-search onSearchQuery={this.onSearchQuery}/> : null
   };
 
+  renderSaveButton() {
+    return (this.showNextIcon) ? <button class="save-button" onClick={() => this.onSaveClicked(this.selectedFolder)}>Save here</button> : null;
+  }
+
   render() {
     return (
       <div>
@@ -77,6 +81,16 @@ export class ListNavigation {
         </ul>
       )
     }
+    if(this.options.length == 0){
+      return (
+          <div>
+            <ul>
+              <span class='label'>No Results</span>
+            </ul>
+            <button class="save-button" onClick={() => this.onSaveClicked(this.selectedFolder)}>Save here</button>
+          </div>
+      )
+    }
     return (
         <div>
           <ul>
@@ -90,7 +104,7 @@ export class ListNavigation {
                 </li>
             ))}
           </ul>
-          <button class="save-button" onClick={() => this.onSaveClicked(this.selectedFolder)}>Save here</button>
+          {this.renderSaveButton()}
         </div>
     )
   }

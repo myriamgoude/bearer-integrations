@@ -12,10 +12,10 @@ import {File} from "./types";
     group: 'edit'
 })
 export class EditAction {
-    @Input({group: 'feature'}) folders: File[];
+    @Input({group: 'feature'}) folders: File[] = [];
     @Output({
-        intentName: 'saveFolder',
-        intentPropertyName: 'folder',
+        intentName: 'saveFolders',
+        intentPropertyName: 'folders',
         intentReferenceIdKeyName: "referenceId"
     })
     displayedFolder: File[];
@@ -24,7 +24,7 @@ export class EditAction {
     removed: EventEmitter<File>;
 
     handleRemove = (folder: File) => {
-        (this as any).displayedFileRefId = (this as any).filesRefId;
+        (this as any).displayedFolderRefId = (this as any).foldersRefId;
         const updatedList = this.folders.filter((elm: File) => folder.id !== elm.id);
         this.folders = [...updatedList];
         this.displayedFolder = [...updatedList];

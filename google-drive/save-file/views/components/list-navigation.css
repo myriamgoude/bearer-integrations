@@ -38,6 +38,8 @@ span.label {
   height: 40px;
   width: 100px;
   font-weight: bold;
+  float: right;
+  margin-right: 16px;
 }
 
 .save-button:hover {

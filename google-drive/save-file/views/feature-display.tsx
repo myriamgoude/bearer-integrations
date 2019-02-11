@@ -12,7 +12,7 @@ import {File} from "./types";
   group: 'feature'
 })
 export class FeatureDisplay {
-  @Input() folders: File[];
+  @Input() folders: File[] = [];
 
   render() {
     return <folder-display items={this.folders} />
