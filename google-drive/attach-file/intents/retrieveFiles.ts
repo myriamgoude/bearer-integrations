@@ -14,7 +14,6 @@ export default class RetrieveFilesIntent extends FetchData implements FetchData<
       promises.push(Client(token).get(`/${file}`, {params: {fields: '*'}}));
     });
     const data = await Promise.all(promises);
-    // return {data: data.data};
     return { data: data.map(item => item.data) };
   }
 }

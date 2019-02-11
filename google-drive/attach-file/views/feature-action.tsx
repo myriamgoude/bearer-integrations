@@ -164,7 +164,7 @@ export class FeatureAction {
     renderUnauthorized: any = ({ authenticate }) => (
         <icon-button
             onClick={() => this.onAuthorizeClick(authenticate)}
-            text="Attach File"
+            text="Connect to Google Drive"
         />
     );
 
@@ -211,23 +211,29 @@ export class FeatureAction {
                         onOptionClicked={this.handleLogout} />
                 );
             case InterfaceState.Folder:
-                if (this.filesSearchResults) {
+                if (this.filesSearchResults && this.filesSearchResults.length !== 0) {
                     return (
-                        <list-navigation
-                            options={this.filesSearchResults}
-                            attributeName={'name'}
-                            onSearchQuery={this.handleSearchQuery}
-                            showNextIcon={true}
-                            onOptionClicked={this.handleItemSelect}/>
+                        <div>
+                            <list-navigation
+                                options={this.filesSearchResults}
+                                attributeName={'name'}
+                                onSearchQuery={this.handleSearchQuery}
+                                showNextIcon={true}
+                                onOptionClicked={this.handleItemSelect}/>
+                            <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
+                        </div>
                     );
                 }
                 return (
-                    <list-navigation
-                        options={this.folders}
-                        onSearchQuery={this.handleSearchQuery}
-                        attributeName={'name'}
-                        showNextIcon={true}
-                        onOptionClicked={this.handleItemSelect} />
+                    <div>
+                        <list-navigation
+                            options={this.folders}
+                            onSearchQuery={this.handleSearchQuery}
+                            attributeName={'name'}
+                            showNextIcon={true}
+                            onOptionClicked={this.handleItemSelect} />
+                        <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
+                    </div>
                 );
         }
         return null
@@ -235,6 +241,7 @@ export class FeatureAction {
 
     handleExternalClick = (_e:Event) => {
         this.selectedFolder = undefined;
+        this.filesSearchResults = [];
         if(this.ui != InterfaceState.Unauthenticated){
             this.ui = InterfaceState.Authenticated
         }
