@@ -6,4 +6,5 @@ export type File = {
     size: string;
     webViewLink: string;
     path: string[];
+    parents: string[];
 }

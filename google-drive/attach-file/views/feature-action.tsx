@@ -6,7 +6,6 @@
 import {BearerFetch, Element, Intent, Listen, Output, Prop, RootComponent, State} from '@bearer/core';
 import '@bearer/ui';
 import { File } from "./types";
-import fuzzysearch from "./fuzzy";
 
 enum InterfaceState {
     Unauthenticated,
@@ -32,15 +31,15 @@ export class FeatureAction {
     @Prop() autoClose: boolean = true;
     @Prop() multi: boolean = true;
     @Intent('listData') getData: BearerFetch;
+    @Intent('searchData') searchData: BearerFetch;
+    @Intent('fetchPreviousFolder') fetchPreviousFolder: BearerFetch;
 
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
     @State() revoke: any | undefined;
 
-    @State() folders: File[] | undefined;
     @State() data: File[] | undefined;
     @State() selectedFolder: File | undefined;
-    @State() selectedFolders: File[] | undefined = [];
     @State() filesSearchResults: File[] | undefined;
     @State() filesWithPath: any | undefined = [];
 
@@ -75,11 +74,15 @@ export class FeatureAction {
     };
 
     handleSearchQuery = (query: string) => {
-        const matcher = query.toLocaleLowerCase();
-        this.filesSearchResults = [...this.data.filter(c => fuzzysearch(matcher, c.name.toLocaleLowerCase()))];
+        this.filesSearchResults = undefined;
+        const req = (query.length > 3) ? this.searchData({query}) : this.getData({folderId: 'root'});
+        req.then(({data}: {data: File[]}) => {
+            this.filesSearchResults = data;
+        }).catch(this.handleError);
     };
 
     handleFolderSelect = (selectedFolder: File, mainFolder?: boolean) => {
+        this.data = undefined;
         let params = {} as {folderId: string};
         if (mainFolder) {
             params.folderId = 'root';
@@ -98,9 +101,9 @@ export class FeatureAction {
     };
 
     handleItemSelect = (selectedItem: File) => {
+        this.filesSearchResults = undefined;
         if (selectedItem.mimeType === 'application/vnd.google-apps.folder') {
             this.selectedFolder = selectedItem;
-            this.selectedFolders.push(selectedItem);
             this.handleFolderSelect(selectedItem);
         } else {
             this.handleAttachFile(selectedItem);
@@ -111,21 +114,28 @@ export class FeatureAction {
         switch(this.ui) {
             case InterfaceState.Settings:
             case InterfaceState.Folder:
-                const index = this.selectedFolders.indexOf(this.selectedFolder) - 1;
-                console.log(this.selectedFolders);
-                if (index === -1) {
-                    this.handleFolderSelect(this.selectedFolders[0], true);
-                } else if (index === -2) {
-                    this.ui = InterfaceState.Authenticated;
-                } else {
-                    this.ui = InterfaceState.Folder;
-                    this.handleItemSelect(this.selectedFolders[index]);
-                }
+                this.fetchPreviousFolderData();
                 break;
             case InterfaceState.Error:
                 this.ui = InterfaceState.Authenticated;
                 break;
         }
+    };
+
+    fetchPreviousFolderData = () => {
+        console.log(this.selectedFolder);
+        if (!this.selectedFolder || !this.selectedFolder.parents) {
+            this.data = undefined;
+            this.ui = InterfaceState.Authenticated;
+            return;
+        }
+        this.data = undefined;
+        this.getData({folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File[]}) => {
+            this.data = data;
+        }).catch(this.handleError);
+        this.fetchPreviousFolder({folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File}) => {
+            this.selectedFolder = data;
+        }).catch(this.handleError)
     };
 
     handleAttachFile = (file: any) => {
@@ -141,6 +151,7 @@ export class FeatureAction {
         if(this.autoClose) {
             this.ui = InterfaceState.Authenticated;
         }
+        this.data = undefined;
     };
 
     handleMenu = () => {
@@ -225,24 +236,25 @@ export class FeatureAction {
                         </div>
                     );
                 }
-                return (
-                    <div>
-                        <list-navigation
-                            options={this.data}
-                            onSearchQuery={this.handleSearchQuery}
-                            attributeName={'name'}
-                            showNextIcon={true}
-                            onOptionClicked={this.handleItemSelect} />
-                        <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
-                    </div>
-                );
+                    return (
+                        <div>
+                            <list-navigation
+                                options={this.data}
+                                attributeName={'name'}
+                                onSearchQuery={this.handleSearchQuery}
+                                showNextIcon={true}
+                                onOptionClicked={this.handleItemSelect}/>
+                            <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
+                        </div>
+                    );
         }
         return null
     };
 
     handleExternalClick = (_e:Event) => {
+        this.data = undefined;
         this.selectedFolder = undefined;
-        this.filesSearchResults = [];
+        this.filesSearchResults = undefined;
         if(this.ui != InterfaceState.Unauthenticated){
             this.ui = InterfaceState.Authenticated
         }

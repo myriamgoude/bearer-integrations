@@ -1,6 +1,6 @@
 export const folders = {
     pageSize: 500,
-    orderBy: 'folder',
+    orderBy: 'folder, name',
     q: '',
     fields: '*'
 };
