@@ -13,16 +13,24 @@ export class WorkflowBox {
   @Prop() heading: string;
   @Prop() subHeading: string | undefined;
 
+  renderFooter = () => {
+    return (
+        <div>
+          <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
+        </div>
+    )
+  };
+
   render() {
     return (
         <div class='wrapper'>
-          <shadow-box styles={{position:'absolute', padding: '24px 16px 8px 16px'}}>
-            <div>
+          <shadow-box styles={{position:'absolute', padding: '8px 32px'}}>
+            <div style={{marginBottom: '32px'}}>
               <div class='title'>
               <button onClick={this.onBack} class='back'>
                   <icon-chevron direction="left"></icon-chevron>
                 </button>
-                <div style={{flex:'1', marginLeft:'10px'}}>
+                <div style={{flex:'1'}}>
                   <span>{this.heading}</span>
                   <span style={{fontSize: '10px', display: 'block', lineHeight:'6px'}}>{this.subHeading}</span>
                 </div>
@@ -31,6 +39,7 @@ export class WorkflowBox {
               </div>
               <slot />
             </div>
+            {this.renderFooter()}
           </shadow-box>
         </div>
     )

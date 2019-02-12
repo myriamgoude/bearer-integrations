@@ -6,7 +6,7 @@ export default class SaveFilesIntent extends SaveState implements SaveState<Stat
     const { files } = event.params;
     return {
       state: {
-        files: files.map(file => file.id)
+        files: files.map(file => {return {id: file.id, path: file.path}})
       },
       data: files
     }
@@ -21,7 +21,7 @@ export type Params = {
 }
 
 export type State = {
-  files: string[];
+  files: any[];
 }
 
 export type ReturnedData = File[];

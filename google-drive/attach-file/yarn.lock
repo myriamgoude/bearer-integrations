@@ -55,7 +55,7 @@
     uuid "^3.3.2"
     webpack "^4.12.0"
 
-"@bearer/cli@beta":
+"@bearer/cli@beta5":
   version "0.93.3"
   resolved "https://registry.npmjs.org/@bearer/cli/-/cli-0.93.3.tgz#34c3ad260e3576d1bca7354a8699503366288ca1"
   integrity sha512-x33pA6w2oYZGP9iNS1/SPkm5qbB1c/iDmbLhGrR4FwB8G2eKhBuEXzHUEx1QRTxLN/o1oFaSuk6HTwNLPwsM2Q==

@@ -4,5 +4,5 @@ div {
   display: inline;
   padding: 8px;
   background-color: white;
-  min-width: 320px;
+  width: 320px;
 }

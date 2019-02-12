@@ -1,9 +1,40 @@
 .list-item {
     display: flex;
-    align-items: baseline;
+    align-items: center;
 }
 
 .list-item > a {
     padding: 20px;
     color: #59607B;
+}
+
+.list-item div {
+    display: flex;
+    flex-flow: column;
+}
+
+.list-item div.preview {
+    width: 31px;
+    height: 31px;
+    border-radius: 50%;
+    background-color: #F3F5FF;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    margin-left: 16px;
+}
+
+a {
+    color: #898B92;
+    font-family: "Proxima Nova";
+    font-size: 12px;
+    letter-spacing: 0.1px;
+    line-height: 14px;
+}
+
+p {
+    margin: 0;
+    font-size: 14px;
 }

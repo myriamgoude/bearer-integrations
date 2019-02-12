@@ -39,9 +39,9 @@ export class FeatureAction {
     @State() revoke: any | undefined;
 
     @State() data: File[] | undefined;
+    @State() path: string[] | undefined = [];
     @State() selectedFolder: File | undefined;
     @State() filesSearchResults: File[] | undefined;
-    @State() filesWithPath: any | undefined = [];
 
     @Output() files: File[] = [];
 
@@ -74,6 +74,7 @@ export class FeatureAction {
     };
 
     handleSearchQuery = (query: string) => {
+        this.data = undefined;
         this.filesSearchResults = undefined;
         const req = (query.length > 3) ? this.searchData({query}) : this.getData({folderId: 'root'});
         req.then(({data}: {data: File[]}) => {
@@ -102,6 +103,7 @@ export class FeatureAction {
 
     handleItemSelect = (selectedItem: File) => {
         this.filesSearchResults = undefined;
+        this.path.push(selectedItem.name);
         if (selectedItem.mimeType === 'application/vnd.google-apps.folder') {
             this.selectedFolder = selectedItem;
             this.handleFolderSelect(selectedItem);
@@ -123,7 +125,6 @@ export class FeatureAction {
     };
 
     fetchPreviousFolderData = () => {
-        console.log(this.selectedFolder);
         if (!this.selectedFolder || !this.selectedFolder.parents) {
             this.data = undefined;
             this.ui = InterfaceState.Authenticated;
@@ -139,6 +140,7 @@ export class FeatureAction {
     };
 
     handleAttachFile = (file: any) => {
+        file.path = this.path;
         if(this.multi){
             const files = (this.files.length) ? this.files : (this as any).filesInitial || [];
             this.files = [
@@ -152,6 +154,7 @@ export class FeatureAction {
             this.ui = InterfaceState.Authenticated;
         }
         this.data = undefined;
+        this.path = [];
     };
 
     handleMenu = () => {
@@ -230,9 +233,9 @@ export class FeatureAction {
                                 options={this.filesSearchResults}
                                 attributeName={'name'}
                                 onSearchQuery={this.handleSearchQuery}
+                                onBackClicked={this.handleWorkflowBack}
                                 showNextIcon={true}
                                 onOptionClicked={this.handleItemSelect}/>
-                            <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
                         </div>
                     );
                 }
@@ -243,8 +246,8 @@ export class FeatureAction {
                                 attributeName={'name'}
                                 onSearchQuery={this.handleSearchQuery}
                                 showNextIcon={true}
+                                onBackClicked={this.handleWorkflowBack}
                                 onOptionClicked={this.handleItemSelect}/>
-                            <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
                         </div>
                     );
         }

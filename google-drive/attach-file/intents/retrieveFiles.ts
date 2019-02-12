@@ -9,12 +9,20 @@ export default class RetrieveFilesIntent extends FetchData implements FetchData<
     // Put your logic here
     let promises = [];
     const token = event.context.authAccess.accessToken;
-    const pulls = (event.context.reference) ? event.context.reference.files : [];
-    pulls.forEach(file => {
-      promises.push(Client(token).get(`/${file}`, {params: {fields: '*'}}));
+    const files = (event.context.reference) ? event.context.reference.files : [];
+    files.forEach(file => {
+      promises.push(Client(token).get(`/${file.id}`, {params: {fields: '*'}}));
     });
-    const data = await Promise.all(promises);
-    return { data: data.map(item => item.data) };
+    let data = await Promise.all(promises);
+    data = data.map(item => item.data);
+    data.forEach(file => {
+      files.forEach(fileWithPath => {
+        if (file.id === fileWithPath.id) {
+          file.path = fileWithPath.path;
+        }
+      })
+    });
+    return { data };
   }
 }
 

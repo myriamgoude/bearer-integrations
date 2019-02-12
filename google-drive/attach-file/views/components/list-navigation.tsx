@@ -17,6 +17,7 @@ const iconStyle ={
 export class ListNavigation {
   @Prop() options: any[] | undefined;
   @Prop() onOptionClicked: (option: any) => void;
+  @Prop() onBackClicked: () => void;
   @Prop() attributeName: string | undefined;
   @Prop() formatLabel: (option: any) => JSX.Element;
   @Prop() onSearchQuery: (query: string) => void;
@@ -79,9 +80,11 @@ export class ListNavigation {
     }
     if(this.options.length == 0){
       return (
-          <ul>
-            <span class='label'>No Results</span>
-          </ul>
+          <div class="no-results-content">
+            <ion-icon class="search-icon" name="search"></ion-icon>
+            <span class='no-results-label'>No data found</span>
+            <p onClick={this.onBackClicked}>Back</p>
+          </div>
       )
     }
     return (

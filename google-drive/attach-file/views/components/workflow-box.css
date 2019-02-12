@@ -1,7 +1,7 @@
 .wrapper {
   position: absolute;
   background-color: white;
-  min-width: 300px;
+  min-width: 320px;
   z-index: 10;
 }
 
@@ -27,4 +27,31 @@
   font-size: 2em;
   outline: none;
   cursor: pointer;
+}
+
+.footer-text {
+  margin: 0;
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  font-size: 0.8em;
+  opacity: 0.3;
+}
+
+.save-button {
+  float: right;
+  margin: 24px;
+  border: none;
+  background-color: #0FE49B;
+  height: 40px;
+  width: 96px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.save-button:hover {
+  background-color: #00C682;
 }
