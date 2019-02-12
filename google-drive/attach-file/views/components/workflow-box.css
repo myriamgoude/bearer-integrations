@@ -55,3 +55,9 @@
 .save-button:hover {
   background-color: #00C682;
 }
+
+.settings {
+  position: absolute;
+  right: 0;
+  top: 0;
+}

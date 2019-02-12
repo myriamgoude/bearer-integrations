@@ -9,7 +9,6 @@ export default class ListDataIntent extends FetchData implements FetchData<Retur
     const token = event.context.authAccess.accessToken;
     // Put your logic here
     query.q = `"${event.params.folderId}" in parents`;
-    console.log(query);
     const { data }  = await Client(token).get('', { params: query });
     if (data.errors) {
       const message = data.errors.map((e: { message: string }) => e.message).join(', ');
