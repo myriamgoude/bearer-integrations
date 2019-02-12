@@ -28,7 +28,6 @@ export class ConnectAction {
   @Prop() textAuthenticated: string
   @Prop() textUnauthenticated: string
   @Prop() icon: string
-  @Prop() onClick: (event: MouseEvent) => void
 
   @State() ui: InterfaceState = InterfaceState.Unauthenticated
   @State() errorMessage:string | undefined
