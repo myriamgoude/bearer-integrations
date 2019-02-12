@@ -5,22 +5,15 @@ import {
   BearerFetch, 
   Prop,
   Intent, 
-  Element
+  Element,
+  Listen,
+  Event, EventEmitter
 } from '@bearer/core'
 
 import '@bearer/ui'
 
 import { PullRequest, Repo } from './types'
-import { Listen } from '@stencil/core';
-
-enum InterfaceState {
-  Unauthenticated,
-  Authenticated,
-  Repo,
-  PullRequest,
-  Settings,
-  Error,
-}
+import { InterfaceState } from './connect-action'
 
 const StateTitles = {
   [InterfaceState.Repo]: 'Select a Repository',
@@ -55,9 +48,11 @@ export class FeatureAction {
   @Intent('listRepositoryGraph') getRepositoryGraph: BearerFetch
   @Intent('searchPullRequests') searchPullRequests: BearerFetch
 
+  @State() isAuthorized: boolean = false
+  @Event() logout: EventEmitter
+
   @State() ui: InterfaceState = InterfaceState.Unauthenticated
   @State() errorMessage:string | undefined
-  @State() revoke:any | undefined
 
   @State() repos:Repo[] | undefined
   @State() selectedRepo:Repo | undefined
@@ -73,6 +68,11 @@ export class FeatureAction {
     const pr = e.detail as PullRequest;
     const updatedList = this.pullRequests.filter((elm: PullRequest) => pr.id !== elm.id)
     this.pullRequests = [...updatedList]
+  }
+
+  @Listen('body:connect:authenticationStateChanged')
+  isAuthorizedHandler (event: CustomEvent) {
+    this.isAuthorized = event.detail.newValue;
   }
 
   getPullRequests = () => {
@@ -105,8 +105,8 @@ export class FeatureAction {
   }
 
   handleError = error => {
-      this.ui = InterfaceState.Error
-      this.errorMessage = error.error;
+    this.ui = InterfaceState.Error
+    this.errorMessage = error.error;
   }
 
   handleRepoSelect = (selectedRepo: Repo) => {
@@ -149,47 +149,25 @@ export class FeatureAction {
   }
 
   handleLogout = () => {
-    if(this.revoke){ this.revoke() }
-    this.revoke = undefined
     this.ui = InterfaceState.Unauthenticated
+    this.logout.emit();
   }
 
-  onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
-    authenticate()
-      .then(()=>{
-        this.ui = InterfaceState.Authenticated
-        this.handleAttachClick()
-      })
-      .catch(console.error)
-  }
-
-  renderUnauthorized: any = ({ authenticate }) => (
-    <icon-button
-      onClick={() => this.onAuthorizeClick(authenticate)}
-      icon="logo-github"
-      text="Attach Pull Request"
-    />
+  renderUnauthorized = () => (
+    <connect-action icon="logo-github" text-unauthenticated="Attach Pull Request" />
   )
 
-  handleAuthorized: any = ({ revoke }) => {
-    this.revoke = revoke
-  }
-
-  renderAuthorized: any = () => {
-    if (this.ui < InterfaceState.Authenticated) {
-      return null;
-    }
-    
-    return(<bearer-popover opened={this.ui > InterfaceState.Authenticated }>
+  renderAuthorized: any = () => (
+    <bearer-popover opened={this.ui > InterfaceState.Authenticated }>
       <icon-button
         onClick={this.handleAttachClick}
         icon="logo-github"
         text="Attach Pull Request"
         slot="popover-toggler"
       />
-        {this.renderWorkflow()}
-      </bearer-popover>)
-  }
+      {this.renderWorkflow()}
+    </bearer-popover>
+  )
 
   renderWorkflow = () => {
     if(this.ui > InterfaceState.Authenticated) {
@@ -214,7 +192,7 @@ export class FeatureAction {
            {(handleClose) && <button class='popover-control' onClick={handleClose}><ion-icon name="close"></ion-icon></button>}
           </div>
         </div>,
-        <div slot="popover-content">{this.renderWorkflowContent()}</div>
+        <div>{this.renderWorkflowContent()}</div>
       ]
     }
   }
@@ -288,19 +266,12 @@ export class FeatureAction {
   }
 
   handleRemove = (pr: PullRequest) =>{
+    // TODO: check this function is for?
     const updatedList = this.pullRequests.filter((elm:PullRequest)=> pr.id !== elm.id)
     console.log('remove', pr, updatedList)
   }
 
   render() {
-    return (
-      <div>
-        <bearer-authorized
-          renderUnauthorized={this.renderUnauthorized}
-          renderAuthorized={this.handleAuthorized}
-        />
-        { this.renderAuthorized() }
-      </div>
-    )
+    return ( this.isAuthorized ? this.renderAuthorized() : this.renderUnauthorized() )
   }
 }
