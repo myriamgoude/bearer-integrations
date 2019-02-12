@@ -183,7 +183,7 @@ export class FeatureAction {
     renderAuthorized: any = ({ revoke }) => {
         this.revoke = revoke;
         return (
-            <icon-button onClick={this.handleAttachClick} text="Attach File" />
+            <icon-button onClick={this.handleAttachClick} text="Attach a file" />
         )
     };
 

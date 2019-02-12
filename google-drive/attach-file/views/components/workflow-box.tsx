@@ -16,7 +16,7 @@ export class WorkflowBox {
   render() {
     return (
         <div class='wrapper'>
-          <shadow-box styles={{position:'absolute', padding: '15px'}}>
+          <shadow-box styles={{position:'absolute', padding: '24px 16px 8px 16px'}}>
             <div>
               <div class='title'>
               <button onClick={this.onBack} class='back'>
