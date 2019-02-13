@@ -16,6 +16,13 @@ export class FileDisplay {
         window.open(file.webViewLink, '_blank');
     };
 
+    handleRemovalClick (e: MouseEvent, file: File) {
+        e.preventDefault();
+        if (this.onDelete) {
+            this.onDelete(file);
+        }
+    }
+    
     render() {
         if (!this.items && !this.items.length) {
             return null;
@@ -29,7 +36,7 @@ export class FileDisplay {
                                 <p><strong>{file.name}</strong> {file.size ?
                                     <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mo</span> : null}
                                 </p>
-                                { this.onDelete && <a class="remove-link" href="#" onClick={() => this.onDelete(file)}>Remove</a> }
+                                { this.onDelete && <a class="remove-link" href="#" onClick={(e) => { this.handleRemovalClick(e, file) }}>Remove</a> }
                             </div>
                             <div onClick={() => {this.redirect(file)}} class="preview">
                                 <ViewIcon />
