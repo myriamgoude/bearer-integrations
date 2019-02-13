@@ -29,7 +29,7 @@ export class EditAction {
   render() {
     return (
         <div>
-          <file-display items={this.files} onDelete={this.handleRemove} isEditComponent={true} />
+          <file-display items={this.files} onDelete={this.handleRemove} />
         </div>
     )
   }
