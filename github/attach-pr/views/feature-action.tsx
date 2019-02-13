@@ -13,7 +13,15 @@ import {
 import '@bearer/ui'
 
 import { PullRequest, Repo } from './types'
-import { InterfaceState } from './connect-action'
+
+export enum InterfaceState {
+  Unauthenticated,
+  Authenticated,
+  Repo,
+  PullRequest,
+  Settings,
+  Error
+}
 
 const StateTitles = {
   [InterfaceState.Repo]: 'Select a Repository',
@@ -71,8 +79,11 @@ export class FeatureAction {
   }
 
   @Listen('body:connect:authenticationStateChanged')
-  isAuthorizedHandler (event: CustomEvent) {
-    this.isAuthorized = event.detail.newValue;
+  authenticationStateChanged (event: CustomEvent) {
+    this.isAuthorized = event.detail.authorized;
+    if (this.isAuthorized) {
+      this.handleAttachClick();
+    }
   }
 
   getPullRequests = () => {
@@ -157,8 +168,8 @@ export class FeatureAction {
     <connect-action icon="logo-github" text-unauthenticated="Attach Pull Request" />
   )
 
-  renderAuthorized: any = () => (
-    <bearer-popover opened={this.ui > InterfaceState.Authenticated }>
+  renderAuthorized: any = () => {
+    return (<bearer-popover opened={this.ui > InterfaceState.Authenticated}>
       <icon-button
         onClick={this.handleAttachClick}
         icon="logo-github"
@@ -166,35 +177,37 @@ export class FeatureAction {
         slot="popover-toggler"
       />
       {this.renderWorkflow()}
-    </bearer-popover>
-  )
+    </bearer-popover>)
+  }
 
   renderWorkflow = () => {
-    if(this.ui > InterfaceState.Authenticated) {
-
-      const heading = StateTitles[this.ui] || "";
-      const subHeading= (this.selectedRepo) ? `From ${this.selectedRepo.nameWithOwner}` : undefined;
-      const handleBack = (this.ui > InterfaceState.Repo) ? this.handleWorkflowBack : undefined;
-      const handleClose = this.handleExternalClick;
-      const handleMenu = this.handleMenu;
-
-      return [
-        <div slot="popover-header">
-          <div class="popover-header">
-            {(handleBack) && <icon-chevron class="popover-back-nav" direction="left" onClick={handleBack} />}
-            <div class="popover-title">
-              <h3>{heading}</h3>
-              {(subHeading) && <span class="popover-subtitle">{subHeading}</span>}
-            </div>
-          </div>
-          <div class="popover-controls">
-           {(handleMenu) && <button class='popover-control' onClick={handleMenu}>{this.getIcon('settings')}</button>}
-           {(handleClose) && <button class='popover-control' onClick={handleClose}><ion-icon name="close"></ion-icon></button>}
-          </div>
-        </div>,
-        <div>{this.renderWorkflowContent()}</div>
-      ]
+    
+    if(this.ui < InterfaceState.Authenticated) {
+      return null;
     }
+    
+    const heading = StateTitles[this.ui] || "";
+    const subHeading= (this.selectedRepo) ? `From ${this.selectedRepo.nameWithOwner}` : undefined;
+    const handleBack = (this.ui > InterfaceState.Repo) ? this.handleWorkflowBack : undefined;
+    const handleClose = this.handleExternalClick;
+    const handleMenu = this.handleMenu;
+
+    return [
+      <div slot="popover-header">
+        <div class="popover-header">
+          {(handleBack) && <icon-chevron class="popover-back-nav" direction="left" onClick={handleBack} />}
+          <div class="popover-title">
+            <h3>{heading}</h3>
+            {(subHeading) && <span class="popover-subtitle">{subHeading}</span>}
+          </div>
+        </div>
+        <div class="popover-controls">
+         {(handleMenu) && <button class='popover-control' onClick={handleMenu}>{this.getIcon('settings')}</button>}
+         {(handleClose) && <button class='popover-control' onClick={handleClose}><ion-icon name="close"></ion-icon></button>}
+        </div>
+      </div>,
+      <div>{this.renderWorkflowContent()}</div>
+    ]
   }
 
   getIcon(icon: string) {

@@ -3,21 +3,11 @@ import {
   Prop,
   State,
   Element,
-  Watch,
   Listen
 } from '@bearer/core'
 
 import '@bearer/ui'
 import { Event, EventEmitter } from '@stencil/core'
-
-export enum InterfaceState {
-  Unauthenticated,
-  Authenticated,
-  Repo,
-  PullRequest,
-  Settings,
-  Error,
-}
 
 @RootComponent({
   group: 'connect',
@@ -29,7 +19,6 @@ export class ConnectAction {
   @Prop() textUnauthenticated: string
   @Prop() icon: string
 
-  @State() ui: InterfaceState = InterfaceState.Unauthenticated
   @State() errorMessage:string | undefined
   @State() revoke:any | undefined
   @State() isAuthorized: boolean
@@ -37,21 +26,16 @@ export class ConnectAction {
   @Event() authenticationStateChanged: EventEmitter
   @Element() el: HTMLElement;
 
-  handleError = error => {
-      this.ui = InterfaceState.Error
-      this.errorMessage = error.error;
-  }
-
   handleLogin = () => {
-    this.ui = InterfaceState.Authenticated
     this.isAuthorized = true;
+    this.throwEventAuthenticationStateChanged(this.isAuthorized)
   }
 
   handleLogout = () => {
     if(this.revoke){ this.revoke() }
     this.revoke = undefined
-    this.ui = InterfaceState.Unauthenticated
     this.isAuthorized = false;
+    this.throwEventAuthenticationStateChanged(this.isAuthorized)
   }
 
   onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
@@ -81,9 +65,9 @@ export class ConnectAction {
     />)
   }
 
-  @Watch("isAuthorized")
-  watchIsAuthorized(newValue: boolean, oldValue: boolean) {
-    this.authenticationStateChanged.emit({newValue, oldValue});
+  throwEventAuthenticationStateChanged(authorized: boolean) {
+    console.log("authenticationStateChanged")
+    this.authenticationStateChanged.emit({authorized});
   }
 
   @Listen("body:feature:logout")
