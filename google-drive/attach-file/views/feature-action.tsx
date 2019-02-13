@@ -43,6 +43,7 @@ export class FeatureAction {
     @State() path: string[] | undefined = [];
     @State() selectedFolder: File | undefined;
     @State() filesSearchResults: File[] | undefined;
+    @State() rootFolder: boolean | undefined = false;
 
     @Output() files: File[] = [];
 
@@ -83,14 +84,11 @@ export class FeatureAction {
         }).catch(this.handleError);
     };
 
-    handleFolderSelect = (selectedFolder: File, mainFolder?: boolean) => {
+    handleFolderSelect = (selectedFolder: File) => {
+        this.rootFolder = true;
         this.data = undefined;
         let params = {} as {folderId: string};
-        if (mainFolder) {
-            params.folderId = undefined;
-        } else {
-            params.folderId = `${selectedFolder.id}`
-        }
+        params.folderId = `${selectedFolder.id}`;
         this.getData(params)
             .then(({data}:{data: File[]}) => {
                 this.data = data
@@ -137,6 +135,9 @@ export class FeatureAction {
             this.data = data;
         }).catch(this.handleError);
         this.fetchPreviousFolder({folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File}) => {
+            if (!data.parents) {
+                this.rootFolder = false;
+            }
             this.selectedFolder = data;
         }).catch(this.handleError)
     };
@@ -201,7 +202,9 @@ export class FeatureAction {
                     subHeading={(this.selectedFolder) ? `From ${this.selectedFolder.name}` : undefined}
                     onBack={this.handleWorkflowBack}
                     onClose={this.handleExternalClick}
+                    rootFolder={this.rootFolder}
                     onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
+                    style={{position: 'absolute', marginLeft: '24px'}}
                 >
                     {this.renderWorkflowContent()}
                 </workflow-box>

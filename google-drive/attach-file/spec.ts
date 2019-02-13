@@ -15,6 +15,13 @@ export default {
       label: 'Setup Display Component'
     },
     {
+      classname: 'ConnectAction',
+      isRoot: true,
+      initialTagName: 'connect-action',
+      group: 'connect',
+      label: 'Connect Action Component'
+    },
+    {
       classname: 'FeatureAction',
       isRoot: true,
       initialTagName: 'feature-action',

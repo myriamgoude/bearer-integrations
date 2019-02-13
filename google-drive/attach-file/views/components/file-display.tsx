@@ -11,7 +11,6 @@ import ViewIcon from './view-icon';
 export class FileDisplay {
     @Prop() onDelete: (file: File) => void | undefined;
     @Prop() items: File[];
-    @Prop() isEditComponent: boolean;
 
     redirect = (file: File) => {
         window.open(file.webViewLink, '_blank');
@@ -22,7 +21,6 @@ export class FileDisplay {
             return null;
         }
 
-        if (this.isEditComponent) {
             return (
                 this.items.map(file => {
                     return (
@@ -40,25 +38,5 @@ export class FileDisplay {
                     )
                 })
             )
-        }
-
-        return (
-            this.items.map(file => {
-                return (
-                    <li class="list-item">
-                        <div>
-                            <p>{file.path.join('/')}/<strong>{file.name}</strong> {file.size ?
-                                <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mo</span> : null}
-                            </p>
-                        </div>
-                        <div onClick={() => {
-                            this.redirect(file)
-                        }} class="preview">
-                            <ViewIcon />
-                        </div>
-                    </li>
-                )
-            })
-        )
     }
 }

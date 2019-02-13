@@ -12,6 +12,7 @@ export class WorkflowBox {
   @Prop() onBack: ()=> void;
   @Prop() onMenu: ()=> void | undefined;
   @Prop() onClose: (e:Event) => void | undefined;
+  @Prop() rootFolder: boolean | undefined;
   @Prop() heading: string;
   @Prop() subHeading: string | undefined;
 
@@ -33,9 +34,9 @@ export class WorkflowBox {
                 {(this.onClose) ? <button class='menu' onClick={this.onClose}><IconClose /></button> : null}
               </div>
               <div class='title'>
-              <button onClick={this.onBack} class='back'>
+                {this.rootFolder ? <button onClick={this.onBack} class='back'>
                   <icon-chevron direction="left"></icon-chevron>
-                </button>
+                </button> : null}
                 <div style={{flex:'1'}}>
                   <span style={{fontSize: '16px', fontFamily: 'Arial', lineHeight:'19px', fontWeight: 'bold', color: '#030D36'}}>{this.heading}</span>
                   <span style={{fontSize: '12px', fontFamily: 'Arial', display: 'block', lineHeight:'14px', fontWeight: 'normal', color: '#030D36'}}>{this.subHeading}</span>

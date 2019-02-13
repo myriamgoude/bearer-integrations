@@ -1,7 +1,7 @@
 .loading {	
   height: 16px;	
   opacity: 0.56;	
-  border-radius: 7px;	
+  border-radius: 7px;
   background: linear-gradient(270deg, #E1E5F8 0%, #F0F1F5 100%);
 }
 
@@ -32,7 +32,6 @@ span.label {
   font-size: 14px;
   flex: 1;
   white-space:nowrap;
-    font-family: Arial;
     color: #030D36;
 }
 
