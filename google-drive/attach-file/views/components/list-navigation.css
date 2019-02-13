@@ -32,6 +32,8 @@ span.label {
   font-size: 14px;
   flex: 1;
   white-space:nowrap;
+    font-family: Arial;
+    color: #030D36;
 }
 
 .no-results-content {

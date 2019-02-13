@@ -37,8 +37,8 @@ export class WorkflowBox {
                   <icon-chevron direction="left"></icon-chevron>
                 </button>
                 <div style={{flex:'1'}}>
-                  <span>{this.heading}</span>
-                  <span style={{fontSize: '10px', display: 'block', lineHeight:'6px', fontWeight: 'normal'}}>{this.subHeading}</span>
+                  <span style={{fontSize: '16px', fontFamily: 'Arial', lineHeight:'19px', fontWeight: 'bold', color: '#030D36'}}>{this.heading}</span>
+                  <span style={{fontSize: '12px', fontFamily: 'Arial', display: 'block', lineHeight:'14px', fontWeight: 'normal', color: '#030D36'}}>{this.subHeading}</span>
                 </div>
               </div>
               <slot />

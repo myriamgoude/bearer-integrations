@@ -26,6 +26,7 @@
     font-size: 14px;
     display: flex;
     justify-content: center;
+    align-items: center;
     cursor: pointer;
     border: none;
     margin-left: 16px;
@@ -33,12 +34,16 @@
 
 a {
     color: #898B92;
+    font-family: Arial;
     font-size: 12px;
     letter-spacing: 0.1px;
     line-height: 14px;
+    padding-top: 5px;
 }
 
 p {
+    font-family: Arial;
+    color: #6B7083;
     margin: 0;
     font-size: 14px;
 }

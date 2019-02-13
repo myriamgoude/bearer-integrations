@@ -1,11 +1,7 @@
 import {Component, Prop} from '@bearer/core'
 import {File} from '../types'
 import 'ionicons'
-
-const iconStyle ={
-    alignSelf: 'center',
-    fontSize: '1.2em',
-}
+import ViewIcon from './view-icon';
 
 @Component({
     tag: 'file-display',
@@ -33,12 +29,12 @@ export class FileDisplay {
                         <li class="list-item">
                             <div>
                                 <p>{file.path.join('/')}/<strong>{file.name}</strong> {file.size ?
-                                    <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mb</span> : null}
+                                    <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mo</span> : null}
                                 </p>
-                                <a href="#" onClick={() => this.onDelete(file)}>REMOVE</a>
+                                <a class="remove-link" href="#" onClick={() => this.onDelete(file)}>Remove</a>
                             </div>
                             <div onClick={() => {this.redirect(file)}} class="preview">
-                                <ion-icon name="open" style={iconStyle}></ion-icon>
+                                <ViewIcon />
                             </div>
                         </li>
                     )
@@ -52,13 +48,13 @@ export class FileDisplay {
                     <li class="list-item">
                         <div>
                             <p>{file.path.join('/')}/<strong>{file.name}</strong> {file.size ?
-                                <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mb</span> : null}
+                                <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mo</span> : null}
                             </p>
                         </div>
                         <div onClick={() => {
                             this.redirect(file)
                         }} class="preview">
-                            <ion-icon name="open" style={iconStyle}></ion-icon>
+                            <ViewIcon />
                         </div>
                     </li>
                 )
