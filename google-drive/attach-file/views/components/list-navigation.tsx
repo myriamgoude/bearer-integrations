@@ -2,7 +2,6 @@ import { Component, Prop } from '@bearer/core'
 import 'ionicons'
 import {File} from '../types'
 import NoResultBackgroundIcon from './no-result-background-icon';
-import SearchIcon from './search-icon';
 
 const iconStyle ={
   alignSelf: 'center',
@@ -85,9 +84,6 @@ export class ListNavigation {
           <div class="no-results-content">
               <div class="background">
                 <NoResultBackgroundIcon />
-                <div class="icon">
-                  <SearchIcon />
-                </div>
               </div>
             <span class='no-results-label'>No data found</span>
             <p onClick={this.onBackClicked}>Back</p>

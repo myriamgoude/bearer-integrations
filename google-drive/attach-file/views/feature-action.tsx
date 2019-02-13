@@ -202,6 +202,7 @@ export class FeatureAction {
                     onBack={this.handleWorkflowBack}
                     onClose={this.handleExternalClick}
                     onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
+                    style={{position: 'absolute', marginLeft: '24px'}}
                 >
                     {this.renderWorkflowContent()}
                 </workflow-box>
