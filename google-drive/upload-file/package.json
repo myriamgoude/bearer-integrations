@@ -1,0 +1,41 @@
+{
+  "name": "save-file",
+  "version": "0.0.1",
+  "description": "SaveFile",
+  "main": "dist/index.js",
+  "types": "dist/types/components.d.ts",
+  "module": "dist/esm/index.js",
+  "collection": "dist/collection/collection-manifest.json",
+  "scripts": {
+    "push": "bearer push",
+    "start": "bearer start",
+    "invoke": "bearer invoke",
+    "generate": "bearer invoke",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@bearer/core": "beta5",
+    "@bearer/intents": "beta5",
+    "@bearer/ui": "beta5",
+    "axios": "^0.18.0",
+    "ionicons": "^4.5.0-3"
+  },
+  "devDependencies": {
+    "@bearer/cli": "beta5",
+    "@types/node": "latest"
+  },
+  "license": "MIT",
+  "jest": {
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx"
+    ]
+  }
+}
