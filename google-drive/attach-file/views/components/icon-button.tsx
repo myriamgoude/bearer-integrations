@@ -1,5 +1,5 @@
 import { Component, Prop } from '@bearer/core'
-import GoogleDrive from './google-drive-logo';
+import IconGoogleDrive from './icon-google-drive';
 
 const style = {
   fontSize: '1em',
@@ -22,7 +22,7 @@ export class IconButton {
   render() {
     return (<bearer-button style={style}>
       <span>
-        <GoogleDrive />
+        <IconGoogleDrive />
         {this.text}
       </span>
     </bearer-button>)

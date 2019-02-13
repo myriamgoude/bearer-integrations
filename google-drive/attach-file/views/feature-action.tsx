@@ -189,10 +189,7 @@ export class FeatureAction {
     renderAuthorized: any = ({ revoke }) => {
         this.revoke = revoke;
         return (
-            <div style={{display: 'flex', width: '375px', justifyContent: 'space-between'}}>
-                <icon-button onClick={() => this.onAuthorizeClick(this.authorize)} text="Connect to Google Drive"/>
-                <icon-button onClick={this.handleAttachClick} text="Attach a file" />
-            </div>
+            <icon-button onClick={this.handleAttachClick} text="Attach a file" />
         )
     };
 
