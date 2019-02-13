@@ -1,4 +1,7 @@
 svg {
-    position: absolute;
-    top: 40%;
+    height: 16px;
+    padding-right: 5px;
+    margin-bottom: -2px;
+    color: #3E75C3;
+    font-size: 1.2em;
 }

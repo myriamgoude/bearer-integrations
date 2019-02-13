@@ -1,16 +1,15 @@
 import { Component, Prop } from '@bearer/core'
-import 'ionicons'
-import GoogleDrive from './google-drive-logo'
+import GoogleDrive from './google-drive-logo';
 
 const style = {
-  fontSize: '0.875em',
+  fontSize: '1em',
+  lineHeight: '30px',
   backgroundColor: 'white',
   fontWeight: '500',
   border: 'none',
   outline: 'none',
   cursor: 'pointer',
-  padding: '8px 10px 8px 25px'
-};
+}
 
 @Component({
   tag: 'icon-button',
@@ -21,11 +20,11 @@ export class IconButton {
   @Prop() text: string;
 
   render() {
-    return (<shadow-box>
-      <GoogleDrive />
-      <button style={style}>
+    return (<bearer-button style={style}>
+      <span>
+        <GoogleDrive />
         {this.text}
-      </button>
-    </shadow-box>)
+      </span>
+    </bearer-button>)
   }
 }
