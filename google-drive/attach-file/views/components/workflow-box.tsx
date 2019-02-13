@@ -1,4 +1,6 @@
 import { Component, Prop } from '@bearer/core'
+import IconClose from './icon-close';
+import IconSettings from './icon-settings';
 
 @Component({
   tag: 'workflow-box',
@@ -27,10 +29,8 @@ export class WorkflowBox {
           <shadow-box styles={{position:'absolute', padding: '8px 32px'}}>
             <div style={{margin: '8px 0 32px'}}>
               <div class="settings">
-                {(this.onMenu) ? <button style={{height: '25px'}} class='menu' onClick={this.onMenu}><ion-icon style={{transform: 'rotate(90deg)'}} name="more"></ion-icon></button> : null}
-                {(this.onClose) ? <button style={{height: '25px'}} class='menu' onClick={this.onClose}>
-                  <ion-icon name="close"></ion-icon>
-                </button> : null}
+                {(this.onMenu) ? <button class='menu' onClick={this.onMenu}><IconSettings /></button> : null}
+                {(this.onClose) ? <button class='menu' onClick={this.onClose}><IconClose /></button> : null}
               </div>
               <div class='title'>
               <button onClick={this.onBack} class='back'>

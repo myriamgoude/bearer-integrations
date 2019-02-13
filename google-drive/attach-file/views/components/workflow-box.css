@@ -15,12 +15,20 @@
 .menu {
   color: #AEB2C3;
   font-size: 1.5em;
+  height: 16px;
+  width: 16px;
   background: none;
   border: none;
   outline: none;
   cursor: pointer;
-  transform: rotate(180deg);
+  margin: 8px 4px;
+  padding: 0;
 }
+
+.menu:last-child { margin-right: 8px; }
+
+.menu > svg { vertical-align: top; }
+
 .back {
   background: none;
   border: none;
