@@ -8,3 +8,7 @@ export type File = {
     path: string[];
     parents: string[];
 }
+
+export type TAuthSavedPayload = {
+  authId: string
+}
