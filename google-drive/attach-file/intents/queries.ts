@@ -1,6 +1,7 @@
 export const folders = {
-    pageSize: 500,
-    orderBy: 'folder, name',
+    corpora: 'user',
+    pageSize: 20,
+    orderBy: 'modifiedTime desc',
     q: '',
     fields: '*'
 };

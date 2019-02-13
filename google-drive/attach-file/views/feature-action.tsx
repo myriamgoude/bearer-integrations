@@ -37,6 +37,7 @@ export class FeatureAction {
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
     @State() revoke: any | undefined;
+    @State() authorize: any | undefined;
 
     @State() data: File[] | undefined;
     @State() path: string[] | undefined = [];
@@ -67,16 +68,16 @@ export class FeatureAction {
         this.selectedFolder = undefined;
         this.errorMessage = undefined;
         this.ui = InterfaceState.Folder;
-        this.getData({folderId: 'root'})
+        this.getData()
             .then(({data}:{data: File[]}) => {
-                this.data = data
-            }).catch(this.handleError)
+                this.data = data;
+            }).catch(this.handleError);
     };
 
     handleSearchQuery = (query: string) => {
         this.data = undefined;
         this.filesSearchResults = undefined;
-        const req = (query.length > 3) ? this.searchData({query}) : this.getData({folderId: 'root'});
+        const req = (query.length > 3) ? this.searchData({query}) : this.getData();
         req.then(({data}: {data: File[]}) => {
             this.filesSearchResults = data;
         }).catch(this.handleError);
@@ -86,7 +87,7 @@ export class FeatureAction {
         this.data = undefined;
         let params = {} as {folderId: string};
         if (mainFolder) {
-            params.folderId = 'root';
+            params.folderId = undefined;
         } else {
             params.folderId = `${selectedFolder.id}`
         }
@@ -103,9 +104,9 @@ export class FeatureAction {
 
     handleItemSelect = (selectedItem: File) => {
         this.filesSearchResults = undefined;
-        this.path.push(selectedItem.name);
         if (selectedItem.mimeType === 'application/vnd.google-apps.folder') {
             this.selectedFolder = selectedItem;
+            this.path.push(selectedItem.name);
             this.handleFolderSelect(selectedItem);
         } else {
             this.handleAttachFile(selectedItem);
@@ -113,6 +114,7 @@ export class FeatureAction {
     };
 
     handleWorkflowBack = () => {
+        this.path.splice(-1,1);
         switch(this.ui) {
             case InterfaceState.Settings:
             case InterfaceState.Folder:
@@ -168,8 +170,9 @@ export class FeatureAction {
     };
 
     onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
+        this.authorize = authenticate;
         authenticate()
-            .then(()=>{
+            .then(() => {
                 this.ui = InterfaceState.Authenticated;
                 this.handleAttachClick()
             })
@@ -177,16 +180,19 @@ export class FeatureAction {
     };
 
     renderUnauthorized: any = ({ authenticate }) => (
-        <icon-button
-            onClick={() => this.onAuthorizeClick(authenticate)}
-            text="Connect to Google Drive"
-        />
+            <icon-button
+                onClick={() => this.onAuthorizeClick(authenticate)}
+                text="Connect to Google Drive"
+            />
     );
 
     renderAuthorized: any = ({ revoke }) => {
         this.revoke = revoke;
         return (
-            <icon-button onClick={this.handleAttachClick} text="Attach a file" />
+            <div style={{display: 'flex', width: '375px', justifyContent: 'space-between'}}>
+                <icon-button onClick={() => this.onAuthorizeClick(this.authorize)} text="Connect to Google Drive"/>
+                <icon-button onClick={this.handleAttachClick} text="Attach a file" />
+            </div>
         )
     };
 
@@ -199,7 +205,7 @@ export class FeatureAction {
                     onBack={this.handleWorkflowBack}
                     onClose={this.handleExternalClick}
                     onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
-                    style={{position: 'absolute', paddingLeft: '10px'}}
+                    style={{position: 'absolute', left: '35%', top: '25%'}}
                 >
                     {this.renderWorkflowContent()}
                 </workflow-box>

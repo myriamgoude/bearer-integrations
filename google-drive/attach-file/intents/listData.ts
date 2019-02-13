@@ -8,8 +8,12 @@ export default class ListDataIntent extends FetchData implements FetchData<Retur
   async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
     const token = event.context.authAccess.accessToken;
     // Put your logic here
-    query.q = `"${event.params.folderId}" in parents`;
+    if (event.params.folderId) {
+      query.q = `"${event.params.folderId}" in parents`;
+    }
     const { data }  = await Client(token).get('', { params: query });
+    const type = 'application/vnd.google-apps.folder';
+    data.files.sort((x,y) => { return x.mimeType == type ? -1 : y.mimeType == type ? 1 : 0; });
     if (data.errors) {
       const message = data.errors.map((e: { message: string }) => e.message).join(', ');
       return { error: message }

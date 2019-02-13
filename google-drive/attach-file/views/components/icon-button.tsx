@@ -9,11 +9,12 @@ const style = {
   border: 'none',
   outline: 'none',
   cursor: 'pointer',
-  padding: '8px 16px'
+  padding: '8px 10px 8px 25px'
 };
 
 @Component({
   tag: 'icon-button',
+  styleUrl: './icon-button.css',
   shadow: true
 })
 export class IconButton {

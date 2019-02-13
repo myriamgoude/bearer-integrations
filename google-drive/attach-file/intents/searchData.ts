@@ -8,7 +8,8 @@ export default class SearchDataIntent extends FetchData implements FetchData<Ret
   async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
     const token = event.context.authAccess.accessToken;
     const params = event.params;
-    query.q = `name contains '${params.query}'`;
+    delete query.orderBy;
+    query.q = `name contains '${params.query}' or fullText contains '${params.query}'`;
     const { data } = await Client(token).get('', {params: query});
     if (data.errors) {
       const message = data.errors.map((e: { message: string }) => e.message).join(', ');

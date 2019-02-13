@@ -27,7 +27,7 @@ export class WorkflowBox {
           <shadow-box styles={{position:'absolute', padding: '8px 32px'}}>
             <div style={{margin: '8px 0 32px'}}>
               <div class="settings">
-                {(this.onMenu) ? <button class='menu' onClick={this.onMenu}>...</button> : null}
+                {(this.onMenu) ? <button style={{height: '25px'}} class='menu' onClick={this.onMenu}><ion-icon style={{transform: 'rotate(90deg)'}} name="more"></ion-icon></button> : null}
                 {(this.onClose) ? <button style={{height: '25px'}} class='menu' onClick={this.onClose}>
                   <ion-icon name="close"></ion-icon>
                 </button> : null}
@@ -38,7 +38,7 @@ export class WorkflowBox {
                 </button>
                 <div style={{flex:'1'}}>
                   <span>{this.heading}</span>
-                  <span style={{fontSize: '10px', display: 'block', lineHeight:'6px'}}>{this.subHeading}</span>
+                  <span style={{fontSize: '10px', display: 'block', lineHeight:'6px', fontWeight: 'normal'}}>{this.subHeading}</span>
                 </div>
               </div>
               <slot />

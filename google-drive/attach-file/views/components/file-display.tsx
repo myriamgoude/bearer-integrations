@@ -32,7 +32,9 @@ export class FileDisplay {
                     return (
                         <li class="list-item">
                             <div>
-                                <p>{file.path.join('/')}</p>
+                                <p>{file.path.join('/')}/<strong>{file.name}</strong> {file.size ?
+                                    <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mb</span> : null}
+                                </p>
                                 <a href="#" onClick={() => this.onDelete(file)}>REMOVE</a>
                             </div>
                             <div onClick={() => {this.redirect(file)}} class="preview">
@@ -49,9 +51,13 @@ export class FileDisplay {
                 return (
                     <li class="list-item">
                         <div>
-                            <p>{file.name}</p>
+                            <p>{file.path.join('/')}/<strong>{file.name}</strong> {file.size ?
+                                <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mb</span> : null}
+                            </p>
                         </div>
-                        <div onClick={() => {this.redirect(file)}} class="preview">
+                        <div onClick={() => {
+                            this.redirect(file)
+                        }} class="preview">
                             <ion-icon name="open" style={iconStyle}></ion-icon>
                         </div>
                     </li>
