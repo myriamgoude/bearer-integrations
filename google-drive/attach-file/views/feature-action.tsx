@@ -30,6 +30,7 @@ const StateTitles = {
 export class FeatureAction {
     @Prop() autoClose: boolean = true;
     @Prop() multi: boolean = true;
+    @Prop() authId: string
     @Intent('listData') getData: BearerFetch;
     @Intent('searchData') searchData: BearerFetch;
     @Intent('fetchPreviousFolder') fetchPreviousFolder: BearerFetch;
@@ -69,7 +70,7 @@ export class FeatureAction {
         this.selectedFolder = undefined;
         this.errorMessage = undefined;
         this.ui = InterfaceState.Folder;
-        this.getData()
+        this.getData({ authId: this.authId })
             .then(({data}:{data: File[]}) => {
                 this.data = data;
             }).catch(this.handleError);
@@ -78,7 +79,7 @@ export class FeatureAction {
     handleSearchQuery = (query: string) => {
         this.data = undefined;
         this.filesSearchResults = undefined;
-        const req = (query.length > 3) ? this.searchData({query}) : this.getData();
+        const req = (query.length > 3) ? this.searchData({authId: this.authId, query}) : this.getData({ authId: this.authId });
         req.then(({data}: {data: File[]}) => {
             this.filesSearchResults = data;
         }).catch(this.handleError);
@@ -89,7 +90,7 @@ export class FeatureAction {
         this.data = undefined;
         let params = {} as {folderId: string};
         params.folderId = `${selectedFolder.id}`;
-        this.getData(params)
+        this.getData({ authId: this.authId, ...params})
             .then(({data}:{data: File[]}) => {
                 this.data = data
             }).catch(this.handleError)
@@ -131,10 +132,10 @@ export class FeatureAction {
             return;
         }
         this.data = undefined;
-        this.getData({folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File[]}) => {
+        this.getData({authId: this.authId, folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File[]}) => {
             this.data = data;
         }).catch(this.handleError);
-        this.fetchPreviousFolder({folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File}) => {
+        this.fetchPreviousFolder({authId: this.authId, folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File}) => {
             if (!data.parents) {
                 this.rootFolder = false;
             }
