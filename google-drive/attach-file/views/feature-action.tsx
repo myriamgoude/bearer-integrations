@@ -182,7 +182,7 @@ export class FeatureAction {
     renderUnauthorized: any = ({ authenticate }) => (
             <icon-button
                 onClick={() => this.onAuthorizeClick(authenticate)}
-                text="Connect to Google Drive"
+                text="Attach a file"
             />
     );
 
@@ -281,13 +281,13 @@ export class FeatureAction {
 
     render() {
         return (
-            <div>
+            <span>
                 <bearer-authorized
                     renderUnauthorized={this.renderUnauthorized}
                     renderAuthorized={this.renderAuthorized}
                 />
                 {this.renderWorkflow()}
-            </div>
+            </span>
         )
     }
 }
