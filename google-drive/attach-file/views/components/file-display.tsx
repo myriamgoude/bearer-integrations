@@ -26,10 +26,10 @@ export class FileDisplay {
                     return (
                         <li class="list-item">
                             <div>
-                                <p>{file.path.join('/')}/<strong>{file.name}</strong> {file.size ?
+                                <p><strong>{file.name}</strong> {file.size ?
                                     <span class="file-size">{(Number(file.size) / 1000000).toFixed(2)} Mo</span> : null}
                                 </p>
-                                <a class="remove-link" href="#" onClick={() => this.onDelete(file)}>Remove</a>
+                                { this.onDelete && <a class="remove-link" href="#" onClick={() => this.onDelete(file)}>Remove</a> }
                             </div>
                             <div onClick={() => {this.redirect(file)}} class="preview">
                                 <ViewIcon />
