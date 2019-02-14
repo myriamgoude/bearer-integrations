@@ -40,7 +40,6 @@ export class FeatureAction {
     @State() foldersData: File[] | undefined;
     @State() selectedFolder: File | undefined;
     @State() foldersSearchResults: File[] | undefined;
-    @State() path: string[] | undefined = [];
     @State() authorized = false;
     @State() rootFolder = false;
     @State() showButton = true;
@@ -103,12 +102,10 @@ export class FeatureAction {
     handleItemSelect = (selectedItem: File) => {
         this.foldersSearchResults = undefined;
         this.selectedFolder = selectedItem;
-        this.path.push(selectedItem.name);
         this.handleFolderSelect(selectedItem);
     };
 
     handleWorkflowBack = () => {
-        this.path.splice(-1, 1);
         switch(this.ui) {
             case InterfaceState.Settings:
             case InterfaceState.Folder:
@@ -121,7 +118,6 @@ export class FeatureAction {
     };
 
     handleAttachFolder = () => {
-        this.selectedFolder.path = this.path;
         if (!this.selectedFolder) {
             this.getMainFolder();
         }
@@ -129,7 +125,6 @@ export class FeatureAction {
         if(this.autoClose) {
             this.ui = InterfaceState.Authenticated;
         }
-        this.path = [];
     };
 
     getMainFolder = () => {
@@ -255,7 +250,6 @@ export class FeatureAction {
     };
 
     handleExternalClick = (_e:Event) => {
-        this.path = [];
         this.foldersData = undefined;
         this.selectedFolder = undefined;
         this.foldersSearchResults = undefined;
