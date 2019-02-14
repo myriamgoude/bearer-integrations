@@ -173,14 +173,14 @@ export class FeatureAction {
     renderUnauthorized: any = ({ authenticate }) => (
         <icon-button
             onClick={() => this.onAuthorizeClick(authenticate)}
-            text="Attach a file"
+            text="Save to Google Drive"
         />
     );
 
     renderAuthorized: any = ({ revoke }) => {
         this.revoke = revoke;
         return (
-            <icon-button onClick={this.handleAttachClick} text="Attach a file" />
+            <icon-button onClick={this.handleAttachClick} text="Save to Google Drive" />
         )
     };
 
