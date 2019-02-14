@@ -6,20 +6,17 @@
 import {BearerFetch, Element, Intent, Listen, Output, Prop, RootComponent, State} from '@bearer/core';
 import '@bearer/ui';
 import { File } from "./types";
-import fuzzysearch from "./fuzzy";
 
 enum InterfaceState {
     Unauthenticated,
     Authenticated,
     Folder,
-    Files,
     Settings,
     Error,
 }
 
 const StateTitles = {
     [InterfaceState.Folder]: 'Select destination',
-    [InterfaceState.Files]:'Select one file',
     [InterfaceState.Error]:'Select destination',
     [InterfaceState.Settings]:'Settings',
 };
@@ -31,7 +28,9 @@ const StateTitles = {
 export class FeatureAction {
     @Prop() autoClose: boolean = true;
     @Prop() multi: boolean = true;
+    @Prop() authId: string;
     @Intent('listData') getData: BearerFetch;
+    @Intent('searchData') searchData: BearerFetch;
     @Intent('fetchMainFolder') fetchMainFolder: BearerFetch;
 
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
@@ -40,8 +39,11 @@ export class FeatureAction {
 
     @State() foldersData: File[] | undefined;
     @State() selectedFolder: File | undefined;
-    @State() selectedFolders: File[] | undefined = [];
     @State() foldersSearchResults: File[] | undefined;
+    @State() path: string[] | undefined = [];
+    @State() authorized = false;
+    @State() rootFolder = false;
+    @State() showButton = true;
 
     @Output() folders: File[];
 
@@ -67,27 +69,29 @@ export class FeatureAction {
         this.selectedFolder = undefined;
         this.errorMessage = undefined;
         this.ui = InterfaceState.Folder;
-        this.getData({folderId: 'root'})
+        this.getData({ authId: this.authId })
             .then(({data}:{data: File[]}) => {
                 this.foldersData = data;
             }).catch(this.handleError)
     };
 
     handleSearchQuery = (query: string) => {
-        const matcher = query.toLocaleLowerCase();
-        this.foldersSearchResults = [...this.foldersData.filter(c => fuzzysearch(matcher, c.name.toLocaleLowerCase()))];
+        this.foldersData = undefined;
+        this.foldersSearchResults = undefined;
+        const req = (query.length > 3) ? this.searchData({authId: this.authId, query}) : this.getData({ authId: this.authId });
+        req.then(({data}: {data: File[]}) => {
+            this.foldersSearchResults = data;
+        }).catch(this.handleError);
     };
 
-    handleFolderSelect = (selectedFolder: File, mainFolder?: boolean) => {
+    handleFolderSelect = (selectedFolder: File) => {
+        this.rootFolder = true;
+        this.foldersData = undefined;
         let params = {} as {folderId: string};
-        if (mainFolder) {
-            params.folderId = 'root';
-        } else {
-            params.folderId = `${selectedFolder.id}`
-        }
+        params.folderId = `${selectedFolder.id}`;
         this.getData(params)
             .then(({data}:{data: File[]}) => {
-                this.foldersData = data
+                this.foldersData = data;
             }).catch(this.handleError)
     };
 
@@ -97,25 +101,18 @@ export class FeatureAction {
     };
 
     handleItemSelect = (selectedItem: File) => {
+        this.foldersSearchResults = undefined;
         this.selectedFolder = selectedItem;
-        this.selectedFolders.push(selectedItem);
+        this.path.push(selectedItem.name);
         this.handleFolderSelect(selectedItem);
     };
 
     handleWorkflowBack = () => {
+        this.path.splice(-1, 1);
         switch(this.ui) {
             case InterfaceState.Settings:
             case InterfaceState.Folder:
-                const index = this.selectedFolders.indexOf(this.selectedFolder) - 1;
-                console.log(this.selectedFolders);
-                if (index === -1) {
-                    this.handleFolderSelect(this.selectedFolders[0], true);
-                } else if (index === -2) {
-                    this.ui = InterfaceState.Authenticated;
-                } else {
-                    this.ui = InterfaceState.Folder;
-                    this.handleItemSelect(this.selectedFolders[index]);
-                }
+                this.getMainFolder();
                 break;
             case InterfaceState.Error:
                 this.ui = InterfaceState.Authenticated;
@@ -124,6 +121,7 @@ export class FeatureAction {
     };
 
     handleAttachFolder = () => {
+        this.selectedFolder.path = this.path;
         if (!this.selectedFolder) {
             this.getMainFolder();
         }
@@ -131,15 +129,25 @@ export class FeatureAction {
         if(this.autoClose) {
             this.ui = InterfaceState.Authenticated;
         }
+        this.path = [];
     };
 
     getMainFolder = () => {
-        let params = {} as {folderId: string};
-        params.folderId = this.foldersData[0]['parents'][0];
-        this.fetchMainFolder(params)
-            .then(({data}:{data: File}) => {
-                this.folders = [data];
-            }).catch(this.handleError)
+        if (!this.selectedFolder || !this.selectedFolder.parents) {
+            this.foldersData = undefined;
+            this.ui = InterfaceState.Authenticated;
+            return;
+        }
+        this.foldersData = undefined;
+        this.getData({authId: this.authId, folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File[]}) => {
+            this.foldersData = data;
+        }).catch(this.handleError);
+        this.fetchMainFolder({authId: this.authId, folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File}) => {
+            if (!data.parents) {
+                this.rootFolder = false;
+            }
+            this.selectedFolder = data;
+        }).catch(this.handleError)
     };
 
     handleMenu = () => {
@@ -154,7 +162,8 @@ export class FeatureAction {
 
     onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
         authenticate()
-            .then(()=>{
+            .then(() => {
+                this.authorized = true;
                 this.ui = InterfaceState.Authenticated;
                 this.handleAttachClick()
             })
@@ -164,14 +173,14 @@ export class FeatureAction {
     renderUnauthorized: any = ({ authenticate }) => (
         <icon-button
             onClick={() => this.onAuthorizeClick(authenticate)}
-            text="Connect to Google Drive"
+            text="Attach a file"
         />
     );
 
     renderAuthorized: any = ({ revoke }) => {
         this.revoke = revoke;
         return (
-            <icon-button onClick={this.handleAttachClick} text="Save to Google Drive" />
+            <icon-button onClick={this.handleAttachClick} text="Attach a file" />
         )
     };
 
@@ -182,9 +191,13 @@ export class FeatureAction {
                     heading={StateTitles[this.ui] || ""}
                     subHeading={(this.selectedFolder) ? `From ${this.selectedFolder.name}` : undefined}
                     onBack={this.handleWorkflowBack}
+                    showSaveButton={this.showButton}
+                    selectedFolder={this.selectedFolder}
+                    rootFolder={this.rootFolder}
                     onClose={this.handleExternalClick}
+                    onSaveClicked={this.handleAttachFolder}
                     onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
-                    style={{position: 'absolute', paddingLeft: '10px'}}
+                    style={{position: 'absolute', marginLeft: '24px'}}
                 >
                     {this.renderWorkflowContent()}
                 </workflow-box>
@@ -195,11 +208,15 @@ export class FeatureAction {
     renderWorkflowContent = () => {
         switch(this.ui){
             case InterfaceState.Error:
+                this.rootFolder = false;
+                this.showButton = false;
                 return <error-message
                     message={this.errorMessage}
                     onRetry={this.handleRetry}
                 />;
             case InterfaceState.Settings:
+                this.rootFolder = false;
+                this.showButton = false;
                 // just use the same handler for all options as we just have logout
                 return (
                     <list-navigation
@@ -216,13 +233,10 @@ export class FeatureAction {
                         <div>
                             <list-navigation
                                 options={this.foldersSearchResults}
-                                selectedFolder={this.selectedFolder}
                                 attributeName={'name'}
                                 onSearchQuery={this.handleSearchQuery}
                                 showNextIcon={true}
-                                onOptionClicked={this.handleItemSelect}
-                                onSaveClicked={this.handleAttachFolder}/>
-                            <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
+                                onOptionClicked={this.handleItemSelect}/>
                         </div>
                     );
                 }
@@ -230,13 +244,10 @@ export class FeatureAction {
                     <div>
                         <list-navigation
                             options={this.foldersData}
-                            selectedFolder={this.selectedFolder}
                             attributeName={'name'}
                             onSearchQuery={this.handleSearchQuery}
                             showNextIcon={true}
-                            onOptionClicked={this.handleItemSelect}
-                            onSaveClicked={this.handleAttachFolder}/>
-                            <p class="footer-text">Powered by <strong>Bearer.sh</strong></p>
+                            onOptionClicked={this.handleItemSelect}/>
                     </div>
                 );
         }
@@ -244,8 +255,10 @@ export class FeatureAction {
     };
 
     handleExternalClick = (_e:Event) => {
+        this.path = [];
+        this.foldersData = undefined;
         this.selectedFolder = undefined;
-        this.foldersSearchResults = [];
+        this.foldersSearchResults = undefined;
         if(this.ui != InterfaceState.Unauthenticated){
             this.ui = InterfaceState.Authenticated
         }
@@ -262,13 +275,13 @@ export class FeatureAction {
 
     render() {
         return (
-            <div>
+            <span>
                 <bearer-authorized
                     renderUnauthorized={this.renderUnauthorized}
                     renderAuthorized={this.renderAuthorized}
                 />
                 {this.renderWorkflow()}
-            </div>
+            </span>
         )
     }
 }

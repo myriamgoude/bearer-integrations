@@ -34,7 +34,7 @@ export class EditAction {
     render() {
         return (
             <div>
-                <folder-display items={this.folders} onDelete={this.handleRemove} isEditComponent={true} />
+                <folder-display items={this.folders} onDelete={this.handleRemove} />
             </div>
         )
     }

@@ -5,4 +5,10 @@ export type File = {
     mimeType: string;
     size: string;
     webViewLink: string;
+    path: string[];
+    parents: string[];
+}
+
+export type TAuthSavedPayload = {
+    authId: string
 }

@@ -6,7 +6,7 @@ export default class SaveFoldersIntent extends SaveState implements SaveState<St
     const { folders } = event.params;
     return {
       state: {
-        folders: folders.map(folder => folder.id)
+        folders: folders.map(folder => {return {id: folder.id, path: folder.path}})
       },
       data: folders
     }
@@ -21,7 +21,7 @@ export type Params = {
 }
 
 export type State = {
-  folders: string[];
+  folders: any[];
 }
 
 export type ReturnedData = File[];

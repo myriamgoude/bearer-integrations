@@ -8,7 +8,10 @@ export default class FetchMainFolderIntent extends FetchData implements FetchDat
   async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
     const token = event.context.authAccess.accessToken;
     const { data }  = await Client(token).get(`/${event.params.folderId}`, { params: {fields: '*' }});
-    console.log(data);
+    if (data.errors) {
+      const message = data.errors.map((e: { message: string }) => e.message).join(', ');
+      return { error: message }
+    }
     return { data }
   }
 }

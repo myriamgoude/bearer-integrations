@@ -7,11 +7,16 @@ import { File } from "../views/types";
 export default class ListDataIntent extends FetchData implements FetchData<ReturnedData, any, TOAUTH2AuthContext> {
   async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
     const token = event.context.authAccess.accessToken;
+    const type = 'application/vnd.google-apps.folder';
     // Put your logic here
-    query.q = `"${event.params.folderId}" in parents`;
-    console.log(query);
+    const folderId = (event.params.folderId) ? event.params.folderId : 'root';
+    query.q = `"${folderId}" in parents and mimeType = "${type}"`;
+
     const { data }  = await Client(token).get('', { params: query });
-    data.files = data.files.filter(item => item.mimeType === 'application/vnd.google-apps.folder');
+    if (data.errors) {
+      const message = data.errors.map((e: { message: string }) => e.message).join(', ');
+      return { error: message }
+    }
     return { data: data.files }
   }
 }

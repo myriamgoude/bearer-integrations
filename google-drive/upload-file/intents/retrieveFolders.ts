@@ -7,11 +7,20 @@ export default class RetrieveFoldersIntent extends FetchData implements FetchDat
     let promises = [];
     const token = event.context.authAccess.accessToken;
     const folders = (event.context.reference) ? event.context.reference.folders : [];
+    console.log(folders);
     folders.forEach(folder => {
-      promises.push(Client(token).get(`/${folder}`, {params: {fields: '*'}}));
+      promises.push(Client(token).get(`/${folder.id}`, {params: {fields: '*'}}));
     });
-    const data = await Promise.all(promises);
-    return { data: data.map(item => item.data) }
+    let data = await Promise.all(promises);
+    data = data.map(item => item.data);
+    data.forEach(folder => {
+      folders.forEach(folderWithPath => {
+        if (folder.id === folderWithPath.id) {
+          folder.path = folderWithPath.path;
+        }
+      })
+    });
+    return { data }
   }
 }
 

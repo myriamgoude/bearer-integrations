@@ -1,7 +1,6 @@
 import { Component, Prop } from '@bearer/core'
 import 'ionicons'
-import GoogleDrive from './google-drive-logo'
-
+import IconGoogleDrive from './icon-google-drive'
 
 const style = {
   fontSize: '1em',
@@ -15,17 +14,18 @@ const style = {
 
 @Component({
   tag: 'icon-button',
+  styleUrl: './icon-button.css',
   shadow: true
 })
 export class IconButton {
-  @Prop() text: string
+  @Prop() text: string;
 
   render() {
-    return (<shadow-box>
-      <GoogleDrive />
-      <button style={style}>
+    return (<bearer-button style={style}>
+      <span>
+      <IconGoogleDrive />
         {this.text}
-      </button>
-    </shadow-box>)
+      </span>
+    </bearer-button>)
   }
 }

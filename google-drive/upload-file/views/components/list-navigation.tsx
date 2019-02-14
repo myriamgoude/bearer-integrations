@@ -1,6 +1,6 @@
-import { Component, Prop } from '@bearer/core'
-import 'ionicons'
-import {File} from '../types'
+import { Component, Prop } from '@bearer/core';
+import IconNoResults from './icon-no-results';
+import 'ionicons';
 
 const iconStyle ={
   alignSelf: 'center',
@@ -16,9 +16,7 @@ const iconStyle ={
 
 export class ListNavigation {
   @Prop() options: any[] | undefined;
-  @Prop() selectedFolder: File | undefined;
   @Prop() onOptionClicked: (option: any) => void;
-  @Prop() onSaveClicked: (option: any) => void;
   @Prop() attributeName: string | undefined;
   @Prop() formatLabel: (option: any) => JSX.Element;
   @Prop() onSearchQuery: (query: string) => void;
@@ -58,10 +56,6 @@ export class ListNavigation {
     return (this.onSearchQuery) ? <br-search onSearchQuery={this.onSearchQuery}/> : null
   };
 
-  renderSaveButton() {
-    return (this.showNextIcon) ? <button class="save-button" onClick={() => this.onSaveClicked(this.selectedFolder)}>Save here</button> : null;
-  }
-
   render() {
     return (
       <div>
@@ -83,11 +77,11 @@ export class ListNavigation {
     }
     if(this.options.length == 0){
       return (
-          <div>
-            <ul>
-              <span class='label'>No Results</span>
-            </ul>
-            <button class="save-button" onClick={() => this.onSaveClicked(this.selectedFolder)}>Save here</button>
+          <div class="no-results-content">
+            <div class="background">
+              <IconNoResults />
+            </div>
+            <span class='no-results-label'>This is final destination</span>
           </div>
       )
     }
@@ -104,7 +98,6 @@ export class ListNavigation {
                 </li>
             ))}
           </ul>
-          {this.renderSaveButton()}
         </div>
     )
   }

@@ -1,3 +1,7 @@
+:host {
+    font-family: Arial;
+}
+
 .footer-text {
     margin: 0;
     position: absolute;
