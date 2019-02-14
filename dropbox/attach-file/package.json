@@ -1,0 +1,43 @@
+{
+  "name": "attach-file",
+  "version": "0.0.1",
+  "description": "AttachFile",
+  "main": "dist/index.js",
+  "types": "dist/types/components.d.ts",
+  "module": "dist/esm/index.js",
+  "collection": "dist/collection/collection-manifest.json",
+  "scripts": {
+    "push": "bearer push",
+    "start": "bearer start",
+    "invoke": "bearer invoke",
+    "generate": "bearer invoke",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@bearer/core": "beta5",
+    "@bearer/intents": "beta5",
+    "@bearer/ui": "beta5",
+    "axios": "^0.18.0",
+    "ionicons": "^4.5.0-3",
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@bearer/cli": "beta5",
+    "@types/lodash": "^4.14.120",
+    "@types/node": "latest"
+  },
+  "license": "MIT",
+  "jest": {
+    "transform": {
+      "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json",
+      "jsx"
+    ]
+  }
+}

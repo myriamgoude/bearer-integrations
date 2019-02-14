@@ -1,0 +1,26 @@
+{
+  "authorizationURL": "https://www.dropbox.com/oauth2/authorize",
+  "tokenURL": "https://api.dropboxapi.com/oauth2/token",
+  "authType": "OAUTH2",
+  "tokenParams": {
+    "redirect_uri": "{{CALLBACK_URL_V2}}",
+    "grant_type": "authorization_code"
+  },
+  "authorizationParams": {},
+  "config": {
+    "callbackURL": "{{CALLBACK_URL_V2}}",
+    "response_type": "code"
+  },
+  "setupViews": [
+    {
+      "type": "text",
+      "label": "Client ID",
+      "controlName": "clientID"
+    },
+    {
+      "type": "password",
+      "label": "Client Secret",
+      "controlName": "clientSecret"
+    }
+  ]
+}
