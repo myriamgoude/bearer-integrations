@@ -33,7 +33,7 @@ export class FeatureAction {
     @Intent('listData') getData: BearerFetch;
     @Intent('searchData') searchData: BearerFetch;
     @Intent('fetchMainFolder') fetchMainFolder: BearerFetch;
-    @Intent('uploadFile') uploadFile: BearerFetch;
+    @Intent('uploadFile') uploadFileIntent: BearerFetch;
 
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
@@ -121,37 +121,48 @@ export class FeatureAction {
 
     handleAttachFolder = async () => {
         if (!this.selectedFolder) {
-            await this.getMainFolder();
+            this.rootFolder = true;
+            this.getMainFolder(true);
+        } else {
+            this.folders = [this.selectedFolder];
+            this.uploadFile();
         }
-        this.folders = [this.selectedFolder];
         if(this.autoClose) {
             this.ui = InterfaceState.Authenticated;
+            this.foldersData = undefined;
         }
-
-        if (this.fileURL) {
-            this.uploadFile({fileUrl: this.fileURL, folderId: this.selectedFolder.id}).then(() => {
-                console.log('success');
-            }).catch(this.handleError);
-        }
+        this.rootFolder = false;
     };
 
-    getMainFolder = () => {
-        if (!this.selectedFolder || !this.selectedFolder.parents) {
+    getMainFolder = (attach?: boolean) => {
+        if (!this.rootFolder) {
             this.foldersData = undefined;
             this.ui = InterfaceState.Authenticated;
             return;
         }
         this.foldersData = undefined;
-        this.getData({authId: this.authId, folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File[]}) => {
+        this.getData({authId: this.authId, folderId: this.selectedFolder ? this.selectedFolder.parents[0] : 'root'}).then(({data}:{data: File[]}) => {
             this.foldersData = data;
         }).catch(this.handleError);
-        this.fetchMainFolder({authId: this.authId, folderId: this.selectedFolder.parents[0]}).then(({data}:{data: File}) => {
+        this.fetchMainFolder({authId: this.authId, folderId: this.selectedFolder ? this.selectedFolder.parents[0]: 'root'}).then(({data}:{data: File}) => {
             if (!data.parents) {
                 this.rootFolder = false;
             }
             this.selectedFolder = data;
+            if (attach) {
+                this.folders = [data];
+                this.uploadFile();
+            }
         }).catch(this.handleError)
     };
+
+    uploadFile = () => {
+        if (this.fileURL) {
+            this.uploadFileIntent({fileUrl: this.fileURL, folderId: this.selectedFolder.id}).then(() => {
+                console.log('success');
+            }).catch(this.handleError);
+        }
+    }
 
     handleMenu = () => {
         this.ui = InterfaceState.Settings
@@ -261,6 +272,7 @@ export class FeatureAction {
         this.foldersData = undefined;
         this.selectedFolder = undefined;
         this.foldersSearchResults = undefined;
+        this.rootFolder = false;
         if(this.ui != InterfaceState.Unauthenticated){
             this.ui = InterfaceState.Authenticated
         }
