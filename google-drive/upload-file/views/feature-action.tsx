@@ -29,11 +29,11 @@ export class FeatureAction {
     @Prop() autoClose: boolean = true;
     @Prop() multi: boolean = true;
     @Prop() authId: string;
-    @Prop() fileURL: string;
+    @Prop() fileURL: string = 'http://www.pdf995.com/samples/pdf.pdf';
     @Intent('listData') getData: BearerFetch;
     @Intent('searchData') searchData: BearerFetch;
     @Intent('fetchMainFolder') fetchMainFolder: BearerFetch;
-    // @Intent('uploadFile') uploadFile: BearerFetch;
+    @Intent('uploadFile') uploadFile: BearerFetch;
 
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
@@ -119,22 +119,20 @@ export class FeatureAction {
         }
     };
 
-    handleAttachFolder = () => {
+    handleAttachFolder = async () => {
         if (!this.selectedFolder) {
-            this.getMainFolder();
+            await this.getMainFolder();
         }
         this.folders = [this.selectedFolder];
         if(this.autoClose) {
             this.ui = InterfaceState.Authenticated;
         }
 
-        //TODO need to handle uploading files to google drive using axios
-
-        // if (this.fileURL) {
-        //     this.uploadFile({fileUrl: this.fileURL, folderId: this.selectedFolder.id}).then(() => {
-        //         console.log('success');
-        //     }).catch(this.handleError);
-        // }
+        if (this.fileURL) {
+            this.uploadFile({fileUrl: this.fileURL, folderId: this.selectedFolder.id}).then(() => {
+                console.log('success');
+            }).catch(this.handleError);
+        }
     };
 
     getMainFolder = () => {
