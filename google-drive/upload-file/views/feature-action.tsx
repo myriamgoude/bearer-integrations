@@ -33,7 +33,7 @@ export class FeatureAction {
     @Intent('listData') getData: BearerFetch;
     @Intent('searchData') searchData: BearerFetch;
     @Intent('fetchMainFolder') fetchMainFolder: BearerFetch;
-    @Intent('uploadFile') uploadFile: BearerFetch;
+    // @Intent('uploadFile') uploadFile: BearerFetch;
 
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
@@ -128,11 +128,13 @@ export class FeatureAction {
             this.ui = InterfaceState.Authenticated;
         }
 
-        if (this.fileURL) {
-            this.uploadFile({fileUrl: this.fileURL, folderId: this.selectedFolder.id}).then(() => {
-                console.log('success');
-            }).catch(this.handleError);
-        }
+        //TODO need to handle uploading files to google drive using axios
+
+        // if (this.fileURL) {
+        //     this.uploadFile({fileUrl: this.fileURL, folderId: this.selectedFolder.id}).then(() => {
+        //         console.log('success');
+        //     }).catch(this.handleError);
+        // }
     };
 
     getMainFolder = () => {
