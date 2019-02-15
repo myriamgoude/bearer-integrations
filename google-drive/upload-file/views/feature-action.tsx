@@ -29,9 +29,11 @@ export class FeatureAction {
     @Prop() autoClose: boolean = true;
     @Prop() multi: boolean = true;
     @Prop() authId: string;
+    @Prop() fileURL: string;
     @Intent('listData') getData: BearerFetch;
     @Intent('searchData') searchData: BearerFetch;
     @Intent('fetchMainFolder') fetchMainFolder: BearerFetch;
+    @Intent('uploadFile') uploadFile: BearerFetch;
 
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
@@ -124,6 +126,12 @@ export class FeatureAction {
         this.folders = [this.selectedFolder];
         if(this.autoClose) {
             this.ui = InterfaceState.Authenticated;
+        }
+
+        if (this.fileURL) {
+            this.uploadFile({fileUrl: this.fileURL, folderId: this.selectedFolder.id}).then(() => {
+                console.log('success');
+            }).catch(this.handleError);
         }
     };
 

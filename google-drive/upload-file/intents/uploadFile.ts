@@ -28,15 +28,18 @@ const {google} = require('googleapis');
 
 export default class UploadFileIntent extends FetchData implements FetchData<ReturnedData, any, TOAUTH2AuthContext> {
     async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
-        
+
+        const token = event.context.authAccess.accessToken;
+
         const response = await axios({
           method:'get',
-          url: 'https://defenders.org/sites/default/files/styles/homepage-feature-2015/public/grizzley-bear_jim-chagares.png?itok=apGsiqAn',
+          url: event.params.fileUrl,
           responseType: 'stream'
-        })
-        
-        const credentials = {"installed":{"client_id":"714485265246-ihmm6867e8j7f9j41b4sn4v2pnqpbspv.apps.googleusercontent.com","client_secret":"PDPW01Pao1Wvz5vkY1MvIWqQ","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}};
-        const token = {"access_token":"ya29.GluwBu8e1PUs9KzOPUqZdqJDJv_KxkwVorDYCufsIiGDCtwaMQ3Cta4IjI5PcYCO6luyFJFeEfLDGVPODSLC99tybioz05xeJf0rz5hA2auRYnj_TQh_yfUyvG72","refresh_token":"1/rZI8V19Q2ufqAmxwM-knDcjHU65dFXhmG9nfyqVgm6iN7QxTsjZBUibp3N5RV4yA","scope":"https://www.googleapis.com/auth/drive.file","token_type":"Bearer","expiry_date":1550153657444}
+        });
+
+
+        // const credentials = {"installed":{"client_id":"69987490611-qcfiic2a1jumtac6ufkel03bhphg96nh.apps.googleusercontent.com","client_secret":"Svw6bZ326WHzgZBV7G2pS5wM","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}};
+        // const token = {"access_token":"ya29.GluwBu8e1PUs9KzOPUqZdqJDJv_KxkwVorDYCufsIiGDCtwaMQ3Cta4IjI5PcYCO6luyFJFeEfLDGVPODSLC99tybioz05xeJf0rz5hA2auRYnj_TQh_yfUyvG72","refresh_token":"1/rZI8V19Q2ufqAmxwM-knDcjHU65dFXhmG9nfyqVgm6iN7QxTsjZBUibp3N5RV4yA","scope":"https://www.googleapis.com/auth/drive.file","token_type":"Bearer","expiry_date":1550153657444}
 
         const {client_secret, client_id, redirect_uris} = credentials.installed;
         const oAuth2Client = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
@@ -44,12 +47,13 @@ export default class UploadFileIntent extends FetchData implements FetchData<Ret
         
         const drive = google.drive({version: 'v3', auth: oAuth2Client});
         var fileMetadata = {
-          'name': 'bear.png' 
+            'name': 'bear.png',
+            'parents': [event.params.folderId]
         };
 
         var media = {
-          mimeType: 'image/png',
-          body: response.data
+            mimeType: 'image/png',
+            body: response.data
         };
         
         const driveResponse = await drive.files.create({
@@ -69,6 +73,7 @@ export default class UploadFileIntent extends FetchData implements FetchData<Ret
  * Typing
  */
 export type Params = {
+    fileUrl: string;
     folderId: string;
 }
 
