@@ -44,6 +44,7 @@ export class FeatureAction {
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
     @State() isAuthorized: boolean = false;
+    @State() openPopoverOnceLoggedIn: boolean = false
 
     @State() data: File[] | undefined;
     @State() path: string[] | undefined = [];
@@ -171,13 +172,19 @@ export class FeatureAction {
 
     handleMenu = () => {
         this.ui = InterfaceState.Settings
-    };
+    }
 
     renderUnauthorized: any = () => (
-        <connect-action text-unauthenticated="Attach a file" />
+        <connect-action text-unauthenticated="Attach a file" onClick={() => { this.openPopoverOnceLoggedIn = true; }}/>
     )
 
     renderAuthorized: any = () => {
+
+        if (this.openPopoverOnceLoggedIn) {
+            this.openPopoverOnceLoggedIn = false;
+            this.handleAttachClick();
+        }
+
         return (
             <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
                 <icon-button slot="popover-toggler" onClick={this.handleAttachClick} text="Attach a file" />
