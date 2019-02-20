@@ -6,9 +6,8 @@
 import Bearer, { RootComponent, Event, Events, EventEmitter, Prop, Element, State } from '@bearer/core'
 import '@bearer/ui'
 
-export type TAuthorizedPayload = {
-  authId: string
-}
+export type TAuthorizedPayload = { authId: string }
+
 import { TAuthSavedPayload } from './types'
 
 @RootComponent({
@@ -22,8 +21,12 @@ export class ConnectAction {
   @Event()
   revoked: EventEmitter<TAuthorizedPayload>
 
-  @Prop({ mutable: true })
-  authId: string = null
+  @Prop() textUnauthenticated: string = "Connect to Google Drive"
+  @Prop() textAuthenticated: string = "Log out from Google Drive"
+  @Prop() kind: string = "embed"
+  @Prop() icon: string
+
+  @Prop({ mutable: true }) authId: string = null
 
   @State()
   authIdInternal: string
@@ -44,11 +47,12 @@ export class ConnectAction {
     })
   }
 
-  renderUnauthorized = ({ authenticate }) => (<icon-button onClick={authenticate} text="Connect to Google Drive" />)
+  renderUnauthorized = ({ authenticate }) => (<icon-button onClick={authenticate} text={this.textUnauthenticated} />)
 
   renderUnauthorizedIfAuthId = () => this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
 
   authenticate = () => {
+    console.log(this.el.querySelector('bearer-authorized'))
     this.el.querySelector('bearer-authorized').authenticate(this.authId)
   }
 
@@ -57,7 +61,7 @@ export class ConnectAction {
       <bearer-authorized
         renderUnauthorized={this.renderUnauthorizedIfAuthId}
         renderAuthorized={({ revoke }) =>
-          this.authIdInternal && (<icon-button text="Log out from Google Drive" onClick={revoke}/>)
+          this.authIdInternal && (<icon-button text={this.textAuthenticated} onClick={revoke}/>)
         }
       />,
       !this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
