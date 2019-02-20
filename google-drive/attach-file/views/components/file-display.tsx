@@ -1,7 +1,7 @@
 import {Component, Prop} from '@bearer/core'
 import {File} from '../types'
 import 'ionicons'
-import ViewIcon from './icon-view';
+import ViewIcon from './icons/icon-view';
 
 @Component({
     tag: 'file-display',

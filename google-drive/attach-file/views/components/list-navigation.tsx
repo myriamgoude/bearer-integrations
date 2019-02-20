@@ -1,7 +1,7 @@
 import { Component, Prop } from '@bearer/core'
 import 'ionicons'
 import {File} from '../types'
-import NoResultIcon from './icon-no-result';
+import NoResultIcon from './icons/icon-no-result';
 
 const iconStyle ={
   alignSelf: 'center',

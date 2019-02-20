@@ -1,5 +1,5 @@
 import { Component, State, Prop } from '@bearer/core'
-import InputSearchIcon from './icon-input-search'
+import InputSearchIcon from './icons/icon-input-search'
 
 const TIMEOUT_DURATION = 500
 

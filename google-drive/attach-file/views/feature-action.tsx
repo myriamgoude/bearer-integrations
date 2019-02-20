@@ -7,8 +7,8 @@ import Bearer, {BearerFetch, Element, Event, Events, EventEmitter, Intent, Liste
 import '@bearer/ui';
 import { File } from "./types";
 
-import IconSettings from "./components/icon-settings";
-import IconClose from "./components/icon-close";
+import IconSettings from "./components/icons/icon-settings";
+import IconClose from "./components/icons/icon-close";
 
 export type TAuthorizedPayload = { authId: string }
 
