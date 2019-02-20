@@ -3,9 +3,14 @@
 
 */
 
-import {BearerFetch, Element, Intent, Listen, Output, Prop, RootComponent, State} from '@bearer/core';
+import Bearer, {BearerFetch, Element, Event, Events, EventEmitter, Intent, Listen, Output, Prop, RootComponent, State} from '@bearer/core';
 import '@bearer/ui';
 import { File } from "./types";
+
+import IconSettings from "./components/icon-settings";
+import IconClose from "./components/icon-close";
+
+export type TAuthorizedPayload = { authId: string }
 
 enum InterfaceState {
     Unauthenticated,
@@ -19,7 +24,7 @@ enum InterfaceState {
 const StateTitles = {
     [InterfaceState.Folder]: 'Select files',
     [InterfaceState.Files]:'Select one file',
-    [InterfaceState.Error]:'Select files',
+    [InterfaceState.Error]:'There was en error',
     [InterfaceState.Settings]:'Settings',
 };
 
@@ -31,14 +36,14 @@ export class FeatureAction {
     @Prop() autoClose: boolean = true;
     @Prop() multi: boolean = true;
     @Prop() authId: string
+
     @Intent('listData') getData: BearerFetch;
     @Intent('searchData') searchData: BearerFetch;
     @Intent('fetchPreviousFolder') fetchPreviousFolder: BearerFetch;
 
     @State() ui: InterfaceState = InterfaceState.Unauthenticated;
     @State() errorMessage: string | undefined;
-    @State() revoke: any | undefined;
-    @State() authorize: any | undefined;
+    @State() isAuthorized: boolean = false;
 
     @State() data: File[] | undefined;
     @State() path: string[] | undefined = [];
@@ -46,6 +51,9 @@ export class FeatureAction {
     @State() filesSearchResults: File[] | undefined;
     @State() rootFolder: boolean | undefined = false;
 
+    @Event() authorized: EventEmitter<TAuthorizedPayload>
+    @Event() revoked: EventEmitter<TAuthorizedPayload>
+    
     @Output() files: File[] = [];
 
     @Element() el: HTMLElement;
@@ -162,55 +170,51 @@ export class FeatureAction {
     };
 
     handleMenu = () => {
+        console.log("handleMenu")
         this.ui = InterfaceState.Settings
     };
 
-    handleLogout = () => {
-        if(this.revoke){ this.revoke() }
-        this.revoke = undefined;
-        this.ui = InterfaceState.Unauthenticated
-    };
+    renderUnauthorized: any = () => (
+        <connect-action text-unauthenticated="Attach a file" />
+    )
 
-    onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
-        this.authorize = authenticate;
-        authenticate()
-            .then(() => {
-                this.ui = InterfaceState.Authenticated;
-                this.handleAttachClick()
-            })
-            .catch(console.error)
-    };
-
-    renderUnauthorized: any = ({ authenticate }) => (
-            <icon-button
-                onClick={() => this.onAuthorizeClick(authenticate)}
-                text="Attach a file"
-            />
-    );
-
-    renderAuthorized: any = ({ revoke }) => {
-        this.revoke = revoke;
+    renderAuthorized: any = () => {
         return (
-            <icon-button onClick={this.handleAttachClick} text="Attach a file" />
+            <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
+                <icon-button slot="popover-toggler" onClick={this.handleAttachClick} text="Attach a file" />
+                {this.renderWorkflow()}
+            </bearer-popover>
         )
     };
 
     renderWorkflow = () => {
-        if(this.ui > InterfaceState.Authenticated){
-            return (
-                <workflow-box
-                    heading={StateTitles[this.ui] || ""}
-                    subHeading={(this.selectedFolder) ? `From ${this.selectedFolder.name}` : undefined}
-                    onBack={this.handleWorkflowBack}
-                    onClose={this.handleExternalClick}
-                    rootFolder={this.rootFolder}
-                    onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
-                    style={{position: 'absolute', marginLeft: '24px'}}
-                >
-                    {this.renderWorkflowContent()}
-                </workflow-box>
-            )
+        console.log("renderWorkflow")
+        if(this.ui <= InterfaceState.Authenticated) {
+            return null;
         }
+    
+        const heading = StateTitles[this.ui] || "";
+        const subHeading= (this.selectedFolder) ? `From ${this.selectedFolder.name}` : undefined;
+        const handleBack = (this.rootFolder) && this.handleWorkflowBack;
+        const handleClose = this.handleExternalClick;
+        const handleMenu = (this.ui == InterfaceState.Settings) ? undefined : this.handleMenu;
+
+        return [
+            <div slot="popover-header">
+                <div class="popover-header">
+                {(handleBack) && <icon-chevron class="popover-back-nav" direction="left" onClick={handleBack} />}
+                <div class="popover-title">
+                    <h3>{heading}</h3>
+                    {(subHeading) && <span class="popover-subtitle">{subHeading}</span>}
+                </div>
+                </div>
+                <div class="popover-controls">
+                {(handleMenu) && <button class='popover-control' onClick={handleMenu}><IconSettings/></button>}
+                {(handleClose) && <button class='popover-control' onClick={handleClose}><IconClose/></button>}
+                </div>
+            </div>,
+            <div>{this.renderWorkflowContent()}</div>
+        ]
     };
 
     renderWorkflowContent = () => {
@@ -221,16 +225,7 @@ export class FeatureAction {
                     onRetry={this.handleRetry}
                 />;
             case InterfaceState.Settings:
-                // just use the same handler for all options as we just have logout
-                return (
-                    <list-navigation
-                        options={[
-                            {name: 'Logout', icon: 'ios-log-out'}
-                        ]}
-                        attributeName={'name'}
-                        showNextIcon={false}
-                        onOptionClicked={this.handleLogout} />
-                );
+                return (<connect-action authId={this.authId} text-authenticated="Logout" icon="ios-log-out" />);
             case InterfaceState.Folder:
                 if (this.filesSearchResults && this.filesSearchResults.length !== 0) {
                     return (
@@ -261,6 +256,7 @@ export class FeatureAction {
     };
 
     handleExternalClick = (_e:Event) => {
+        console.log("handleExternalClick")
         this.data = undefined;
         this.selectedFolder = undefined;
         this.filesSearchResults = undefined;
@@ -276,6 +272,20 @@ export class FeatureAction {
     componentDidLoad() {
         this.el.addEventListener("click", this.handleInternalClick);
         document.addEventListener("click", this.handleExternalClick);
+
+        Bearer.emitter.addListener(Events.AUTHORIZED, () => {
+            console.log("Events.AUTHORIZED", "this.isAuthorized = true;")
+            this.isAuthorized = true;
+            if (this.ui < InterfaceState.Authenticated) {
+                this.ui = InterfaceState.Authenticated;
+            }
+        })
+
+        Bearer.emitter.addListener(Events.REVOKED, () => {
+            console.log("Events.REVOKED", "this.isAuthorized = false;")
+            this.isAuthorized = false;
+            this.ui = InterfaceState.Unauthenticated;
+        })
     }
 
     handleRemove = (file: File) =>{
@@ -284,14 +294,6 @@ export class FeatureAction {
     };
 
     render() {
-        return (
-            <span>
-                <bearer-authorized
-                    renderUnauthorized={this.renderUnauthorized}
-                    renderAuthorized={this.renderAuthorized}
-                />
-                {this.renderWorkflow()}
-            </span>
-        )
+        return ( this.isAuthorized ? this.renderAuthorized() : this.renderUnauthorized() )
     }
 }
