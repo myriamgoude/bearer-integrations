@@ -1,10 +1,16 @@
 .br-search-wrapper { 
   border-radius: 4px;	
-  background-color: #F6F8FF;
-  padding:10px;
+  background-color: #F5F7FF;
+  padding: 10px;
   display: flex;
 }
-.br-search {	
+
+.br-search-icon {
+  padding-top: 3px;
+  padding-left: 4px;
+}
+
+.br-search-input {	
   height: 17px;	
   opacity: 0.33;	
   color: #030D36;	
@@ -18,7 +24,6 @@
 }
 
 .br-search::placeholder {
-  padding-left: 8px;
   font-size: 16px;
-  color: #030D36;
+  color: #6A7397;
 }

@@ -1,6 +1,5 @@
 import { Component, State, Prop } from '@bearer/core'
-import 'ionicons'
-import InputSearchIcon from './input-search-icon'
+import InputSearchIcon from './icon-input-search'
 
 const TIMEOUT_DURATION = 500
 
@@ -24,13 +23,13 @@ export class BrSearch {
 
   render() {
     return (
-      <div class='br-search-wrapper'>
-        <InputSearchIcon />
+      <div class="br-search-wrapper">
+        <span class="br-search-icon"><InputSearchIcon/></span>
         <input
-          class='br-search'
-          type='text'
+          class="br-search-input"
+          type="text"
           onKeyUp={this.searchHandler} 
-          placeholder='Search file'
+          placeholder="Search file"
           value={this.query}/>
       </div>
     )
