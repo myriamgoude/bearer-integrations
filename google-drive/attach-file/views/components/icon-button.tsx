@@ -20,7 +20,7 @@ export class IconButton {
   @Prop() text: string;
 
   render() {
-    return (<bearer-button style={style}>
+    return (<bearer-button style={style} kind="embed">
       <span>
         <IconGoogleDrive />
         {this.text}
