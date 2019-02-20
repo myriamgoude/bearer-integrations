@@ -52,7 +52,6 @@ export class ConnectAction {
   renderUnauthorizedIfAuthId = () => this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
 
   authenticate = () => {
-    console.log(this.el.querySelector('bearer-authorized'))
     this.el.querySelector('bearer-authorized').authenticate(this.authId)
   }
 
