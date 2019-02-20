@@ -170,7 +170,6 @@ export class FeatureAction {
     };
 
     handleMenu = () => {
-        console.log("handleMenu")
         this.ui = InterfaceState.Settings
     };
 
@@ -188,14 +187,13 @@ export class FeatureAction {
     };
 
     renderWorkflow = () => {
-        console.log("renderWorkflow")
         if(this.ui <= InterfaceState.Authenticated) {
             return null;
         }
     
         const heading = StateTitles[this.ui] || "";
-        const subHeading= (this.selectedFolder) ? `From ${this.selectedFolder.name}` : undefined;
-        const handleBack = (this.rootFolder) && this.handleWorkflowBack;
+        const subHeading= (this.selectedFolder && this.ui !== InterfaceState.Settings) ? `From ${this.selectedFolder.name}` : undefined;
+        const handleBack = (this.rootFolder && subHeading) && this.handleWorkflowBack;
         const handleClose = this.handleExternalClick;
         const handleMenu = (this.ui == InterfaceState.Settings) ? undefined : this.handleMenu;
 
@@ -213,7 +211,7 @@ export class FeatureAction {
                 {(handleClose) && <button class='popover-control' onClick={handleClose}><IconClose/></button>}
                 </div>
             </div>,
-            <div>{this.renderWorkflowContent()}</div>
+            <div style={{width: "300px"}}>{this.renderWorkflowContent()}</div>
         ]
     };
 
@@ -256,7 +254,6 @@ export class FeatureAction {
     };
 
     handleExternalClick = (_e:Event) => {
-        console.log("handleExternalClick")
         this.data = undefined;
         this.selectedFolder = undefined;
         this.filesSearchResults = undefined;
@@ -274,7 +271,6 @@ export class FeatureAction {
         document.addEventListener("click", this.handleExternalClick);
 
         Bearer.emitter.addListener(Events.AUTHORIZED, () => {
-            console.log("Events.AUTHORIZED", "this.isAuthorized = true;")
             this.isAuthorized = true;
             if (this.ui < InterfaceState.Authenticated) {
                 this.ui = InterfaceState.Authenticated;
@@ -282,7 +278,6 @@ export class FeatureAction {
         })
 
         Bearer.emitter.addListener(Events.REVOKED, () => {
-            console.log("Events.REVOKED", "this.isAuthorized = false;")
             this.isAuthorized = false;
             this.ui = InterfaceState.Unauthenticated;
         })

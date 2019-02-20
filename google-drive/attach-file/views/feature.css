@@ -2,37 +2,28 @@
     font-family: Arial;
 }
 
-.footer-text {
-    margin: 0;
-    position: absolute;
-    bottom: 1px;
-    left: 1px;
-    font-size: 0.8em;
-    opacity: 0.3;
-}
-
-.wrapper {
-  position: absolute;
-  background-color: white;
-  min-width: 320px;
-  z-index: 10;
-}
-
 .popover-header {
-  line-height: 33px;
   display: flex;
-  margin-bottom: 20px;
+  line-height: 33px;
+  align-items: baseline;
+}
+
+.popover-back-nav {
+  margin-right: 8px;
 }
 
 .popover-title h3 {
     font-weight: bold;
     color: #030D36;
     margin: 0;
+    font-size: 16px;
+    line-height: 16px;
 }
 
 .popover-title .popover-subtitle {
     font-weight: normal;
     color: #030D36;
+    font-size: 12px;
 }
 
 .popover-controls {
