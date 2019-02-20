@@ -63,7 +63,7 @@ export class ListNavigation {
   render() {
     return (
       <div>
-        {this.renderSearch()}
+        {this.options && this.options.length > 0 && this.renderSearch()}
         <div class='scroll'>
             {this.renderContents()}
         </div>
@@ -82,11 +82,11 @@ export class ListNavigation {
     if(this.options.length == 0){
       return (
           <div class="no-results-content">
-              <div class="background">
+              <div class="no-results-icon">
                 <NoResultIcon />
               </div>
             <span class='no-results-label'>No data found</span>
-            <p onClick={this.onBackClicked}>Back</p>
+            <bearer-button kind="secondary" onClick={this.onBackClicked}>Back</bearer-button>
           </div>
       )
     }

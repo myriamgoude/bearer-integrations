@@ -53,10 +53,7 @@ span.label {
     line-height: 19px;
 }
 
-p {
-    color: #030D36;
-    font-size: 14px;
-    letter-spacing: 0.17px;
-    text-decoration: underline;
-    cursor: pointer;
+.no-results-icon {
+  margin-bottom: 8px;
 }
+
