@@ -64,6 +64,7 @@ export class FeatureAction {
 
     handleAttachClick = () => {
         if(this.ui > InterfaceState.Authenticated){
+            this.foldersData = undefined;
             this.ui = InterfaceState.Authenticated;
             return
         }
@@ -137,6 +138,7 @@ export class FeatureAction {
     getMainFolder = (attach?: boolean) => {
         if (!this.rootFolder) {
             this.foldersData = undefined;
+            this.foldersSearchResults = undefined;
             this.ui = InterfaceState.Authenticated;
             return;
         }
@@ -242,7 +244,7 @@ export class FeatureAction {
                         onOptionClicked={this.handleLogout} />
                 );
             case InterfaceState.Folder:
-                if (this.foldersSearchResults && this.foldersSearchResults.length !== 0) {
+                if (this.foldersSearchResults) {
                     return (
                         <div>
                             <list-navigation

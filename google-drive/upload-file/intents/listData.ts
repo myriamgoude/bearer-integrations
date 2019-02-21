@@ -11,7 +11,6 @@ export default class ListDataIntent extends FetchData implements FetchData<Retur
     // Put your logic here
     const folderId = (event.params.folderId) ? event.params.folderId : 'root';
     query.q = `"${folderId}" in parents and mimeType = "${type}"`;
-
     const { data }  = await Client(token).get('', { params: query });
     if (data.errors) {
       const message = data.errors.map((e: { message: string }) => e.message).join(', ');

@@ -37,8 +37,10 @@ li:last-child {
 span.label {
   font-size: 14px;
   flex: 1;
-  white-space:nowrap;
   color: #030D36;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .no-results-content {
