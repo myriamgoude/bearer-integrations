@@ -31,8 +31,10 @@ li {
 span.label {
   font-size: 14px;
   flex: 1;
-  white-space:nowrap;
-    color: #030D36;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #030D36;
 }
 
 .no-results-content {
