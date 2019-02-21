@@ -1,7 +1,7 @@
 export const folders = {
     corpora: 'user',
     pageSize: 20,
-    orderBy: 'modifiedTime desc',
+    orderBy: 'folder, modifiedTime desc',
     q: '',
     fields: '*'
 };

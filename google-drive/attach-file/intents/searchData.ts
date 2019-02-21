@@ -9,7 +9,7 @@ export default class SearchDataIntent extends FetchData implements FetchData<Ret
     const token = event.context.authAccess.accessToken;
     const params = event.params;
     delete query.orderBy;
-    query.q = `name contains '${params.query}' or fullText contains '${params.query}'`;
+    query.q = `name contains '${params.query}' or fullText contains '${params.query}' and trashed = ${false}`;
     const { data } = await Client(token).get('', {params: query});
     if (data.errors) {
       const message = data.errors.map((e: { message: string }) => e.message).join(', ');

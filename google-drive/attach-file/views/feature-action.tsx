@@ -73,6 +73,7 @@ export class FeatureAction {
 
     handleAttachClick = () => {
         if(this.ui > InterfaceState.Authenticated){
+            this.data = undefined;
             this.ui = InterfaceState.Authenticated;
             return
         }
@@ -137,6 +138,7 @@ export class FeatureAction {
     fetchPreviousFolderData = () => {
         if (!this.selectedFolder || !this.selectedFolder.parents) {
             this.data = undefined;
+            this.filesSearchResults = undefined;
             this.ui = InterfaceState.Authenticated;
             return;
         }
@@ -232,7 +234,7 @@ export class FeatureAction {
             case InterfaceState.Settings:
                 return (<connect-action authId={this.authId} text-authenticated="Logout" icon="ios-log-out" />);
             case InterfaceState.Folder:
-                if (this.filesSearchResults && this.filesSearchResults.length !== 0) {
+                if (this.filesSearchResults) {
                     return (
                         <div>
                             <list-navigation

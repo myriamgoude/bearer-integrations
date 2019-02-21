@@ -9,11 +9,8 @@ export default class ListDataIntent extends FetchData implements FetchData<Retur
     const token = event.context.authAccess.accessToken;
     // Put your logic here
     const folderId = (event.params.folderId) ? event.params.folderId : 'root';
-    query.q = `"${folderId}" in parents`;
-
+    query.q = `"${folderId}" in parents and trashed = ${false}`;
     const { data }  = await Client(token).get('', { params: query });
-    const type = 'application/vnd.google-apps.folder';
-    data.files.sort((x,y) => { return x.mimeType == type ? -1 : y.mimeType == type ? 1 : 0; });
     if (data.errors) {
       const message = data.errors.map((e: { message: string }) => e.message).join(', ');
       return { error: message }
