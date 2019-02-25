@@ -1,49 +1,19 @@
 import { Component, State, Prop } from '@bearer/core'
 
-const scrollStyle = {
-  maxHeight: '300px',
-  overflow: 'scroll',
-  margin: '10px'
-}
-
-const listStyle = {
-  listStyle: 'none',
-  padding: '0',
-}
-const itemStyle = {
-  lineHeight: '18px',
-  display: 'flex',
-  flex: '1',
-  marginBottom: '10px',
-  justifyContent: 'flex-end'
-}
-const labelStyle = {
-  flex:'1',
-}
-
-const buttonStyle = {
-  borderRadius: '4px',
-  color: 'white',
-  backgroundColor: '#0FE49B',
-  fontSize: '1.1em',
-  padding: '5px 25px',
-  lineHeight: '30px',
-  border: 'none',
-} 
-
 @Component({
   tag: 'list-select',
+  styleUrl: 'list-select.css',
   shadow: true
 })
 
 export class ListSelect {
-  @State() selected: { [key: string]: boolean }
-  @Prop() options: any[] = []
-  @Prop() selectedOptions: any[] = []
+  @State() selected: { [key: string]: boolean } = {}
+  @Prop() options: any[] | undefined
+  @Prop({mutable: true}) selectedOptions: any[] = []
   @Prop() hideOptions: any[] = [] 
   @Prop() attributeName: string | undefined
   @Prop() attributeHash: string | undefined
-  @Prop() onSave: (data:any[])=> void
+  @Prop() handleSubmit: (data:any[])=> void
   @Prop() search: boolean = false
   
   getName = (element:any) =>{
@@ -61,11 +31,13 @@ export class ListSelect {
     }
   }
 
-  handleSubmit(e: Event) {
+  onSubmit = (e: Event) => {
     e.preventDefault()
-    this.onSave(
+    this.handleSubmit(
       this.options.filter((opt) => this.selected[this.getHash(opt)])
     )
+    this.selected = {}
+    this.selectedOptions = []
   }
 
   handleChecked(option:string, checked:boolean){
@@ -74,20 +46,37 @@ export class ListSelect {
 
   componentWillLoad(){
     const searchKeys = this.selectedOptions.map((elm:any) => this.getHash(elm))
-    this.selected = this.options.reduce((acc, option) => { 
+    const options = this.options || []
+    this.selected = options.reduce((acc, option) => { 
         const hashKey= this.getHash(option)
         acc[hashKey] = searchKeys.indexOf(hashKey) != -1
         return acc 
     },{})
   }
 
-  renderItems() {
+  renderItems = (options: any[] | undefined) => {
+    if(options == undefined){
+      return (
+        <ul>
+          {Array(4).fill(true).map(()=>(<li class="loading" style={this.randomWidthStyle()}></li>))}
+        </ul>
+      )
+    }
+
+    if(options.length == 0){
+      return (
+          <ul>
+            <span class='label'>No Results</span>
+          </ul>
+      )
+    }
+
     return (
-      <ul style={listStyle}>
-        {this.options.map((option)=>(
-          <li style={itemStyle}>
-          <span style={labelStyle}>{this.getName(option)}</span>
-          <br-checkbox 
+      <ul>
+        {options.map((option)=>(
+          <li>
+          <span class="label">{this.getName(option)}</span>
+          <br-checkbox class="checkbox"
             onChecked={(e: Event) => this.handleChecked(option, (e.target as any).checked)}
             checked={(this.selected[this.getHash(option)])}
           />
@@ -97,14 +86,18 @@ export class ListSelect {
     )
   }
 
+  randomWidthStyle(){
+    const amount = (Math.random()*150)+100
+    return { width: `${amount}px` }
+  }
+
   render() {
     return (
-      <form onSubmit={(e) => this.handleSubmit(e)}>
+      <form>
         {(this.search) ? <br-search/> : null }
-        <div style={scrollStyle}>
-          {this.renderItems()}
+        <div class="list">
+          {this.renderItems(this.options)}
         </div>
-        <input type="submit" style={buttonStyle} value="Subscribe" />
       </form>
     )
   }

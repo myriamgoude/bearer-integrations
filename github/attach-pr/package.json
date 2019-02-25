@@ -12,14 +12,14 @@
     "push": "bearer push"
   },
   "dependencies": {
-    "@bearer/core": "^0.92.0",
-    "@bearer/intents": "^0.92.0",
-    "@bearer/ui": "^0.92.0",
+    "@bearer/core": "next",
+    "@bearer/intents": "next",
+    "@bearer/ui": "next",
     "axios": "^0.18.0",
     "ionicons": "^4.5.0-3"
   },
   "devDependencies": {
-    "@bearer/cli": "^0.92.0",
+    "@bearer/cli": "next",
     "@types/jest": "^23.3.12",
     "@types/node": "^10.12.18",
     "jest": "latest"

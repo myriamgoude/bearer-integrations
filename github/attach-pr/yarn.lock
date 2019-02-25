@@ -18,15 +18,15 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@bearer/bearer-cli@^0.92.2":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/bearer-cli/-/bearer-cli-0.92.2.tgz#f743f284de706f7a98a191a70fc0926e430d0b56"
-  integrity sha512-UZnzYziOj3ZCoiFW8ylxbA57GzqouUK5K94CfSZit75Z/chpJphIsGJI+gcl16A5pjIEETsmllR9rUBxplSFfA==
+"@bearer/bearer-cli@^0.94.0":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/bearer-cli/-/bearer-cli-0.94.0.tgz#cc26553bb94bca7ca8ed1249a43ffffcd87430a1"
+  integrity sha512-y3ZElQAINU/ySYpTlgPqVoxUpneoiylmj25WUqzFLU/h/qquzQWZcz1EHVeDD/eqWpFYwKFubR9jiSDOimu7ig==
   dependencies:
-    "@bearer/intents" "^0.92.2"
-    "@bearer/logger" "^0.92.2"
-    "@bearer/transpiler" "^0.92.2"
-    "@bearer/types" "^0.92.2"
+    "@bearer/intents" "^0.94.0"
+    "@bearer/logger" "^0.94.0"
+    "@bearer/transpiler" "^0.94.0"
+    "@bearer/types" "^0.94.0"
     "@koa/cors" "^2.2.2"
     amazon-cognito-identity-js "^2.0.3"
     archiver "^2.1.1"
@@ -71,16 +71,16 @@
     uuid "^3.3.2"
     webpack "^4.12.0"
 
-"@bearer/cli@^0.92.0":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/cli/-/cli-0.92.2.tgz#40c2454529275a81c72892fd3d318ec0da108252"
-  integrity sha512-Q9a6aGmLU66KM9A5Zmsnf/W3jj7rH09glREcAu2DA80lT0UaCl2zD0RxjvQnIL7lcMSBVwu1y+n5stql5pE5eg==
+"@bearer/cli@next":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/cli/-/cli-0.94.0.tgz#07207a3a42b9566969855469320309313477b52f"
+  integrity sha512-vKRNR1X1qjaoVOp1aaXgnPsnwhrRobPZlJHp/6CsJB0DAi+Cw0AIBWK8f98tiNhMqcd7FdphcwLo/dLEB7w4Kw==
   dependencies:
-    "@bearer/bearer-cli" "^0.92.2"
-    "@bearer/intents" "^0.92.2"
-    "@bearer/security" "^0.92.2"
-    "@bearer/transpiler" "^0.92.2"
-    "@bearer/types" "^0.92.2"
+    "@bearer/bearer-cli" "^0.94.0"
+    "@bearer/intents" "^0.94.0"
+    "@bearer/security" "^0.94.0"
+    "@bearer/transpiler" "^0.94.0"
+    "@bearer/types" "^0.94.0"
     "@oclif/command" "^1.5.2"
     "@oclif/config" "^1.8.6"
     "@oclif/plugin-autocomplete" "^0.1.0"
@@ -110,12 +110,12 @@
     typescript-json-schema "^0.34.0"
     webpack "^4.20.2"
 
-"@bearer/core@^0.92.0", "@bearer/core@^0.92.2":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/core/-/core-0.92.2.tgz#5cdcfdec732bd1e6b7df007b6c21be7133231bf3"
-  integrity sha512-ob87sPoQFe/sTUZVNyXw9HXOyjILE1V0w1A/q8tat4dMPpc3BpnTbwlqaz7JSXTGwrFjnnzwHWngOnydoAaImQ==
+"@bearer/core@^0.94.0", "@bearer/core@next":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/core/-/core-0.94.0.tgz#405cb7bfc1d26f457fdee623c18910ecca51813b"
+  integrity sha512-/7Pt6ONK9Bd6Kt7CsCT4SD4GGNDi2f4m/mwxc+bPHQyxxZ7Ufx1kLJj1GoaBTbKhcuRHk3TqhY4qaPQYDARRNw==
   dependencies:
-    "@bearer/types" "^0.92.2"
+    "@bearer/types" "^0.94.0"
     "@stencil/core" "0.11.2"
     fbemitter "^2.1.1"
     lodash.get "^4.4.2"
@@ -128,34 +128,34 @@
     rollup-plugin-strip "^1.2.0"
     typescript "^3.2.4"
 
-"@bearer/intents@^0.92.0", "@bearer/intents@^0.92.2":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/intents/-/intents-0.92.2.tgz#c6a79180fe9c226e7656cd60dc1be9840d1192da"
-  integrity sha512-Nr/V26Sp00U9ZAbHjXuPCjwdGHvMr5KRupYoRBNrvHBAL2F8G6pVrSEnatvUpPXoDFAiQSc3DB6JYuNLjmhPaw==
+"@bearer/intents@^0.94.0", "@bearer/intents@next":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/intents/-/intents-0.94.0.tgz#2f0947bc200a7e8980a2b0c6d53143633db0512a"
+  integrity sha512-OKwty2htpY8Jin0sNh+7uCrFU0iZ9+4nYoREPmAVTLAynYH7GWqvxTy6Hx7ZhJRTcWEt+7n4WTW4wFlRUBPyBw==
   dependencies:
-    "@bearer/logger" "^0.92.2"
+    "@bearer/logger" "^0.94.0"
     axios "^0.18.0"
     typescript "^3.2.4"
     uuid "^3.3.2"
 
-"@bearer/logger@^0.92.2":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/logger/-/logger-0.92.2.tgz#87fede0a74c75b92e5af55955364370a37bd73c3"
-  integrity sha512-m7yTHfyIy9aJwVxxwCY1nfty3an124WHSfArAFa66eN2T2DIi178rCxvbq7R18odddQX0LtNeh0Gy1xE6h2fSA==
+"@bearer/logger@^0.94.0":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/logger/-/logger-0.94.0.tgz#3bfb44e0ed4b53ab521783c739a39568828c90b1"
+  integrity sha512-fu6oLp8Ggs3g1xSQmSxliI3kQHsnxmXZcsbCEHwZ9LxrP4kx9ZlJFm1JLes2U1E91U9bu36W6aQ9lll7cjVzMA==
   dependencies:
     debug "^4.1.0"
 
-"@bearer/security@^0.92.2":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/security/-/security-0.92.2.tgz#8224dfce7c93e5ba4f936333320a98a923f48666"
-  integrity sha512-stydrE1OpB33Jkj6G2GEf+ybw7L6VmCvkznl/EipokeI3iVhi9+37O0bMssFdKNBUrak98M51LA+e63o76Uung==
+"@bearer/security@^0.94.0":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/security/-/security-0.94.0.tgz#9be38ef5bce5c9feeb812ca6c046d18883c6464c"
+  integrity sha512-sZLL40DtGeohkt8bXo1Mss2Q7C+tdtwsDlafLp5T6PjnmGXWEOIa3op8PPm+/w+A97RpLJ574qqM7qLCf5WfqQ==
 
-"@bearer/transpiler@^0.92.2":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/transpiler/-/transpiler-0.92.2.tgz#af1cfc65e9cb472d4f38266ced3a1ebe0795875a"
-  integrity sha512-UqJgYU3O9PE9mzOssHTRUmTvkPrfaCbbR1/I+8G5BIajKT3aAGNJED8B1v4HFn8emZtnU8OaxvX3Ugc2guDM7w==
+"@bearer/transpiler@^0.94.0":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/transpiler/-/transpiler-0.94.0.tgz#78d2c81a6e29461fdbae4c972d2a995bed0b7712"
+  integrity sha512-Le3Z+Akt8WedoGikrirfgKd7dIrJmlmx3bHQ0ug7THv6V1m/tgBM/DaR1icdR/J8coa4OpY+oK5l9NO5gHsQ1Q==
   dependencies:
-    "@bearer/logger" "^0.92.2"
+    "@bearer/logger" "^0.94.0"
     async-foreach "^0.1.3"
     case "^1.5.5"
     command-line-args "^5.0.2"
@@ -163,17 +163,17 @@
     typescript "^3.2.4"
     typescript-json-schema "^0.34.0"
 
-"@bearer/types@^0.92.2":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/types/-/types-0.92.2.tgz#74b2375a3ff6925e34ba77b90120bd772f9efb74"
-  integrity sha512-PKSY+htSNW6JjSQDr6emgo4WqnczC1pmKudEThmj/OUZj8q8yM4R17yCnu3Vp8Bz0l6U9s7Z3LcckrFgvAOYvQ==
+"@bearer/types@^0.94.0":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/types/-/types-0.94.0.tgz#d44fa3a9d8c833811d8793412a285907a5db57c7"
+  integrity sha512-0bE54vmpDbsXMl92qE8YAwRC18s3zNFCMF6aovoYUUPh0xCThgCaowxXnJBXIvlbalypa0o9P/bwUwVirG65vQ==
 
-"@bearer/ui@^0.92.0":
-  version "0.92.2"
-  resolved "https://registry.npmjs.org/@bearer/ui/-/ui-0.92.2.tgz#338a67423b114d0e4de66e0c648c35c31aa126f5"
-  integrity sha512-hddqnnhLGNLQCbj08aoa2pCh0m04hb62QZUgisdN5qF5nu6IC11yOlE+pwdJWaqFCOBta7qoFB/zEfTc9/+WBA==
+"@bearer/ui@next":
+  version "0.94.0"
+  resolved "https://registry.npmjs.org/@bearer/ui/-/ui-0.94.0.tgz#aab4dadb321d2fa5279ad3d6bf67a8a175f5c6e1"
+  integrity sha512-5lyUavlZVMxi4o9GldBRn7pcCxSHvLCWpPaGqjb+ZLPdS98Rpkmw5+T/c5TPQhAZEPxUVEx9eX1qOhLDfR+HaQ==
   dependencies:
-    "@bearer/core" "^0.92.2"
+    "@bearer/core" "^0.94.0"
     "@stencil/core" "0.11.2"
     "@stencil/sass" "^0.1.0"
     bootstrap "^4.1.0"
