@@ -1,0 +1,75 @@
+.wrapper {
+  position: absolute;
+  background-color: white;
+  min-width: 320px;
+  z-index: 10;
+}
+
+.title {
+  line-height: 33px;
+  display: flex;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.menu {
+  color: #AEB2C3;
+  font-size: 1.5em;
+  height: 16px;
+  width: 16px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 8px 4px;
+  padding: 0;
+}
+
+.menu:last-child { margin-right: 8px; }
+
+.menu > svg { vertical-align: top; }
+
+.back {
+  background: none;
+  border: none;
+  font-size: 2em;
+  outline: none;
+  cursor: pointer;
+  margin-top: 7px;
+}
+
+.footer-text {
+  margin: 0;
+  position: absolute;
+  bottom: 6px;
+  left: 6px;
+  font-size: 0.8em;
+  opacity: 0.3;
+}
+
+.save-button {
+  float: right;
+  border: none;
+  background-color: #0FE49B;
+  height: 40px;
+  width: 96px;
+  border-radius: 4px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  text-align: center;
+  line-height: 16px;
+  cursor: pointer;
+  margin-bottom: 8px;
+}
+
+.save-button:hover {
+  background-color: #0EBD81;
+}
+
+.settings {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
