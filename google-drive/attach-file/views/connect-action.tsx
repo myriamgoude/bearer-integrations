@@ -26,7 +26,7 @@ export class ConnectAction {
   @Prop() kind: string = "embed"
   @Prop() icon: string
 
-  @Prop({ mutable: true }) authId: string = null
+  @Prop({ mutable: true }) authId: string
 
   @State()
   authIdInternal: string
