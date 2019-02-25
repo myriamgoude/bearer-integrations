@@ -5,21 +5,22 @@ import {
   BearerFetch, 
   Prop,
   Intent, 
-  Element
+  Element,
+  Listen,
+  Event, EventEmitter
 } from '@bearer/core'
 
 import '@bearer/ui'
 
 import { PullRequest, Repo } from './types'
-import { Listen } from '@stencil/core';
 
-enum InterfaceState {
+export enum InterfaceState {
   Unauthenticated,
   Authenticated,
   Repo,
   PullRequest,
   Settings,
-  Error,
+  Error
 }
 
 const StateTitles = {
@@ -55,9 +56,11 @@ export class FeatureAction {
   @Intent('listRepositoryGraph') getRepositoryGraph: BearerFetch
   @Intent('searchPullRequests') searchPullRequests: BearerFetch
 
+  @State() isAuthorized: boolean = false
+  @Event() logout: EventEmitter
+
   @State() ui: InterfaceState = InterfaceState.Unauthenticated
   @State() errorMessage:string | undefined
-  @State() revoke:any | undefined
 
   @State() repos:Repo[] | undefined
   @State() selectedRepo:Repo | undefined
@@ -75,6 +78,14 @@ export class FeatureAction {
     this.pullRequests = [...updatedList]
   }
 
+  @Listen('body:connect:authenticationStateChanged')
+  authenticationStateChanged (event: CustomEvent) {
+    this.isAuthorized = event.detail.authorized;
+    if (this.isAuthorized) {
+      this.handleAttachClick();
+    }
+  }
+
   getPullRequests = () => {
     return (this.pullRequests.length) ? this.pullRequests : (this as any).pullRequestsInitial || []
   }
@@ -85,10 +96,6 @@ export class FeatureAction {
   }
   
   handleAttachClick = () => {
-    if(this.ui > InterfaceState.Authenticated){
-      this.ui = InterfaceState.Authenticated
-      return 
-    }
     this.selectedRepo = undefined
     this.errorMessage = undefined
     this.ui = InterfaceState.Repo
@@ -109,8 +116,8 @@ export class FeatureAction {
   }
 
   handleError = error => {
-      this.ui = InterfaceState.Error
-      this.errorMessage = error.error;
+    this.ui = InterfaceState.Error
+    this.errorMessage = error.error;
   }
 
   handleRepoSelect = (selectedRepo: Repo) => {
@@ -153,61 +160,59 @@ export class FeatureAction {
   }
 
   handleLogout = () => {
-    if(this.revoke){ this.revoke() }
-    this.revoke = undefined
     this.ui = InterfaceState.Unauthenticated
+    this.logout.emit();
   }
 
-  onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
-    authenticate()
-      .then(()=>{
-        this.ui = InterfaceState.Authenticated
-        this.handleAttachClick()
-      })
-      .catch(console.error)
-  }
-
-  renderUnauthoried: any = ({ authenticate }) => (
-    <icon-button
-      onClick={() => this.onAuthorizeClick(authenticate)}
-      icon="logo-github"
-      text="Attach Pull Request"
-    />
+  renderUnauthorized = () => (
+    <connect-action icon="logo-github" text-unauthenticated="Attach Pull Request" />
   )
 
-  handleAuthorized: any = ({ revoke }) => {
-    this.revoke = revoke
-  }
-
   renderAuthorized: any = () => {
-    if(this.ui < InterfaceState.Authenticated){
-      return null
-    }
-
-    return (<icon-button
-              onClick={this.handleAttachClick}
-              icon="logo-github" 
-              text="Attach Pull Request"
-              isPopover={true}
-              isPopoverOpened={this.ui > InterfaceState.Authenticated}
-            >
-        {this.renderWorkflow()}
-      </icon-button>)
+    return (<bearer-popover opened={this.ui > InterfaceState.Authenticated}>
+      <icon-button
+        onClick={this.handleAttachClick}
+        icon="logo-github"
+        text="Attach Pull Request"
+        slot="popover-toggler"
+      />
+      {this.renderWorkflow()}
+    </bearer-popover>)
   }
 
   renderWorkflow = () => {
-    if(this.ui > InterfaceState.Authenticated){
-      return (
-        <workflow-box
-        heading={StateTitles[this.ui] || ""}
-        subHeading={(this.selectedRepo) ? `From ${this.selectedRepo.nameWithOwner}` : undefined}
-        onBack={this.handleWorkflowBack}
-        onClose={this.handleExternalClick}
-        onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
-        >
-          {this.renderWorkflowContent()}
-        </workflow-box>
-      )
+    
+    if(this.ui < InterfaceState.Authenticated) {
+      return null;
+    }
+    
+    const heading = StateTitles[this.ui] || "";
+    const subHeading= (this.selectedRepo) ? `From ${this.selectedRepo.nameWithOwner}` : undefined;
+    const handleBack = (this.ui > InterfaceState.Repo) ? this.handleWorkflowBack : undefined;
+    const handleClose = this.handleExternalClick;
+    const handleMenu = this.handleMenu;
+
+    return [
+      <div slot="popover-header">
+        <div class="popover-header">
+          {(handleBack) && <icon-chevron class="popover-back-nav" direction="left" onClick={handleBack} />}
+          <div class="popover-title">
+            <h3>{heading}</h3>
+            {(subHeading) && <span class="popover-subtitle">{subHeading}</span>}
+          </div>
+        </div>
+        <div class="popover-controls">
+         {(handleMenu) && <button class='popover-control' onClick={handleMenu}>{this.getIcon('settings')}</button>}
+         {(handleClose) && <button class='popover-control' onClick={handleClose}><ion-icon name="close"></ion-icon></button>}
+        </div>
+      </div>,
+      <div>{this.renderWorkflowContent()}</div>
+    ]
+  }
+
+  getIcon(icon: string) {
+    if (icon === "settings") {
+      return (<svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" ><path d="M23,50c0,5-4,9-9,9s-9-4-9-9c0-5,4-9,9-9S23,45,23,50z M86,41c-5,0-9,4-9,9c0,5,4,9,9,9s9-4,9-9C95,45,91,41,86,41z M51,41  c-5,0-9,4-9,9c0,5,4,9,9,9c5,0,9-4,9-9C60,45,56,41,51,41z"/></svg>)
     }
   }
 
@@ -272,32 +277,14 @@ export class FeatureAction {
       this.ui = InterfaceState.Authenticated
     }
   }
-  
-  handleInternalClick = (e:Event) => {
-    e.stopImmediatePropagation()
-  }
-
-  componentDidLoad() {
-    this.el.addEventListener("click", this.handleInternalClick);
-    document.addEventListener("click", this.handleExternalClick);
-  }
 
   handleRemove = (pr: PullRequest) =>{
+    // TODO: check this function is for?
     const updatedList = this.pullRequests.filter((elm:PullRequest)=> pr.id !== elm.id)
     console.log('remove', pr, updatedList)
   }
 
   render() {
-    return (
-      <div>
-        <bearer-authorized
-          renderUnauthorized={this.renderUnauthoried}
-          renderAuthorized={this.handleAuthorized}
-        />
-        { this.renderAuthorized() }
-      </div>
-      
-      
-    )
+    return ( this.isAuthorized ? this.renderAuthorized() : this.renderUnauthorized() )
   }
 }

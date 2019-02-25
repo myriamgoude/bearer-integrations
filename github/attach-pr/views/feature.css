@@ -38,3 +38,70 @@ p {
 h4 {
   margin: 0;
 }
+
+.popover-content,
+.popover-header { width: 300px; }
+
+.popover-header {
+  display: flex;
+  flex: 1;
+  justify-content: flex-start;
+  align-items: center;
+  align-content: center;
+}
+
+.popover-header .popover-back-nav {
+  line-height: 30px;
+  margin-right: 10px;
+}
+
+.popover-header .popover-title {
+  color: #030D36;
+}
+
+.popover-header .popover-title h3 {
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.popover-header .popover-subtitle {
+  font-size: 10px;
+  line-height: 6px;
+  font-weight: 500;
+}
+
+.popover-controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  line-height: 16px;
+}
+
+.popover-control {
+  padding: 0;
+  margin: 0 0 0 8px;
+  color: #AEB2C3;
+  height: 16px;
+  font-size: 120%;
+  line-height: 16px;
+  width: 16px;
+}
+
+.popover-control,
+.popover-back-nav {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.svg-icon {
+  display: block;
+  fill: #AFB2C2;
+  stroke: #AFB2C2;
+  height: 100%;
+  width: 100%;
+}
