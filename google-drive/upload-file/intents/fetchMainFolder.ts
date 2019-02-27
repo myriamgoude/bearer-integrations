@@ -1,15 +1,14 @@
 import { TOAUTH2AuthContext, FetchData, TFetchActionEvent, TFetchPromise } from '@bearer/intents'
-import Client from "./client";
-import {File} from "../views/types";
-// Uncomment this line if you need to use Client
-// import Client from './client'
+import Client from './client'
+import { File } from '../views/types'
 
-export default class FetchMainFolderIntent extends FetchData implements FetchData<ReturnedData, any, TOAUTH2AuthContext> {
-  async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
-    const token = event.context.authAccess.accessToken;
-    const { data }  = await Client(token).get(`/${event.params.folderId}`, { params: {fields: '*' }});
+export default class FetchMainFolderIntent extends FetchData
+  implements FetchData<ReturnedData, any, TOAUTH2AuthContext> {
+  async action({ context, params }: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
+    const token = context.authAccess.accessToken
+    const { data } = await Client(token).get(`/${params.folderId}`, { params: { fields: '*' } })
     if (data.errors) {
-      const message = data.errors.map((e: { message: string }) => e.message).join(', ');
+      const message = data.errors.map((e: { message: string }) => e.message).join(', ')
       return { error: message }
     }
     return { data }
@@ -20,7 +19,7 @@ export default class FetchMainFolderIntent extends FetchData implements FetchDat
  * Typing
  */
 export type Params = {
-  folderId: string;
+  folderId: string
 }
 
-export type ReturnedData = File[];
+export type ReturnedData = File[]
