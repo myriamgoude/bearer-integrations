@@ -1,0 +1,1 @@
+export default () => (<svg class="svg-icon" alt="Dropbox" xmlns="http://www.w3.org/2000/svg" role="img" height="100%" viewBox="0 0 32 32"><title>Dropbox</title><path fill="rgb(0, 98, 255)" d="M8 2.4l8 5.1-8 5.1-8-5.1 8-5.1zm16 0l8 5.1-8 5.1-8-5.1 8-5.1zM0 17.7l8-5.1 8 5.1-8 5.1-8-5.1zm24-5.1l8 5.1-8 5.1-8-5.1 8-5.1zM8 24.5l8-5.1 8 5.1-8 5.1-8-5.1z"></path></svg>)

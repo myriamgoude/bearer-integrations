@@ -1,0 +1,16 @@
+button {
+  border-radius: 4px;
+  color: white;
+  background-color: #030D36;
+  font-size: 1.1em;
+  padding: 5px 25px;
+  line-height: 30px;
+  border: none;
+}
+div {
+  text-align: center;
+}
+
+p{
+  color: #DC4C4C;
+}

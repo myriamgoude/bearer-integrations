@@ -1,0 +1,24 @@
+.br-search-wrapper { 
+  border-radius: 4px;	
+  background-color: #F6F8FF;
+  padding:10px;
+  display: flex;
+}
+.br-search {	
+  height: 17px;	
+  opacity: 0.33;	
+  color: #030D36;	
+  font-size: 14px;	
+  line-height: 17px;
+  width: 100%;
+  border:none;
+  outline: none;
+  background: transparent;
+  padding-left: 8px;
+}
+
+.br-search::placeholder {
+  padding-left: 8px;
+  font-size: 16px;
+  color: #030D36;
+}
