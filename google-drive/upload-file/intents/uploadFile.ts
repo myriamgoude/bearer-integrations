@@ -1,11 +1,11 @@
-import { TOAUTH2AuthContext, FetchData, TFetchActionEvent, TFetchPromise } from '@bearer/intents';
+import { TOAUTH2AuthContext, FetchData, TFetchActionEvent, TFetchPromise } from '@bearer/intents'
 // Uncomment this line if you need to use Client
-import axios from 'axios';
-import { google } from 'googleapis';
-import  { File } from '../views/types';
+import axios from 'axios'
+import { google } from 'googleapis'
+import { File } from '../views/types'
 
 // Mime module errors on Bearer
-// 
+//
 // You might face an error with the `mime` module using Bearer.sh sdk:
 // ```
 // ERROR in ./node_modules/mime/index.js
@@ -28,45 +28,45 @@ import  { File } from '../views/types';
 // 4. Restart bearer with `yarn start` and voilà!
 
 export default class UploadFileIntent extends FetchData implements FetchData<ReturnedData, any, TOAUTH2AuthContext> {
-    async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
-        const token = event.context.authAccess.accessToken;
-        const OAuth2 = google.auth.OAuth2;
-        const oauth2Client = new OAuth2();
-        oauth2Client.setCredentials({access_token: token});
+  async action({ context, params }: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
+    const token = context.authAccess.accessToken
+    const OAuth2 = google.auth.OAuth2
+    const oauth2Client = new OAuth2()
+    oauth2Client.setCredentials({ access_token: token })
 
-        const response = await axios({
-          method:'get',
-          url: event.params.fileUrl,
-            responseType: 'stream'
-        });
+    const response = await axios({
+      method: 'get',
+      url: params.fileUrl,
+      responseType: 'stream'
+    })
 
-        const pathArr = response.request.path.split('/');
-        const fileName = pathArr[pathArr.length - 1];
-        const fileMetadata = {
-            'name': fileName,
-            'mimeType': response.headers['content-type'],
-            'parents': [event.params.folderId]
-        };
-
-        const { data } = await google.drive({version: 'v3', auth: oauth2Client}).files.create({
-            //@ts-ignore
-            requestBody: fileMetadata,
-            media: {
-                mimeType: response.headers['content-type'],
-                body: response.data
-            }
-        });
-
-        return { data }
+    const pathArr = response.request.path.split('/')
+    const fileName = pathArr[pathArr.length - 1]
+    const fileMetadata = {
+      name: fileName,
+      mimeType: response.headers['content-type'],
+      parents: [params.folderId]
     }
+
+    const { data } = await google.drive({ version: 'v3', auth: oauth2Client }).files.create({
+      //@ts-ignore
+      requestBody: fileMetadata,
+      media: {
+        mimeType: response.headers['content-type'],
+        body: response.data
+      }
+    })
+
+    return { data }
+  }
 }
 
 /**
  * Typing
  */
 export type Params = {
-    fileUrl: string;
-    folderId: string;
+  fileUrl: string
+  folderId: string
 }
 
-export type ReturnedData = File[];
+export type ReturnedData = File[]
