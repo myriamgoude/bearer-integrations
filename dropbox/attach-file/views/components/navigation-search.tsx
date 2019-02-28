@@ -4,10 +4,10 @@ import InputSearchIcon from './icons/icon-input-search'
 const TIMEOUT_DURATION = 500
 
 @Component({
-  tag: 'br-search',
-  styleUrl: 'br-search.css'
+  tag: 'navigation-search',
+  styleUrl: 'navigation-search.css'
 })
-export class BrSearch {
+export class NavigationSearch {
   @State() query: string = ''
   @State() debouner: number
 
@@ -23,12 +23,12 @@ export class BrSearch {
 
   render() {
     return (
-      <div class='br-search-wrapper'>
-        <span class='br-search-icon'>
+      <div class='search-wrapper'>
+        <span class='search-icon'>
           <InputSearchIcon />
         </span>
         <input
-          class='br-search-input'
+          class='search-input'
           type='text'
           onKeyUp={this.searchHandler}
           placeholder='Search file'

@@ -1,300 +1,332 @@
-/*
-  The purpose of this component is to deal with scenario navigation between each views.
+import Bearer, {
+  BearerFetch,
+  Element,
+  Event,
+  Events,
+  EventEmitter,
+  Intent,
+  Listen,
+  Output,
+  Prop,
+  RootComponent,
+  State
+} from '@bearer/core'
+import '@bearer/ui'
+import { File } from './types'
 
-*/
+import IconSettings from './components/icons/icon-settings'
+import IconClose from './components/icons/icon-close'
 
-import {BearerFetch, Element, Intent, Listen, Output, Prop, RootComponent, State} from '@bearer/core';
-import '@bearer/ui';
-import { File } from "./types";
+export type TAuthorizedPayload = { authId: string }
 
 enum InterfaceState {
-    Unauthenticated,
-    Authenticated,
-    Folder,
-    Files,
-    Settings,
-    Error,
+  Unauthenticated,
+  Authenticated,
+  Loading,
+  Folder,
+  Files,
+  Settings,
+  Error
 }
-
-const StateTitles = {
-    [InterfaceState.Folder]: 'Select files',
-    [InterfaceState.Files]:'Select one file',
-    [InterfaceState.Error]:'Select files',
-    [InterfaceState.Settings]:'Settings',
-};
 
 @RootComponent({
   role: 'action',
   group: 'feature'
 })
 export class FeatureAction {
-    @Prop() autoClose: boolean = true;
-    @Prop() multi: boolean = true;
-    @Prop() authId: string;
-    @Intent('listData') getData: BearerFetch;
-    @Intent('searchData') searchData: BearerFetch;
-    @Intent('fetchPreviousFolder') fetchPreviousFolder: BearerFetch;
+  @Prop() autoClose: boolean = true
+  @Prop() multi: boolean = false
+  @Prop() authId: string
 
-    @State() ui: InterfaceState = InterfaceState.Unauthenticated;
-    @State() errorMessage: string | undefined;
-    @State() revoke: any | undefined;
-    @State() authorize: any | undefined;
+  @Intent('listData') getData: BearerFetch
+  @Intent('searchData') searchData: BearerFetch
+  @Intent('fetchPreviousFolder') fetchPreviousFolder: BearerFetch
 
-    @State() data: File[] | undefined;
-    @State() path: string[] | undefined = [];
-    @State() selectedFolder: File | undefined;
-    @State() filesSearchResults: File[] | undefined;
-    @State() rootFolder: boolean | undefined = false;
+  @State() ui: InterfaceState = InterfaceState.Unauthenticated
+  @State() errorMessage: string | undefined
+  @State() isAuthorized: boolean = false
+  @State() openPopoverOnceLoggedIn: boolean = false
 
-    @Output() files: File[] = [];
+  @State() items: File[] | undefined
+  @State() path: string[] | undefined = []
+  @State() selectedFolder: File | undefined
+  @State() filesSearchResults: File[] | undefined
+  @State() rootFolder: boolean | undefined = false
 
-    @Element() el: HTMLElement;
+  I18N_INTEGRATION_ACTION = this.multi ? 'Attach files' : 'Attach a file'
+  StateTitles = {}
 
-    @Listen('body:edit-removed')
-    fileRemovedHandler (e:CustomEvent) {
-        const file = e.detail as File;
-        const updatedList = this.files.filter((elm: File) => file.id !== elm.id);
-        this.files = [...updatedList];
+  @Event() authorized: EventEmitter<TAuthorizedPayload>
+  @Event() revoked: EventEmitter<TAuthorizedPayload>
+
+  @Output() files: File[] = []
+
+  @Element() el: HTMLElement
+
+  @Listen('body:edit-removed')
+  fileRemovedHandler(e: CustomEvent) {
+    const file = e.detail as File
+    const updatedList = this.files.filter((elm: File) => file.id !== elm.id)
+    this.files = [...updatedList]
+  }
+
+  handleRetry = () => {
+    this.ui = InterfaceState.Authenticated
+    this.handleAttachClick()
+  }
+
+  handleAttachClick = () => {
+    if (this.ui > InterfaceState.Authenticated) {
+      this.ui = InterfaceState.Authenticated
+      return
     }
 
-    handleRetry = () => {
-        this.ui = InterfaceState.Authenticated;
-        this.handleAttachClick()
-    };
+    this.items = undefined
+    this.selectedFolder = undefined
+    this.errorMessage = undefined
+    this.ui = InterfaceState.Loading
 
-    handleAttachClick = () => {
-        if(this.ui > InterfaceState.Authenticated){
-            this.ui = InterfaceState.Authenticated;
-            return
-        }
-        this.selectedFolder = undefined;
-        this.errorMessage = undefined;
-        this.ui = InterfaceState.Folder;
-        this.getData({ authId: this.authId })
-            .then(({data}:{data: File[]}) => {
-                this.data = data;
-            }).catch(this.handleError);
-    };
+    this.getData({ authId: this.authId })
+      .then(({ data }: { data: File[] }) => {
+        this.items = data
+        this.ui = InterfaceState.Folder
+      })
+      .catch(this.handleError)
+  }
 
-    handleSearchQuery = (query: string) => {
-        this.data = undefined;
-        this.filesSearchResults = undefined;
-        const req = (query.length > 3) ? this.searchData({authId: this.authId, query}) : this.getData({ authId: this.authId });
-        req.then(({data}: {data: File[]}) => {
-            this.filesSearchResults = data;
-        }).catch(this.handleError);
-    };
+  handleSearchQuery = (query: string) => {
+    this.items = undefined
+    const req =
+      query.length > 3 ? this.searchData({ authId: this.authId, query }) : this.getData({ authId: this.authId })
 
-    handleFolderSelect = (selectedFolder: File) => {
-        this.rootFolder = true;
-        this.data = undefined;
-        let params = {} as {folderPath: string};
-        params.folderPath = `${selectedFolder.path_lower}`;
-        this.getData({ authId: this.authId, ...params})
-            .then(({data}:{data: File[]}) => {
-                this.data = data
-            }).catch(this.handleError)
-    };
+    req
+      .then(({ data }: { data: File[] }) => {
+        this.items = data
+      })
+      .catch(this.handleError)
+  }
 
-    handleError = error => {
-        this.ui = InterfaceState.Error;
-        this.errorMessage = error.error;
-    };
+  handleFolderSelect = (selectedFolder: File) => {
+    this.rootFolder = true
+    this.items = undefined
+    let params = {} as { folderPath: string }
+    params.folderPath = `${selectedFolder.path_lower}`
+    this.getData({ authId: this.authId, ...params })
+      .then(({ data }: { data: File[] }) => {
+        this.items = data
+      })
+      .catch(this.handleError)
+  }
 
-    handleItemSelect = (selectedItem: File) => {
-        this.filesSearchResults = undefined;
-        if (selectedItem['.tag'] === 'folder') {
-            this.selectedFolder = selectedItem;
-            this.path.push(selectedItem.name);
-            this.handleFolderSelect(selectedItem);
-        } else {
-            this.handleAttachFile(selectedItem);
-        }
-    };
+  handleError = error => {
+    this.ui = InterfaceState.Error
+    this.errorMessage = error.error
+  }
 
-    handleWorkflowBack = () => {
-        this.path.splice(-1,1);
-        switch(this.ui) {
-            case InterfaceState.Settings:
-            case InterfaceState.Folder:
-                this.fetchPreviousFolderData();
-                break;
-            case InterfaceState.Error:
-                this.ui = InterfaceState.Authenticated;
-                break;
-        }
-    };
+  handleItemSelect = (selectedItem: File) => {
+    this.items = undefined
+    if (selectedItem['.tag'] === 'folder') {
+      this.selectedFolder = selectedItem
+      this.path.push(selectedItem.name)
+      this.handleFolderSelect(selectedItem)
+    } else {
+      this.handleAttachFile(selectedItem)
+    }
+  }
 
-    fetchPreviousFolderData = () => {
-        if (!this.selectedFolder) {
-            this.data = undefined;
-            this.ui = InterfaceState.Authenticated;
-            return;
-        }
-        this.data = undefined;
-        this.getData({authId: this.authId, folderPath: this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '')}).then(({data}:{data: File[]}) => {
-            this.data = data;
-        }).catch(this.handleError);
-        if (this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '') !== '') {
-            this.fetchPreviousFolder({authId: this.authId, folderPath: this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '')}).then(({data}:{data: File}) => {
-                this.selectedFolder = data;
-            }).catch(this.handleError)
-        } else {
-            this.selectedFolder = undefined;
-            this.rootFolder = false;
-        }
-    };
+  handleWorkflowBack = () => {
+    this.path.splice(-1, 1)
+    switch (this.ui) {
+      case InterfaceState.Settings:
+      case InterfaceState.Folder:
+        this.fetchPreviousFolderData()
+        break
+      case InterfaceState.Error:
+        this.ui = InterfaceState.Authenticated
+        break
+    }
+  }
 
-    handleAttachFile = (file: any) => {
-        file.path = this.path;
-        if(this.multi){
-            const files = (this.files.length) ? this.files : (this as any).filesInitial || [];
-            this.files = [
-                ...files.filter((elm: File) => file.id !== elm.id),
-                (file as File)
-            ]
-        } else {
-            this.files = [file];
-        }
-        if(this.autoClose) {
-            this.ui = InterfaceState.Authenticated;
-        }
-        this.data = undefined;
-        this.path = [];
-    };
+  fetchPreviousFolderData = () => {
+    if (!this.selectedFolder) {
+      this.items = undefined
+      this.ui = InterfaceState.Authenticated
+      return
+    }
+    this.items = undefined
+    this.getData({
+      authId: this.authId,
+      folderPath: this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '')
+    })
+      .then(({ data }: { data: File[] }) => {
+        this.items = data
+      })
+      .catch(this.handleError)
+    if (this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '') !== '') {
+      this.fetchPreviousFolder({
+        authId: this.authId,
+        folderPath: this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '')
+      })
+        .then(({ data }: { data: File }) => {
+          this.selectedFolder = data
+        })
+        .catch(this.handleError)
+    } else {
+      this.selectedFolder = undefined
+      this.rootFolder = false
+    }
+  }
 
-    handleMenu = () => {
-        this.ui = InterfaceState.Settings
-    };
+  handleAttachFile = (file: any) => {
+    file.path = this.path
+    if (this.multi) {
+      const files = this.files.length ? this.files : (this as any).filesInitial || []
+      this.files = [...files.filter((elm: File) => file.id !== elm.id), file as File]
+    } else {
+      this.files = [file]
+    }
+    if (this.autoClose) {
+      this.ui = InterfaceState.Authenticated
+    }
+    this.items = undefined
+    this.path = []
+  }
 
-    handleLogout = () => {
-        if(this.revoke){ this.revoke() }
-        this.revoke = undefined;
-        this.ui = InterfaceState.Unauthenticated
-    };
+  handleMenu = () => {
+    this.ui = InterfaceState.Settings
+  }
 
-    onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
-        this.authorize = authenticate;
-        authenticate()
-            .then(() => {
-                this.ui = InterfaceState.Authenticated;
-                this.handleAttachClick()
-            })
-            .catch(console.error)
-    };
+  // handleLogout = () => {
+  //     if(this.revoke){ this.revoke() }
+  //     this.revoke = undefined;
+  //     this.ui = InterfaceState.Unauthenticated
+  // };
 
-    renderUnauthorized: any = ({ authenticate }) => (
-            <icon-button
-                onClick={() => this.onAuthorizeClick(authenticate)}
-                text="Attach a file"
-            />
-    );
+  renderUnauthorized: any = () => (
+    <connect-action
+      text-unauthenticated={this.I18N_INTEGRATION_ACTION}
+      onClick={() => {
+        this.openPopoverOnceLoggedIn = true
+      }}
+    />
+  )
 
-    renderAuthorized: any = ({ revoke }) => {
-        this.revoke = revoke;
-        return (
-            <icon-button onClick={this.handleAttachClick} text="Attach a file" />
-        )
-    };
-
-    renderWorkflow = () => {
-        if(this.ui > InterfaceState.Authenticated){
-            return (
-                <workflow-box
-                    heading={StateTitles[this.ui] || ""}
-                    subHeading={(this.selectedFolder) ? `From ${this.selectedFolder.name}` : undefined}
-                    onBack={this.handleWorkflowBack}
-                    onClose={this.handleExternalClick}
-                    rootFolder={this.rootFolder}
-                    onMenu={(this.ui == InterfaceState.Settings) ? undefined : this.handleMenu }
-                    style={{position: 'absolute', marginLeft: '24px'}}
-                >
-                    {this.renderWorkflowContent()}
-                </workflow-box>
-            )
-        }
-    };
-
-    renderWorkflowContent = () => {
-        switch(this.ui){
-            case InterfaceState.Error:
-                return <error-message
-                    message={this.errorMessage}
-                    onRetry={this.handleRetry}
-                />;
-            case InterfaceState.Settings:
-                // just use the same handler for all options as we just have logout
-                return (
-                    <list-navigation
-                        options={[
-                            {name: 'Logout', icon: 'ios-log-out'}
-                        ]}
-                        attributeName={'name'}
-                        showNextIcon={false}
-                        onOptionClicked={this.handleLogout} />
-                );
-            case InterfaceState.Folder:
-                if (this.filesSearchResults && this.filesSearchResults.length !== 0) {
-                    return (
-                        <div>
-                            <list-navigation
-                                options={this.filesSearchResults}
-                                attributeName={'name'}
-                                onSearchQuery={this.handleSearchQuery}
-                                onBackClicked={this.handleWorkflowBack}
-                                showNextIcon={true}
-                                onOptionClicked={this.handleItemSelect}/>
-                        </div>
-                    );
-                }
-                    return (
-                        <div>
-                            <list-navigation
-                                options={this.data}
-                                attributeName={'name'}
-                                onSearchQuery={this.handleSearchQuery}
-                                showNextIcon={true}
-                                onBackClicked={this.handleWorkflowBack}
-                                onOptionClicked={this.handleItemSelect}/>
-                        </div>
-                    );
-        }
-        return null
-    };
-
-    handleExternalClick = (_e:Event) => {
-        this.data = undefined;
-        this.selectedFolder = undefined;
-        this.filesSearchResults = undefined;
-        this.rootFolder = false;
-        if(this.ui != InterfaceState.Unauthenticated){
-            this.ui = InterfaceState.Authenticated
-        }
-    };
-
-    handleInternalClick = (e:Event) => {
-        e.stopImmediatePropagation()
-    };
-
-    componentDidLoad() {
-        this.el.addEventListener("click", this.handleInternalClick);
-        document.addEventListener("click", this.handleExternalClick);
+  renderAuthorized: any = () => {
+    if (this.openPopoverOnceLoggedIn) {
+      this.openPopoverOnceLoggedIn = false
+      this.handleAttachClick()
     }
 
-    handleRemove = (file: File) =>{
-        const updatedList = this.files.filter((elm:File)=> file.id !== elm.id);
-        console.log('remove', file, updatedList)
-    };
+    return (
+      <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
+        <icon-button slot='popover-toggler' onClick={this.handleAttachClick} text={this.I18N_INTEGRATION_ACTION} />
+        {this.renderWorkflow()}
+      </bearer-popover>
+    )
+  }
 
-    render() {
-        return (
-            <span>
-                <bearer-authorized
-                    renderUnauthorized={this.renderUnauthorized}
-                    renderAuthorized={this.renderAuthorized}
-                />
-                {this.renderWorkflow()}
-            </span>
-        )
+  renderWorkflow = () => {
+    if (this.ui <= InterfaceState.Authenticated) {
+      return null
     }
+
+    const heading = this.StateTitles[this.ui] || ''
+    const subHeading =
+      this.selectedFolder && this.ui !== InterfaceState.Settings ? `From ${this.selectedFolder.name}` : undefined
+    const handleBack = this.rootFolder && (this.ui == InterfaceState.Settings || subHeading) && this.handleWorkflowBack
+    const handleClose = this.handleExternalClick
+    const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
+
+    return [
+      <div slot='popover-header'>
+        <div class='popover-header'>
+          {handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={handleBack} />}
+          <div class='popover-title'>
+            <h3>{heading}</h3>
+            {subHeading && <span class='popover-subtitle'>{subHeading}</span>}
+          </div>
+        </div>
+        <div class='popover-controls'>
+          {handleMenu && (
+            <button class='popover-control' onClick={handleMenu}>
+              <IconSettings />
+            </button>
+          )}
+          {handleClose && (
+            <button class='popover-control' onClick={handleClose}>
+              <IconClose />
+            </button>
+          )}
+        </div>
+      </div>,
+      <div style={{ width: '300px' }}>{this.renderWorkflowContent()}</div>
+    ]
+  }
+
+  renderWorkflowContent = () => {
+    switch (this.ui) {
+      case InterfaceState.Loading:
+        return <navigation-loader />
+
+      case InterfaceState.Folder:
+        return [
+          <navigation-search onSearchQuery={this.handleSearchQuery} />,
+          <navigation-list items={this.items} onSubmitted={this.handleItemSelect} />
+        ]
+
+      case InterfaceState.Settings:
+        return <connect-action authId={this.authId} text-authenticated='Logout' icon='ios-log-out' />
+
+      case InterfaceState.Error:
+        return <navigation-error message={this.errorMessage} onRetry={this.handleRetry} />
+    }
+    return null
+  }
+
+  handleExternalClick = (_e: Event) => {
+    this.items = undefined
+    this.selectedFolder = undefined
+    this.rootFolder = false
+    if (this.ui != InterfaceState.Unauthenticated) {
+      this.ui = InterfaceState.Authenticated
+    }
+  }
+
+  handleInternalClick = (e: Event) => {
+    e.stopImmediatePropagation()
+  }
+
+  // handleRemove = (file: File) =>{
+  //     const updatedList = this.files.filter((elm:File)=> file.id !== elm.id);
+  //     console.log('remove', file, updatedList)
+  // };
+
+  componentDidLoad() {
+    this.StateTitles = {
+      [InterfaceState.Loading]: 'Loading...',
+      [InterfaceState.Folder]: this.multi ? 'Select files' : 'Select a file',
+      [InterfaceState.Files]: 'Select one file',
+      [InterfaceState.Error]: 'Something went wrong',
+      [InterfaceState.Settings]: 'Settings'
+    }
+
+    this.el.addEventListener('click', this.handleInternalClick)
+    document.addEventListener('click', this.handleExternalClick)
+
+    Bearer.emitter.addListener(Events.AUTHORIZED, () => {
+      this.isAuthorized = true
+      if (this.ui < InterfaceState.Authenticated) {
+        this.ui = InterfaceState.Authenticated
+      }
+    })
+
+    Bearer.emitter.addListener(Events.REVOKED, () => {
+      this.isAuthorized = false
+      this.ui = InterfaceState.Unauthenticated
+    })
+  }
+
+  render() {
+    return this.isAuthorized ? this.renderAuthorized() : this.renderUnauthorized()
+  }
 }

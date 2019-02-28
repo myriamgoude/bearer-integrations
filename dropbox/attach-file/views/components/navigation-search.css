@@ -1,16 +1,16 @@
-.br-search-wrapper {
+.search-wrapper {
   border-radius: 4px;
   background-color: #f5f7ff;
   padding: 10px;
   display: flex;
 }
 
-.br-search-icon {
+.search-icon {
   padding-top: 3px;
   padding-left: 4px;
 }
 
-.br-search-input {
+.search-input {
   height: 20px;
   opacity: 0.33;
   color: #030d36;
@@ -23,7 +23,7 @@
   padding-left: 8px;
 }
 
-.br-search::placeholder {
+.search::placeholder {
   font-size: 16px;
   color: #6a7397;
 }

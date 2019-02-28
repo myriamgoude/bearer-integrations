@@ -1,12 +1,12 @@
-import axios from 'axios';
+import axios from 'axios'
 
 export default function(token: string) {
   const headers = {
-    'Accept': 'application/json',
+    Accept: 'application/json',
     'User-Agent': 'Bearer',
     'Content-Type': 'application/json',
-    'Authorization': `Bearer ${token}`
-  };
+    Authorization: `Bearer ${token}`
+  }
 
   return axios.create({
     baseURL: 'https://api.dropboxapi.com/2/',

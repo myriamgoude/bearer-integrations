@@ -1,12 +1,15 @@
 import { TOAUTH2AuthContext, SaveState, TSaveActionEvent, TSavePromise } from '@bearer/intents'
 import { File } from '../views/types'
 
-export default class SaveFilesIntent extends SaveState implements SaveState<State, ReturnedData, any, TOAUTH2AuthContext> {
+export default class SaveFilesIntent extends SaveState
+  implements SaveState<State, ReturnedData, any, TOAUTH2AuthContext> {
   async action(event: TSaveActionEvent<State, Params, TOAUTH2AuthContext>): TSavePromise<State, ReturnedData> {
-    const { files } = event.params;
+    const { files } = event.params
     return {
       state: {
-        files: files.map(file => {return {id: file.id}})
+        files: files.map(file => {
+          return { id: file.id }
+        })
       },
       data: files
     }
@@ -17,11 +20,11 @@ export default class SaveFilesIntent extends SaveState implements SaveState<Stat
  * Typing
  */
 export type Params = {
-  files: File[];
+  files: File[]
 }
 
 export type State = {
-  files: any[];
+  files: any[]
 }
 
-export type ReturnedData = File[];
+export type ReturnedData = File[]
