@@ -126,6 +126,8 @@ export class FeatureAction {
         this.path.splice(-1,1);
         switch(this.ui) {
             case InterfaceState.Settings:
+                this.ui = InterfaceState.Folder
+                break;
             case InterfaceState.Folder:
                 this.fetchPreviousFolderData();
                 break;
@@ -202,7 +204,7 @@ export class FeatureAction {
     
         const heading = StateTitles[this.ui] || "";
         const subHeading= (this.selectedFolder && this.ui !== InterfaceState.Settings) ? `From ${this.selectedFolder.name}` : undefined;
-        const handleBack = (this.rootFolder && subHeading) && this.handleWorkflowBack;
+        const handleBack = (this.rootFolder && (this.ui == InterfaceState.Settings || subHeading)) && this.handleWorkflowBack;
         const handleClose = this.handleExternalClick;
         const handleMenu = (this.ui == InterfaceState.Settings) ? undefined : this.handleMenu;
 
@@ -234,30 +236,20 @@ export class FeatureAction {
             case InterfaceState.Settings:
                 return (<connect-action authId={this.authId} text-authenticated="Logout" icon="ios-log-out" />);
             case InterfaceState.Folder:
-                if (this.filesSearchResults) {
-                    return (
-                        <div>
-                            <list-navigation
-                                options={this.filesSearchResults}
-                                attributeName={'name'}
-                                onSearchQuery={this.handleSearchQuery}
-                                onBackClicked={this.handleWorkflowBack}
-                                showNextIcon={true}
-                                onOptionClicked={this.handleItemSelect}/>
-                        </div>
-                    );
-                }
-                    return (
-                        <div>
-                            <list-navigation
-                                options={this.data}
-                                attributeName={'name'}
-                                onSearchQuery={this.handleSearchQuery}
-                                showNextIcon={true}
-                                onBackClicked={this.handleWorkflowBack}
-                                onOptionClicked={this.handleItemSelect}/>
-                        </div>
-                    );
+                const options = (this.filesSearchResults)
+                    ? this.filesSearchResults : this.data;
+                
+                return (
+                    <div>
+                        <list-navigation
+                            options={options}
+                            attributeName={'name'}
+                            onSearchQuery={this.handleSearchQuery}
+                            onBackClicked={this.handleWorkflowBack}
+                            showNextIcon={true}
+                            onSubmitted={this.handleItemSelect}/>
+                    </div>
+                );
         }
         return null
     };
@@ -291,11 +283,6 @@ export class FeatureAction {
             this.ui = InterfaceState.Unauthenticated;
         })
     }
-
-    handleRemove = (file: File) =>{
-        const updatedList = this.files.filter((elm:File)=> file.id !== elm.id);
-        console.log('remove', file, updatedList)
-    };
 
     render() {
         return ( this.isAuthorized ? this.renderAuthorized() : this.renderUnauthorized() )
