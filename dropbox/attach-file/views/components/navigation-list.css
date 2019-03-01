@@ -1,25 +1,25 @@
-ul {
-  list-style: none;
-  padding: 0;
-  cursor: pointer;
-}
-
 .scroll {
   max-height: 300px;
   overflow-x: hidden;
   overflow-y: scroll;
-  margin: 10px;
 }
 
 ::-webkit-scrollbar {
   width: 0;
 }
 
-li {
-  line-height: 30px;
+ul.navigation-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+li.navigation-item {
+  line-height: 16px;
   display: flex;
   flex: 1;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   justify-content: flex-end;
 }
 
@@ -33,6 +33,7 @@ span.label {
 }
 
 .no-results-content {
+  margin: 16px auto;
   display: flex;
   flex-direction: column;
   align-items: center;

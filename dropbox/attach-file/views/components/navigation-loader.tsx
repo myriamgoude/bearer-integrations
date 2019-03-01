@@ -9,11 +9,11 @@ export class NavigationLoader {
 
   render() {
     return (
-      <ul>
+      <ul class='navigation-loader'>
         {Array(4)
           .fill(true)
           .map(() => (
-            <li class='loader' style={this.randomWidthStyle()} />
+            <li style={this.randomWidthStyle()} />
           ))}
       </ul>
     )

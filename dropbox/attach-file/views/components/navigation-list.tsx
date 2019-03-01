@@ -1,13 +1,13 @@
 import { Component, Prop, t } from '@bearer/core'
 import IconNoResults from '../icons/icon-no-results'
-import { File } from '../types'
+import { NavigationItem } from '../types'
 
 @Component({ tag: 'navigation-list', styleUrl: 'navigation-list.css' })
 export class NavigationList {
-  @Prop() items: File[] = []
+  @Prop() items: NavigationItem[] = []
   @Prop() onSubmitted: any
 
-  handleSubmit(selection: File) {
+  handleSubmit(selection: NavigationItem) {
     if (this.onSubmitted) {
       this.onSubmitted(selection)
     }
@@ -30,9 +30,10 @@ export class NavigationList {
     }
 
     return (
-      <ul>
+      <ul class='navigation-list'>
         {this.items.map(item => (
           <li
+            class='navigation-item'
             onClick={() => {
               this.handleSubmit(item)
             }}
