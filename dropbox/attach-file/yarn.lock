@@ -2,15 +2,15 @@
 # yarn lockfile v1
 
 
-"@bearer/bearer-cli@^0.99.0":
-  version "0.99.0"
-  resolved "https://registry.npmjs.org/@bearer/bearer-cli/-/bearer-cli-0.99.0.tgz#2f57f0c2f44939bfc0710a20d52203455073b537"
-  integrity sha512-PYoPUZ2SPE3z6aD0RtTKedAyO+fvKrZaIsf19qy+RiKxAoIjTXodv2e784rvpll52+juLx2yU34S/qfA0jajBA==
+"@bearer/bearer-cli@^0.96.1":
+  version "0.96.1"
+  resolved "https://registry.npmjs.org/@bearer/bearer-cli/-/bearer-cli-0.96.1.tgz#c9089477ae5ef860ee3b2291828b89c03cf0e8db"
+  integrity sha512-WhAABnZkyVUx1f4L25MB6BVdI8JA0LFHIHgEFnBlw9fs2y3DkRccO2HSK+3lKIUV7CBTz4tzEf5hmjv9yGRRkA==
   dependencies:
-    "@bearer/intents" "^0.99.0"
-    "@bearer/logger" "^0.99.0"
-    "@bearer/transpiler" "^0.99.0"
-    "@bearer/types" "^0.99.0"
+    "@bearer/intents" "^0.96.1"
+    "@bearer/logger" "^0.96.1"
+    "@bearer/transpiler" "^0.96.1"
+    "@bearer/types" "^0.96.1"
     "@koa/cors" "^2.2.2"
     amazon-cognito-identity-js "^2.0.3"
     archiver "^2.1.1"
@@ -55,17 +55,16 @@
     uuid "^3.3.2"
     webpack "^4.12.0"
 
-"@bearer/cli@next":
-  version "0.99.0"
-  resolved "https://registry.npmjs.org/@bearer/cli/-/cli-0.99.0.tgz#69bd943efc3f1c0335348915cebf56013a4cbc87"
-  integrity sha512-UGtIB2K2KjwTCdzQPVrln59nd7EbnSus+TZgztmhQmncQ+VkU5FOqrWhNbejO2GOUfzxBRelKnMgk/R0Us0MiQ==
+"@bearer/cli@beta5":
+  version "0.96.1"
+  resolved "https://registry.npmjs.org/@bearer/cli/-/cli-0.96.1.tgz#9e3577a150c8f50d0b7bb8ec1774f58664841c12"
+  integrity sha512-q42ws78j8KjxkMpxca5lJh5chbxC5X6h0Gi0tT4q/pzEs46mR5R7rR8LVOnRYYfo3ksXSXt6JyVEhsftGPOccQ==
   dependencies:
-    "@bearer/bearer-cli" "^0.99.0"
-    "@bearer/intents" "^0.99.0"
-    "@bearer/openapi-generator" "^0.99.0"
-    "@bearer/security" "^0.99.0"
-    "@bearer/transpiler" "^0.99.0"
-    "@bearer/types" "^0.99.0"
+    "@bearer/bearer-cli" "^0.96.1"
+    "@bearer/intents" "^0.96.1"
+    "@bearer/security" "^0.96.1"
+    "@bearer/transpiler" "^0.96.1"
+    "@bearer/types" "^0.96.1"
     "@oclif/command" "^1.5.2"
     "@oclif/config" "^1.8.6"
     "@oclif/plugin-autocomplete" "^0.1.0"
@@ -131,7 +130,17 @@
     rollup-plugin-strip "^1.2.0"
     typescript "^3.2.4"
 
-"@bearer/intents@^0.99.0", "@bearer/intents@next":
+"@bearer/intents@^0.96.1":
+  version "0.96.1"
+  resolved "https://registry.npmjs.org/@bearer/intents/-/intents-0.96.1.tgz#36163211527c85e029481820d391ad61d79707f6"
+  integrity sha512-kDM0Epg6mS7xdva925sOwehxKPYMf5S29avLo/2oWXD6vzJ5NciyaA+rn4U5iGZ2qlHgNyzZFf4t46/aFBg+WA==
+  dependencies:
+    "@bearer/logger" "^0.96.1"
+    axios "^0.18.0"
+    typescript "^3.2.4"
+    uuid "^3.3.2"
+
+"@bearer/intents@next":
   version "0.99.0"
   resolved "https://registry.npmjs.org/@bearer/intents/-/intents-0.99.0.tgz#c8a0a9912f050f03d42c78a44b7702976c55db8d"
   integrity sha512-+L/Fn3HCZiAQ9VD0zltUhrGtuSy9/jQo+4mE3v7jhObE8nX/4SoHODqloknTeLjNPin/N/XAKpF2R3xpWRxSxQ==
@@ -150,6 +159,13 @@
     debounce "^1.2.0"
     jest-fetch-mock "^2.1.1"
 
+"@bearer/logger@^0.96.1":
+  version "0.96.1"
+  resolved "https://registry.npmjs.org/@bearer/logger/-/logger-0.96.1.tgz#0b456ac4b497b6c2876340a44c9d9ca0d4484188"
+  integrity sha512-+h5Nsg1oT7T9D68px4nZD8dQD+slA1Rs+3K+g6TwIwTdTVtZqB7PJHHCFnsPjKkcalmXOR6+wLhb72WDozH+WA==
+  dependencies:
+    debug "^4.1.0"
+
 "@bearer/logger@^0.99.0":
   version "0.99.0"
   resolved "https://registry.npmjs.org/@bearer/logger/-/logger-0.99.0.tgz#fc8bd6cc3ecc570aab56166d59585f59fdbc2579"
@@ -157,30 +173,28 @@
   dependencies:
     debug "^4.1.0"
 
-"@bearer/openapi-generator@^0.99.0":
-  version "0.99.0"
-  resolved "https://registry.npmjs.org/@bearer/openapi-generator/-/openapi-generator-0.99.0.tgz#7bca77ec4f31017f14e3bbb21ae242c5774f6db1"
-  integrity sha512-O8buXQQQF1SJ9Lc94yFtKPpbMgvHOdmd7ANX64/XXex4Gu5OEGxoM9UUVlUUQVXZe9RXhNY9VJMkkWb2ne+DMg==
-  dependencies:
-    lodash.merge "^4.6.1"
+"@bearer/security@^0.96.1":
+  version "0.96.1"
+  resolved "https://registry.npmjs.org/@bearer/security/-/security-0.96.1.tgz#4f9a37a9c563ef1c72f15055dd5378cad02b11f1"
+  integrity sha512-agQ5SOZowms9ZLddHrO/nIhegppxuAlNYX6wrbDNGPeZFOAY+cFptududWAvbB8+QpZX1qumiknep7b97vIHHg==
 
-"@bearer/security@^0.99.0":
-  version "0.99.0"
-  resolved "https://registry.npmjs.org/@bearer/security/-/security-0.99.0.tgz#e89f414cf20f4c41ac17aff02809af56d0d6fd05"
-  integrity sha512-d3rg5yoz5ukSoFPZBAmZFFsTLqHa8+9ueV6884mDy9iRu3n/OgUPPBOvhSj7bOrC2CPbMMuXeytmcYMMl1IXIw==
-
-"@bearer/transpiler@^0.99.0":
-  version "0.99.0"
-  resolved "https://registry.npmjs.org/@bearer/transpiler/-/transpiler-0.99.0.tgz#154670ee5edcc001de912f8be8de169901f3e5a5"
-  integrity sha512-BDws8KH9Gtz6f0vZL7RENEyAHr68Tjfz7TABjp9TztMMPKu3bK/mq0CVt9oGysN++Ciao9aQPOVEiWvvAqC2Pg==
+"@bearer/transpiler@^0.96.1":
+  version "0.96.1"
+  resolved "https://registry.npmjs.org/@bearer/transpiler/-/transpiler-0.96.1.tgz#f72d43a87a1921bdd53d6f467a97b81b37ba0b20"
+  integrity sha512-5teuaGCcRu9pDGvYCN+FE+pt3DJqqBopzI453JOlcAzDy26vLTCjuQ+cGQfEKpQpFCn16+13WppWxh/ljQbceQ==
   dependencies:
-    "@bearer/logger" "^0.99.0"
+    "@bearer/logger" "^0.96.1"
     async-foreach "^0.1.3"
     case "^1.5.5"
     command-line-args "^5.0.2"
     fs-extra "^6.0.1"
     typescript "^3.2.4"
     typescript-json-schema "^0.34.0"
+
+"@bearer/types@^0.96.1":
+  version "0.96.1"
+  resolved "https://registry.npmjs.org/@bearer/types/-/types-0.96.1.tgz#5d20439d6a9abdbd4efc122253337c42b44d25ad"
+  integrity sha512-PSRiy5sxFfUFnWVDFgV0WljnS2B52SSNZ5f35O7ftXCDRIQE9IayIcx1r188hIZTH2Dq1RHP0YkYgt/cFIr/kA==
 
 "@bearer/types@^0.98.0":
   version "0.98.0"

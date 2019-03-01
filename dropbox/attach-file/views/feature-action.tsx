@@ -103,9 +103,8 @@ export class FeatureAction {
   handleSearchQuery = (query: string) => {
     this.rootFolder = false
     this.items = undefined
-    const req = this.searchData({ authId: this.authId, query })
 
-    req
+    this.searchData({ authId: this.authId, query })
       .then(({ data }: { data: File[] }) => {
         this.items = data
       })

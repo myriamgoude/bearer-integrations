@@ -23,7 +23,7 @@
     "lodash": "^4.17.11"
   },
   "devDependencies": {
-    "@bearer/cli": "next",
+    "@bearer/cli": "beta5",
     "@types/lodash": "^4.14.120",
     "@types/node": "^10.12.25"
   },
