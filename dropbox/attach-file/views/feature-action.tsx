@@ -9,7 +9,9 @@ import Bearer, {
   Output,
   Prop,
   RootComponent,
-  State
+  State,
+  t,
+  p
 } from '@bearer/core'
 import '@bearer/ui'
 import { File } from './types'
@@ -24,7 +26,6 @@ enum InterfaceState {
   Authenticated,
   Loading,
   Folder,
-  Files,
   Settings,
   Error
 }
@@ -52,9 +53,6 @@ export class FeatureAction {
   @State() selectedFolder: File | undefined
   @State() filesSearchResults: File[] | undefined
   @State() rootFolder: boolean | undefined = false
-
-  I18N_INTEGRATION_ACTION = this.multi ? 'Attach files' : 'Attach a file'
-  StateTitles = {}
 
   @Event() authorized: EventEmitter<TAuthorizedPayload>
   @Event() revoked: EventEmitter<TAuthorizedPayload>
@@ -204,7 +202,7 @@ export class FeatureAction {
 
   renderUnauthorized: any = () => (
     <connect-action
-      text-unauthenticated={this.I18N_INTEGRATION_ACTION}
+      text-unauthenticated={p('btn.main_action', this.multi ? 2 : 1, 'Attach a file')}
       onClick={() => {
         this.openPopoverOnceLoggedIn = true
       }}
@@ -219,7 +217,11 @@ export class FeatureAction {
 
     return (
       <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
-        <icon-button slot='popover-toggler' onClick={this.handleAttachClick} text={this.I18N_INTEGRATION_ACTION} />
+        <icon-button
+          slot='popover-toggler'
+          onClick={this.handleAttachClick}
+          text={p('btn.main_action', this.multi ? 2 : 1, 'Attach a file')}
+        />
         {this.renderWorkflow()}
       </bearer-popover>
     )
@@ -230,7 +232,14 @@ export class FeatureAction {
       return null
     }
 
-    const heading = this.StateTitles[this.ui] || ''
+    const StateTitles = {
+      [InterfaceState.Loading]: t('state.loading', 'Loading...'),
+      [InterfaceState.Folder]: p('state.select', this.multi ? 2 : 1, 'Select a file'),
+      [InterfaceState.Error]: t('state.error', 'Something went wrong'),
+      [InterfaceState.Settings]: t('state.setting', 'Settings')
+    }
+
+    const heading = StateTitles[this.ui] || ''
     const subHeading =
       this.selectedFolder && this.ui !== InterfaceState.Settings ? `From ${this.selectedFolder.name}` : undefined
     const handleBack = this.rootFolder && (this.ui == InterfaceState.Settings || subHeading) && this.handleWorkflowBack
@@ -275,7 +284,7 @@ export class FeatureAction {
         ]
 
       case InterfaceState.Settings:
-        return <connect-action authId={this.authId} text-authenticated='Logout' icon='ios-log-out' />
+        return <connect-action authId={this.authId} text-authenticated={t('btn.logout', 'Logout')} icon='ios-log-out' />
 
       case InterfaceState.Error:
         return <navigation-error message={this.errorMessage} onRetry={this.handleRetry} />
@@ -302,14 +311,6 @@ export class FeatureAction {
   // };
 
   componentDidLoad() {
-    this.StateTitles = {
-      [InterfaceState.Loading]: 'Loading...',
-      [InterfaceState.Folder]: this.multi ? 'Select files' : 'Select a file',
-      [InterfaceState.Files]: 'Select one file',
-      [InterfaceState.Error]: 'Something went wrong',
-      [InterfaceState.Settings]: 'Settings'
-    }
-
     this.el.addEventListener('click', this.handleInternalClick)
     document.addEventListener('click', this.handleExternalClick)
 

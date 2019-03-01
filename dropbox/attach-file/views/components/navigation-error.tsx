@@ -1,4 +1,4 @@
-import { Component, Prop } from '@bearer/core'
+import { Component, Prop, t } from '@bearer/core'
 
 @Component({ tag: 'navigation-error', styleUrl: 'navigation-error.css' })
 export class NavigationError {
@@ -9,7 +9,7 @@ export class NavigationError {
     return [
       <div class='alert error'>{this.message}</div>,
       <bearer-button kind='secondary' onClick={this.onRetry}>
-        Retry
+        {t('btn.retry', 'Retry')}
       </bearer-button>
     ]
   }

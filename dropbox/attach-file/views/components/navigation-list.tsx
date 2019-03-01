@@ -1,4 +1,4 @@
-import { Component, Prop } from '@bearer/core'
+import { Component, Prop, t } from '@bearer/core'
 import IconNoResults from './icons/icon-no-results'
 import { File } from '../types'
 
@@ -24,7 +24,7 @@ export class NavigationList {
           <div class='no-results-icon'>
             <IconNoResults />
           </div>
-          <span class='no-results-label'>No data found</span>
+          <span class='no-results-label'>{t('state.no_data', 'No data found')}</span>
         </div>
       )
     }
