@@ -1,6 +1,6 @@
 import { BearerFetch, Component, Intent, Prop } from '@bearer/core'
 import { File } from '../types'
-import ViewIcon from './icons/icon-view'
+import ViewIcon from '../icons/icon-view'
 
 @Component({
   tag: 'file-display',

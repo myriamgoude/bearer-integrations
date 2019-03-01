@@ -16,8 +16,8 @@ import Bearer, {
 import '@bearer/ui'
 import { File } from './types'
 
-import IconSettings from './components/icons/icon-settings'
-import IconClose from './components/icons/icon-close'
+import IconSettings from './icons/icon-settings'
+import IconClose from './icons/icon-close'
 
 export type TAuthorizedPayload = { authId: string }
 
@@ -93,9 +93,9 @@ export class FeatureAction {
   }
 
   handleSearchQuery = (query: string) => {
+    this.rootFolder = false
     this.items = undefined
-    const req =
-      query.length > 3 ? this.searchData({ authId: this.authId, query }) : this.getData({ authId: this.authId })
+    const req = this.searchData({ authId: this.authId, query })
 
     req
       .then(({ data }: { data: File[] }) => {
@@ -105,7 +105,6 @@ export class FeatureAction {
   }
 
   handleFolderSelect = (selectedFolder: File) => {
-    this.rootFolder = true
     this.items = undefined
     let params = {} as { folderPath: string }
     params.folderPath = `${selectedFolder.path_lower}`
@@ -242,7 +241,7 @@ export class FeatureAction {
     const heading = StateTitles[this.ui] || ''
     const subHeading =
       this.selectedFolder && this.ui !== InterfaceState.Settings ? `From ${this.selectedFolder.name}` : undefined
-    const handleBack = this.rootFolder && (this.ui == InterfaceState.Settings || subHeading) && this.handleWorkflowBack
+    const handleBack = !this.rootFolder && this.handleWorkflowBack
     const handleClose = this.handleExternalClick
     const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
 
@@ -295,7 +294,6 @@ export class FeatureAction {
   handleExternalClick = (_e: Event) => {
     this.items = undefined
     this.selectedFolder = undefined
-    this.rootFolder = false
     if (this.ui != InterfaceState.Unauthenticated) {
       this.ui = InterfaceState.Authenticated
     }

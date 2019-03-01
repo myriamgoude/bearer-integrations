@@ -1,5 +1,5 @@
 import { Component, Prop, t } from '@bearer/core'
-import IconNoResults from './icons/icon-no-results'
+import IconNoResults from '../icons/icon-no-results'
 import { File } from '../types'
 
 @Component({ tag: 'navigation-list', styleUrl: 'navigation-list.css' })
