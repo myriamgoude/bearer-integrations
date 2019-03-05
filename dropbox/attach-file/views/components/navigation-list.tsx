@@ -1,5 +1,6 @@
 import { Component, Prop, t } from '@bearer/core'
 import IconNoResults from '../icons/icon-no-results'
+import IconPath from '../icons/icon-path'
 import { NavigationItem } from '../types'
 
 @Component({ tag: 'navigation-list', styleUrl: 'navigation-list.css' })
@@ -39,7 +40,7 @@ export class NavigationList {
             }}
           >
             <span class='label'>{item.name}</span>
-            {item['.tag'] === 'folder' && <icon-chevron direction='right' style={{ marginLeft: '20px' }} />}
+            {item['.tag'] === 'folder' && <IconPath />}
           </li>
         ))}
       </ul>

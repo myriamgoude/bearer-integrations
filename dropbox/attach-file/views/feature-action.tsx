@@ -191,6 +191,7 @@ export class FeatureAction {
         subHeading={subHeading}
         errorMessage={this.errorMessage}
         items={this.items}
+        handleSearchQuery={this.handleSearchQuery}
         handleBack={parentFolder ? this.handleWorkflowBack : null}
         handleClose={this.handleExternalClick}
         handleMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}

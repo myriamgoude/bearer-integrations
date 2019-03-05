@@ -1,4 +1,4 @@
-import { Component, State, Prop, t } from '@bearer/core'
+import { Component, Method, State, Prop, t } from '@bearer/core'
 import InputSearchIcon from '../icons/icon-input-search'
 
 const TIMEOUT_DURATION = 500
@@ -19,6 +19,12 @@ export class NavigationSearch {
     this.debouner = setTimeout(() => {
       this.onSearchQuery(this.query)
     }, TIMEOUT_DURATION) as any
+  }
+
+  // Clear method
+  @Method()
+  clearValue() {
+    this.query = ''
   }
 
   render() {

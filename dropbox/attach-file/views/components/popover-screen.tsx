@@ -1,4 +1,4 @@
-import { Component, Prop, t, p } from '@bearer/core'
+import { Element, Component, Prop, t, p } from '@bearer/core'
 
 import IconSettings from '../icons/icon-settings'
 import IconClose from '../icons/icon-close'
@@ -27,21 +27,38 @@ export class PopoverScreen {
   @Prop() handleItemSelection: any
   @Prop() handleRetry: any
 
+  @Element() el: HTMLElement
+
+  clearSearch = () => {
+    const search = this.el.querySelector('navigation-search')
+    if (search) {
+      search.clearValue()
+    }
+  }
+
+  onItemSelected = (...arg) => {
+    this.clearSearch()
+    this.handleItemSelection(...arg)
+  }
+
   renderNavigation = () => {
     switch (this.ui) {
       case InterfaceState.Loading:
+        this.clearSearch()
         return <navigation-loader />
 
       case InterfaceState.Folder:
         return [
           <navigation-search onSearchQuery={this.handleSearchQuery} />,
-          <navigation-list items={this.items} onSubmitted={this.handleItemSelection} />
+          <navigation-list items={this.items} onSubmitted={this.onItemSelected} />
         ]
 
       case InterfaceState.Settings:
+        this.clearSearch()
         return <connect-action authId={this.authId} text-authenticated={t('btn.logout', 'Logout')} icon='ios-log-out' />
 
       case InterfaceState.Error:
+        this.clearSearch()
         return <navigation-error message={this.errorMessage} onRetry={this.handleRetry} />
     }
     return null
