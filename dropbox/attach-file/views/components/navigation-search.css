@@ -22,6 +22,7 @@
   outline: none;
   background: transparent;
   padding-left: 8px;
+  font-family: inherit;
 }
 
 .search-input::placeholder {
