@@ -47,7 +47,7 @@ export class FeatureAction {
   @Prop() autoClose: boolean = true
   @Prop() multi: boolean = true
   @Prop() authId: string
-  @Prop() fileURL: string
+  @Prop() fileUrl: string
   @Intent('listData') getData: BearerFetch
   @Intent('searchData') searchData: BearerFetch
   //   @Intent('fetchMainFolder') fetchMainFolder: BearerFetch
