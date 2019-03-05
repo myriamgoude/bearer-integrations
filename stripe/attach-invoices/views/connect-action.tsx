@@ -2,7 +2,7 @@
   The purpose of this component is to deal with auhentication.
 */
 
-import Bearer, { RootComponent, Event, Events, EventEmitter, Prop, Element, State } from '@bearer/core'
+import Bearer, { RootComponent, Event, Events, EventEmitter, Prop, Element, State, t } from '@bearer/core'
 import '@bearer/ui'
 
 export type TAuthorizedPayload = { authId: string }
@@ -21,8 +21,8 @@ export class ConnectAction {
   revoked: EventEmitter<TAuthorizedPayload>
 
   provider: string = 'Stripe'
-  @Prop() textUnauthenticated: string = 'Connect to ' + this.provider
-  @Prop() textAuthenticated: string = 'Disconnect from ' + this.provider
+  @Prop() textUnauthenticated: string = t('connect.login', 'Connect to ' + this.provider)
+  @Prop() textAuthenticated: string = t('connect.logout', 'Disconnect from ' + this.provider)
   @Prop() kind: string = 'embed'
   @Prop() icon: string
 
