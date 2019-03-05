@@ -3,22 +3,31 @@
 
 */
 
-import { BearerFetch, Element, Intent, Listen, Output, Prop, RootComponent, State } from '@bearer/core'
+import Bearer, {
+  BearerFetch,
+  Element,
+  Event,
+  Events,
+  EventEmitter,
+  Intent,
+  Listen,
+  Output,
+  Prop,
+  RootComponent,
+  State
+} from '@bearer/core'
 import '@bearer/ui'
 import { File } from './types'
 
-enum InterfaceState {
+export type TAuthorizedPayload = { authId: string }
+
+export enum InterfaceState {
   Unauthenticated,
   Authenticated,
+  Loading,
   Folder,
   Settings,
   Error
-}
-
-const StateTitles = {
-  [InterfaceState.Folder]: 'Select destination',
-  [InterfaceState.Error]: 'Select destination',
-  [InterfaceState.Settings]: 'Settings'
 }
 
 @RootComponent({
@@ -32,19 +41,27 @@ export class FeatureAction {
   @Prop() fileURL: string
   @Intent('listData') getData: BearerFetch
   @Intent('searchData') searchData: BearerFetch
-  @Intent('fetchMainFolder') fetchMainFolder: BearerFetch
+  //   @Intent('fetchMainFolder') fetchMainFolder: BearerFetch
   @Intent('uploadFile') uploadFile: BearerFetch
-
-  @State() ui: InterfaceState = InterfaceState.Unauthenticated
-  @State() errorMessage: string | undefined
-  @State() revoke: any | undefined
 
   @State() foldersData: File[] | undefined
   @State() selectedFolder: File | undefined
   @State() foldersSearchResults: File[] | undefined
-  @State() authorized = false
-  @State() rootFolder = false
   @State() showButton = true
+
+  //
+  @State() ui: InterfaceState = InterfaceState.Unauthenticated
+  @State() errorMessage: string | undefined
+  @State() isAuthorized: boolean = false
+
+  @State() items: File[] | undefined
+
+  path: File[] = []
+  rootFolder: boolean = true
+  openPopoverOnceLoggedIn: boolean = false
+
+  @Event() authorized: EventEmitter<TAuthorizedPayload>
+  @Event() revoked: EventEmitter<TAuthorizedPayload>
 
   @Output() folders: File[]
 
@@ -62,46 +79,58 @@ export class FeatureAction {
 
   handleRetry = () => {
     this.ui = InterfaceState.Authenticated
-    this.handleAttachClick()
+    this.togglePopover()
   }
 
-  handleAttachClick = () => {
+  togglePopover = () => {
+    console.log('this.togglePopover', this.ui)
     if (this.ui > InterfaceState.Authenticated) {
       this.ui = InterfaceState.Authenticated
+      console.log(this.ui)
       return
     }
     this.selectedFolder = undefined
     this.errorMessage = undefined
-    this.ui = InterfaceState.Folder
-    this.getData({ authId: this.authId })
+    this.ui = InterfaceState.Loading
+    this.path = []
+
+    this.listFolder()
+  }
+
+  listFolder = () => {
+    this.items = undefined
+    this.errorMessage = undefined
+    this.rootFolder = !this.path.length
+
+    let params = {} as { folderPath: string }
+
+    if (!this.rootFolder) {
+      const currentFolder = this.path[this.path.length - 1]
+      params.folderPath = currentFolder && `${currentFolder.path_lower}`
+    }
+
+    this.getData({ authId: this.authId, ...params })
       .then(({ data }: { data: File[] }) => {
-        this.foldersData = data
+        this.items = data
+        this.ui = InterfaceState.Folder
       })
       .catch(this.handleError)
   }
 
   handleSearchQuery = (query: string) => {
-    this.foldersData = undefined
-    this.foldersSearchResults = undefined
-    const req =
-      query.length > 3 ? this.searchData({ authId: this.authId, query }) : this.getData({ authId: this.authId })
-    req
+    this.rootFolder = false
+    this.items = undefined
+
+    this.searchData({ authId: this.authId, query })
       .then(({ data }: { data: File[] }) => {
-        this.foldersSearchResults = data
+        this.items = data
       })
       .catch(this.handleError)
   }
 
-  handleFolderSelect = (selectedFolder: File) => {
-    this.rootFolder = true
-    this.foldersData = undefined
-    let params = {} as { folderPath: string }
-    params.folderPath = `${selectedFolder.path_lower}`
-    this.getData(params)
-      .then(({ data }: { data: File[] }) => {
-        this.foldersData = data
-      })
-      .catch(this.handleError)
+  handleFolderSelection = (selectedItem: File) => {
+    this.path.push(selectedItem)
+    this.listFolder()
   }
 
   handleError = error => {
@@ -109,17 +138,12 @@ export class FeatureAction {
     this.errorMessage = error.error
   }
 
-  handleItemSelect = (selectedItem: File) => {
-    this.foldersSearchResults = undefined
-    this.selectedFolder = selectedItem
-    this.handleFolderSelect(selectedItem)
-  }
-
   handleWorkflowBack = () => {
+    this.path.splice(-1, 1)
     switch (this.ui) {
       case InterfaceState.Settings:
       case InterfaceState.Folder:
-        this.getMainFolder()
+        this.listFolder()
         break
       case InterfaceState.Error:
         this.ui = InterfaceState.Authenticated
@@ -152,160 +176,202 @@ export class FeatureAction {
     }
   }
 
-  getMainFolder = () => {
-    if (!this.selectedFolder) {
-      this.foldersData = undefined
-      this.ui = InterfaceState.Authenticated
-      return
-    }
-    this.foldersData = undefined
-    this.getData({
-      authId: this.authId,
-      folderPath: this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '')
-    })
-      .then(({ data }: { data: File[] }) => {
-        this.foldersData = data
-      })
-      .catch(this.handleError)
-    if (this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '') !== '') {
-      this.fetchMainFolder({
-        authId: this.authId,
-        folderPath: this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '')
-      })
-        .then(({ data }: { data: File }) => {
-          this.selectedFolder = data
-        })
-        .catch(this.handleError)
-    } else {
-      this.selectedFolder = undefined
-      this.rootFolder = false
-    }
-  }
+  //   getMainFolder = () => {
+  //     if (!this.selectedFolder) {
+  //       this.foldersData = undefined
+  //       this.ui = InterfaceState.Authenticated
+  //       return
+  //     }
+  //     this.foldersData = undefined
+  //     this.getData({
+  //       authId: this.authId,
+  //       folderPath: this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '')
+  //     })
+  //       .then(({ data }: { data: File[] }) => {
+  //         this.foldersData = data
+  //       })
+  //       .catch(this.handleError)
+  //     if (this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '') !== '') {
+  //       this.fetchMainFolder({
+  //         authId: this.authId,
+  //         folderPath: this.selectedFolder.path_display.replace(`/${this.selectedFolder.name}`, '')
+  //       })
+  //         .then(({ data }: { data: File }) => {
+  //           this.selectedFolder = data
+  //         })
+  //         .catch(this.handleError)
+  //     } else {
+  //       this.selectedFolder = undefined
+  //       this.rootFolder = false
+  //     }
+  //   }
+  //   renderUnauthorized: any = ({ authenticate }) => (
+  //     <icon-button onClick={() => this.onAuthorizeClick(authenticate)} text='Save to Dropbox' />
+  //   )
+
+  //   renderAuthorized: any = ({ revoke }) => {
+  //     this.revoke = revoke
+  //     return <icon-button onClick={this.handleAttachClick} text='Save to Dropbox' />
+  //   }
+
+  //   renderWorkflow = () => {
+  //     if (this.ui > InterfaceState.Authenticated) {
+  //       return (
+  //         <workflow-box
+  //           heading={StateTitles[this.ui] || ''}
+  //           subHeading={this.selectedFolder ? `From ${this.selectedFolder.name}` : undefined}
+  //           onBack={this.handleWorkflowBack}
+  //           showSaveButton={this.showButton}
+  //           selectedFolder={this.selectedFolder}
+  //           rootFolder={this.rootFolder}
+  //           onClose={this.handleExternalClick}
+  //           onSaveClicked={this.handleAttachFolder}
+  //           onMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
+  //           style={{ position: 'absolute', marginLeft: '24px' }}
+  //         >
+  //           {this.renderWorkflowContent()}
+  //         </workflow-box>
+  //       )
+  //     }
+  //   }
 
   handleMenu = () => {
+    this.path = []
     this.ui = InterfaceState.Settings
   }
 
-  handleLogout = () => {
-    if (this.revoke) {
-      this.revoke()
-    }
-    this.revoke = undefined
-    this.ui = InterfaceState.Unauthenticated
-  }
-
-  onAuthorizeClick = (authenticate: () => Promise<boolean>) => {
-    authenticate()
-      .then(() => {
-        this.authorized = true
-        this.ui = InterfaceState.Authenticated
-        this.handleAttachClick()
-      })
-      .catch(console.error)
-  }
-
-  renderUnauthorized: any = ({ authenticate }) => (
-    <icon-button onClick={() => this.onAuthorizeClick(authenticate)} text='Save to Dropbox' />
+  renderUnauthorized: any = () => (
+    <connect-action
+      text-unauthenticated={'Save a file'}
+      onClick={() => {
+        this.openPopoverOnceLoggedIn = true
+      }}
+    />
   )
+  renderAuthorized: any = () => {
+    console.log('renderAuthorized')
 
-  renderAuthorized: any = ({ revoke }) => {
-    this.revoke = revoke
-    return <icon-button onClick={this.handleAttachClick} text='Save to Dropbox' />
-  }
-
-  renderWorkflow = () => {
-    if (this.ui > InterfaceState.Authenticated) {
-      return (
-        <workflow-box
-          heading={StateTitles[this.ui] || ''}
-          subHeading={this.selectedFolder ? `From ${this.selectedFolder.name}` : undefined}
-          onBack={this.handleWorkflowBack}
-          showSaveButton={this.showButton}
-          selectedFolder={this.selectedFolder}
-          rootFolder={this.rootFolder}
-          onClose={this.handleExternalClick}
-          onSaveClicked={this.handleAttachFolder}
-          onMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
-          style={{ position: 'absolute', marginLeft: '24px' }}
-        >
-          {this.renderWorkflowContent()}
-        </workflow-box>
-      )
+    if (this.openPopoverOnceLoggedIn) {
+      this.openPopoverOnceLoggedIn = false
+      this.togglePopover()
     }
-  }
 
-  renderWorkflowContent = () => {
-    switch (this.ui) {
-      case InterfaceState.Error:
-        this.rootFolder = false
-        this.showButton = false
-        return <error-message message={this.errorMessage} onRetry={this.handleRetry} />
-      case InterfaceState.Settings:
-        this.rootFolder = false
-        this.showButton = false
-        // just use the same handler for all options as we just have logout
-        return (
-          <list-navigation
-            options={[{ name: 'Logout', icon: 'ios-log-out' }]}
-            attributeName={'name'}
-            showNextIcon={false}
-            onOptionClicked={this.handleLogout}
-          />
-        )
-      case InterfaceState.Folder:
-        if (this.foldersSearchResults && this.foldersSearchResults.length !== 0) {
-          return (
-            <div>
-              <list-navigation
-                options={this.foldersSearchResults}
-                attributeName={'name'}
-                onSearchQuery={this.handleSearchQuery}
-                showNextIcon={true}
-                onOptionClicked={this.handleItemSelect}
-              />
-            </div>
-          )
-        }
-        return (
-          <div>
-            <list-navigation
-              options={this.foldersData}
-              attributeName={'name'}
-              onSearchQuery={this.handleSearchQuery}
-              showNextIcon={true}
-              onOptionClicked={this.handleItemSelect}
-            />
-          </div>
-        )
+    const StateTitles = {
+      [InterfaceState.Loading]: 'Loading...',
+      [InterfaceState.Folder]: 'Select destination',
+      [InterfaceState.Error]: 'Something went wrong',
+      [InterfaceState.Settings]: 'Settings'
     }
-    return null
+    const parentFolder = this.path.length && this.path[this.path.length - 1]
+    const subHeading = parentFolder && this.ui !== InterfaceState.Settings ? `From ${parentFolder.name}` : undefined
+
+    return (
+      <popover-screen
+        ui={this.ui}
+        authId={this.authId}
+        heading={StateTitles[this.ui] || ''}
+        subHeading={subHeading}
+        errorMessage={this.errorMessage}
+        items={this.items}
+        handleBack={parentFolder ? this.handleWorkflowBack : null}
+        handleClose={this.handleExternalClick}
+        handleMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
+        handlePopoverToggler={this.togglePopover}
+        handleItemSelection={this.handleAttachFolder}
+        // handleSubmit={this.handleAttachFolder}
+        handleRetry={this.handleRetry}
+      />
+    )
   }
+  //   renderWorkflowContent = () => {
+  //     switch (this.ui) {
+  //       case InterfaceState.Error:
+  //         this.rootFolder = false
+  //         this.showButton = false
+  //         return <error-message message={this.errorMessage} onRetry={this.handleRetry} />
+  //       case InterfaceState.Settings:
+  //         this.rootFolder = false
+  //         this.showButton = false
+  //         // just use the same handler for all options as we just have logout
+  //         return (
+  //           <list-navigation
+  //             options={[{ name: 'Logout', icon: 'ios-log-out' }]}
+  //             attributeName={'name'}
+  //             showNextIcon={false}
+  //             onOptionClicked={this.handleLogout}
+  //           />
+  //         )
+  //       case InterfaceState.Folder:
+  //         if (this.foldersSearchResults && this.foldersSearchResults.length !== 0) {
+  //           return (
+  //             <div>
+  //               <list-navigation
+  //                 options={this.foldersSearchResults}
+  //                 attributeName={'name'}
+  //                 onSearchQuery={this.handleSearchQuery}
+  //                 showNextIcon={true}
+  //                 onOptionClicked={this.handleItemSelect}
+  //               />
+  //             </div>
+  //           )
+  //         }
+  //         return (
+  //           <div>
+  //             <list-navigation
+  //               options={this.foldersData}
+  //               attributeName={'name'}
+  //               onSearchQuery={this.handleSearchQuery}
+  //               showNextIcon={true}
+  //               onOptionClicked={this.handleItemSelect}
+  //             />
+  //           </div>
+  //         )
+  //     }
+  //     return null
+  //   }
+
+  //   handleExternalClick = (_e: Event) => {
+  //     this.foldersData = undefined
+  //     this.selectedFolder = undefined
+  //     this.foldersSearchResults = undefined
+  //     this.rootFolder = false
+  //     if (this.ui != InterfaceState.Unauthenticated) {
+  //       this.ui = InterfaceState.Authenticated
+  //     }
+  //   }
 
   handleExternalClick = (_e: Event) => {
-    this.foldersData = undefined
-    this.selectedFolder = undefined
-    this.foldersSearchResults = undefined
-    this.rootFolder = false
+    this.items = undefined
+    this.path = []
     if (this.ui != InterfaceState.Unauthenticated) {
       this.ui = InterfaceState.Authenticated
     }
   }
 
   handleInternalClick = (e: Event) => {
+    console.log('handleInternalClick')
     e.stopImmediatePropagation()
   }
 
   componentDidLoad() {
     this.el.addEventListener('click', this.handleInternalClick)
     document.addEventListener('click', this.handleExternalClick)
+
+    Bearer.emitter.addListener(Events.AUTHORIZED, () => {
+      this.isAuthorized = true
+      if (this.ui < InterfaceState.Authenticated) {
+        this.ui = InterfaceState.Authenticated
+      }
+    })
+
+    Bearer.emitter.addListener(Events.REVOKED, () => {
+      this.isAuthorized = false
+      this.ui = InterfaceState.Unauthenticated
+    })
   }
 
   render() {
-    return (
-      <span>
-        <bearer-authorized renderUnauthorized={this.renderUnauthorized} renderAuthorized={this.renderAuthorized} />
-        {this.renderWorkflow()}
-      </span>
-    )
+    console.log('render')
+    return this.isAuthorized ? this.renderAuthorized() : this.renderUnauthorized()
   }
 }

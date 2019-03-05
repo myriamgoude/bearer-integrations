@@ -1,4 +1,4 @@
-import { Component, Prop, t, p } from '@bearer/core'
+import { Component, Prop, Element } from '@bearer/core'
 
 import IconSettings from '../icons/icon-settings'
 import IconClose from '../icons/icon-close'
@@ -10,7 +10,7 @@ import { NavigationItem } from '../types'
   styleUrl: 'popover-screen.css'
 })
 export class PopoverScreen {
-  @Prop() ui: number
+  @Prop() ui: InterfaceState
   @Prop() authId: string
   @Prop() multi: boolean = false
 
@@ -27,6 +27,8 @@ export class PopoverScreen {
   @Prop() handleItemSelection: any
   @Prop() handleRetry: any
 
+  @Element() el: HTMLElement
+
   renderNavigation = () => {
     switch (this.ui) {
       case InterfaceState.Loading:
@@ -39,7 +41,7 @@ export class PopoverScreen {
         ]
 
       case InterfaceState.Settings:
-        return <connect-action authId={this.authId} text-authenticated={t('btn.logout', 'Logout')} icon='ios-log-out' />
+        return <connect-action authId={this.authId} text-authenticated={'Logout'} icon='ios-log-out' />
 
       case InterfaceState.Error:
         return <navigation-error message={this.errorMessage} onRetry={this.handleRetry} />
@@ -48,13 +50,15 @@ export class PopoverScreen {
   }
 
   render() {
+    window.setTimeout(() => {
+      console.log('ui?', this.ui)
+      console.log('should be opened?', this.ui > InterfaceState.Authenticated)
+      console.log('InterfaceState.Authenticated?', InterfaceState.Authenticated)
+      console.log('is opened?', this.el.querySelector('bearer-popover').opened)
+    }, 500)
     return (
       <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
-        <icon-button
-          slot='popover-toggler'
-          onClick={this.handlePopoverToggler}
-          text={p('btn.main_action', this.multi ? 2 : 1, 'Attach a file')}
-        />
+        <icon-button slot='popover-toggler' onClick={this.handlePopoverToggler} text={'Save a file'} />
         <div slot='popover-header'>
           <div class='popover-header'>
             {this.handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={this.handleBack} />}

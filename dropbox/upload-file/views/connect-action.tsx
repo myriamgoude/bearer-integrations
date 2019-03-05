@@ -5,61 +5,72 @@
 import Bearer, { RootComponent, Event, Events, EventEmitter, Prop, Element, State } from '@bearer/core'
 import '@bearer/ui'
 
-export type TAuthorizedPayload = {
-    authId: string
-}
+export type TAuthorizedPayload = { authId: string }
+
 import { TAuthSavedPayload } from './types'
 
 @RootComponent({
-    role: 'action',
-    group: 'connect',
-    shadow: false
+  role: 'action',
+  group: 'connect',
+  shadow: false
 })
 export class ConnectAction {
-    @Event()
-    authorized: EventEmitter<TAuthorizedPayload>;
-    @Event()
-    revoked: EventEmitter<TAuthorizedPayload>;
+  @Event()
+  authorized: EventEmitter<TAuthorizedPayload>
+  @Event()
+  revoked: EventEmitter<TAuthorizedPayload>
 
-    @Prop({ mutable: true })
-    authId: string = null;
+  provider: string = 'Dropbox'
+  @Prop() textUnauthenticated: string = 'Connect to ' + this.provider
+  @Prop() textAuthenticated: string = 'Disconnect from ' + this.provider
+  @Prop() kind: string = 'embed'
+  @Prop() icon: string
 
-    @State()
-    authIdInternal: string;
-    @Element()
-    el: HTMLElement;
+  @Prop({ mutable: true }) authId: string
 
-    componentDidLoad() {
-        this.authIdInternal = this.authId;
-        Bearer.emitter.addListener(Events.AUTHORIZED, ({ data }: { data: TAuthSavedPayload }) => {
-            const authId = data.authId || (data as any).authIdentifier;
-            this.authId = this.authIdInternal = authId;
-            this.authorized.emit({ authId })
-        });
+  @State()
+  authIdInternal: string
+  @Element()
+  el: HTMLElement
 
-        Bearer.emitter.addListener(Events.REVOKED, (_payload: { data: TAuthSavedPayload }) => {
-            this.authIdInternal = this.authId = null;
-            this.revoked.emit()
-        })
-    }
+  componentDidLoad() {
+    this.authIdInternal = this.authId
+    Bearer.emitter.addListener(Events.AUTHORIZED, ({ data }: { data: TAuthSavedPayload }) => {
+      const authId = data.authId || (data as any).authIdentifier
+      this.authId = this.authIdInternal = authId
+      this.authorized.emit({ authId })
+    })
 
-    renderUnauthorized = ({ authenticate }) => (<icon-button onClick={authenticate} text="Connect to Drpobox" />)
+    Bearer.emitter.addListener(Events.REVOKED, (_payload: { data: TAuthSavedPayload }) => {
+      this.authIdInternal = this.authId = null
+      this.revoked.emit()
+    })
+  }
 
-    renderUnauthorizedIfAuthId = () => this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
+  renderUnauthorized = ({ authenticate }) => <icon-button onClick={authenticate} text={this.textUnauthenticated} />
 
-    authenticate = () => {
-        this.el.querySelector('bearer-authorized').authenticate(this.authId)
-    };
+  renderUnauthorizedIfAuthId = () => this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
 
-    render() {
-        return [
-            <bearer-authorized
-                renderUnauthorized={this.renderUnauthorizedIfAuthId}
-                renderAuthorized={({ revoke }) =>
-                    this.authIdInternal && (<icon-button text="Log out from Dropbox" onClick={revoke}/>)
-                }
-            />,
-            !this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
-        ]
-    }
+  authenticate = () => {
+    this.el.querySelector('bearer-authorized').authenticate(this.authId)
+  }
+
+  render() {
+    return [
+      <bearer-authorized
+        renderUnauthorized={this.renderUnauthorizedIfAuthId}
+        renderAuthorized={({ revoke }) =>
+          this.authIdInternal && (
+            <icon-button
+              text={this.textAuthenticated}
+              onClick={() => {
+                revoke(this.authIdInternal)
+              }}
+            />
+          )
+        }
+      />,
+      !this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
+    ]
+  }
 }
