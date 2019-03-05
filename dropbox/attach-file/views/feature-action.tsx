@@ -19,12 +19,19 @@ import { File } from './types'
 export type TAuthorizedPayload = { authId: string }
 
 export enum InterfaceState {
-  Unauthenticated,
-  Authenticated,
-  Loading,
-  Folder,
-  Settings,
-  Error
+  Unauthenticated = 'Unauthenticated',
+  Authenticated = 'Authenticated',
+  Loading = 'Loading',
+  Folder = 'Folder',
+  Settings = 'Settings',
+  Error = 'Error'
+}
+
+const StateTitles = {
+  [InterfaceState.Loading]: 'Loading...',
+  [InterfaceState.Folder]: 'Select a file',
+  [InterfaceState.Error]: 'Something went wrong',
+  [InterfaceState.Settings]: 'Settings'
 }
 
 @RootComponent({
@@ -173,13 +180,6 @@ export class FeatureAction {
       this.togglePopover()
     }
 
-    const StateTitles = {
-      [InterfaceState.Loading]: t('state.loading', 'Loading...'),
-      [InterfaceState.Folder]: p('state.select', this.multi ? 2 : 1, 'Select a file'),
-      [InterfaceState.Error]: t('state.error', 'Something went wrong'),
-      [InterfaceState.Settings]: t('state.setting', 'Settings')
-    }
-
     const parentFolder = this.path.length && this.path[this.path.length - 1]
     const subHeading = parentFolder && this.ui !== InterfaceState.Settings ? `From ${parentFolder.name}` : undefined
 
@@ -187,7 +187,7 @@ export class FeatureAction {
       <popover-screen
         ui={this.ui}
         authId={this.authId}
-        heading={StateTitles[this.ui] || ''}
+        heading={t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''}
         subHeading={subHeading}
         errorMessage={this.errorMessage}
         items={this.items}

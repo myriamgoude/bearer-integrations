@@ -24,15 +24,17 @@ import IconClose from './icons/icon-close'
 
 export type TAuthorizedPayload = { authId: string }
 
-enum InterfaceState {
-  Unauthenticated,
-  Authenticated,
-  Forms,
-  Settings,
-  Error
+export enum InterfaceState {
+  Unauthenticated = 'Unauthenticated',
+  Authenticated = 'Authenticated',
+  Loading = 'Loading',
+  Forms = 'Forms',
+  Settings = 'Settings',
+  Error = 'Error'
 }
 
 const StateTitles = {
+  [InterfaceState.Loading]: 'Loading...',
   [InterfaceState.Forms]: 'Select a form',
   [InterfaceState.Error]: 'Something went wrong',
   [InterfaceState.Settings]: 'Settings'
@@ -182,10 +184,10 @@ export class FeatureAction {
       this.errorMessage = 'Webhook URL is not set'
     }
 
-    const heading = StateTitles[this.ui] || ''
+    const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
     const subHeading = undefined
     const handleBack = this.ui === InterfaceState.Settings && this.handleWorkflowBack
-    const handleClose = this.closePopover
+    const handleClose = this.handleExternalClick
     const handleMenu = this.handleMenu
 
     return [
@@ -238,7 +240,7 @@ export class FeatureAction {
     return null
   }
 
-  closePopover = (_e: Event) => {
+  handleExternalClick = (_e: Event) => {
     this.formsData = undefined
     this.selectedForm = undefined
     this.formsSearchResults = undefined
@@ -253,7 +255,7 @@ export class FeatureAction {
 
   componentDidLoad() {
     this.el.addEventListener('click', this.handleInternalClick)
-    document.addEventListener('click', this.closePopover)
+    document.addEventListener('click', this.handleExternalClick)
 
     Bearer.emitter.addListener(Events.AUTHORIZED, () => {
       this.isAuthorized = true

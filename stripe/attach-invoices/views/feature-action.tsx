@@ -24,15 +24,17 @@ import IconClose from './icons/icon-close'
 
 export type TAuthorizedPayload = { authId: string }
 
-enum InterfaceState {
-  Unauthenticated,
-  Authenticated,
-  Users,
-  Settings,
-  Error
+export enum InterfaceState {
+  Unauthenticated = 'Unauthenticated',
+  Authenticated = 'Authenticated',
+  Loading = 'Loading',
+  Users = 'Users',
+  Settings = 'Settings',
+  Error = 'Error'
 }
 
 const StateTitles = {
+  [InterfaceState.Loading]: 'Loading...',
   [InterfaceState.Users]: 'Select User',
   [InterfaceState.Error]: 'Select User',
   [InterfaceState.Settings]: 'Settings'
@@ -160,7 +162,7 @@ export class FeatureAction {
       return null
     }
 
-    const heading = StateTitles[this.ui] || ''
+    const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
     const subHeading = undefined
     const handleBack = this.ui === InterfaceState.Settings && this.handleWorkflowBack
     const handleClose = this.handleExternalClick

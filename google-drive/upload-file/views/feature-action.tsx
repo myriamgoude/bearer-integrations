@@ -27,14 +27,16 @@ export type TAuthorizedPayload = { authId: string }
 export enum InterfaceState {
   Unauthenticated = 'Unauthenticated',
   Authenticated = 'Authenticated',
+  Loading = 'Loading',
   Folder = 'Folder',
   Settings = 'Settings',
   Error = 'Error'
 }
 
 const StateTitles = {
+  [InterfaceState.Loading]: 'Loading...',
   [InterfaceState.Folder]: 'Select destination',
-  [InterfaceState.Error]: 'Select destination',
+  [InterfaceState.Error]: 'Something went wrong',
   [InterfaceState.Settings]: 'Settings'
 }
 
@@ -250,6 +252,7 @@ export class FeatureAction {
     //     {this.renderWorkflowContent()}
     //   </workflow-box>
     // )
+
     const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui])
     const subHeading = this.selectedFolder
       ? t('texts.selectedFolder', 'From {{name}}', { name: this.selectedFolder.name })

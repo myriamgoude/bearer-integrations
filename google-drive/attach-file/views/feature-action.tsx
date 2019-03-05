@@ -27,18 +27,18 @@ import IconClose from './icons/icon-close'
 export type TAuthorizedPayload = { authId: string }
 
 export enum InterfaceState {
-  Unauthenticated,
-  Authenticated,
-  Folder,
-  Files,
-  Settings,
-  Error
+  Unauthenticated = 'Unauthenticated',
+  Authenticated = 'Authenticated',
+  Loading = 'Loading',
+  Folder = 'Folder',
+  Settings = 'Settings',
+  Error = 'Error'
 }
 
 const StateTitles = {
-  [InterfaceState.Folder]: 'Select files',
-  [InterfaceState.Files]: 'Select one file',
-  [InterfaceState.Error]: 'There was en error',
+  [InterfaceState.Loading]: 'Loading...',
+  [InterfaceState.Folder]: 'Select a file',
+  [InterfaceState.Error]: 'Something went wrong',
   [InterfaceState.Settings]: 'Settings'
 }
 
@@ -224,7 +224,7 @@ export class FeatureAction {
       return null
     }
 
-    const heading = StateTitles[this.ui] || ''
+    const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
     const subHeading =
       this.selectedFolder && this.ui !== InterfaceState.Settings ? `From ${this.selectedFolder.name}` : undefined
     const handleBack = this.rootFolder && subHeading && this.handleWorkflowBack
@@ -294,6 +294,11 @@ export class FeatureAction {
     return null
   }
 
+  handleRemove = (file: File) => {
+    const updatedList = this.files.filter((elm: File) => file.id !== elm.id)
+    console.log('remove', file, updatedList)
+  }
+
   handleExternalClick = (_e: Event) => {
     this.data = undefined
     this.selectedFolder = undefined
@@ -322,11 +327,6 @@ export class FeatureAction {
       this.isAuthorized = false
       this.ui = InterfaceState.Unauthenticated
     })
-  }
-
-  handleRemove = (file: File) => {
-    const updatedList = this.files.filter((elm: File) => file.id !== elm.id)
-    console.log('remove', file, updatedList)
   }
 
   render() {

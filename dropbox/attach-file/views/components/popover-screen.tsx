@@ -10,7 +10,7 @@ import { NavigationItem } from '../types'
   styleUrl: 'popover-screen.css'
 })
 export class PopoverScreen {
-  @Prop() ui: number
+  @Prop() ui: InterfaceState
   @Prop() authId: string
   @Prop() multi: boolean = false
 
