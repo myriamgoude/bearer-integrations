@@ -208,7 +208,7 @@ export class FeatureAction {
 
   renderUnauthorized: any = () => (
     <connect-action
-      text-unauthenticated={t('texts.saveToGoogle', 'Save to Google Drive')}
+      text-unauthenticated={t('btn.main_action', 'Save to Google Drive')}
       onClick={() => {
         this.openPopoverOnceLoggedIn = true
       }}

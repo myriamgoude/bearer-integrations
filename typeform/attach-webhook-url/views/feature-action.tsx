@@ -13,7 +13,8 @@ import Bearer, {
   Output,
   Prop,
   RootComponent,
-  State
+  State,
+  t
 } from '@bearer/core'
 import '@bearer/ui'
 import { Forms } from './types'
@@ -60,7 +61,6 @@ export class FeatureAction {
   @State() formsData: Forms[] | undefined
   @State() selectedForm: Forms | undefined
   @State() formsSearchResults: Forms[] | undefined
-  @State() buttonText: string = 'Create a webhook'
 
   @Event() authorized: EventEmitter<TAuthorizedPayload>
   @Event() revoked: EventEmitter<TAuthorizedPayload>
@@ -146,7 +146,7 @@ export class FeatureAction {
 
   renderUnauthorized: any = () => (
     <connect-action
-      text-unauthenticated={this.buttonText}
+      text-unauthenticated={t('btn.main_action', 'Create a webhook')}
       onClick={() => {
         this.openPopoverOnceLoggedIn = true
       }}
@@ -161,7 +161,11 @@ export class FeatureAction {
 
     return (
       <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
-        <icon-button slot='popover-toggler' onClick={this.togglePopover} text={this.buttonText} />
+        <icon-button
+          slot='popover-toggler'
+          onClick={this.togglePopover}
+          text={t('btn.main_action', 'Create a webhook')}
+        />
         {this.renderWorkflow()}
       </bearer-popover>
     )

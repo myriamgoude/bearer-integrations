@@ -13,7 +13,8 @@ import Bearer, {
   Output,
   Prop,
   RootComponent,
-  State
+  State,
+  t
 } from '@bearer/core'
 import '@bearer/ui'
 import { Customer } from './types'
@@ -133,7 +134,7 @@ export class FeatureAction {
 
   renderUnauthorized: any = () => (
     <connect-action
-      text-unauthenticated='Get invoices'
+      text-unauthenticated={t('btn.main_action', 'Get invoices')}
       onClick={() => {
         this.openPopoverOnceLoggedIn = true
       }}

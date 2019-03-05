@@ -14,7 +14,9 @@ import Bearer, {
   Output,
   Prop,
   RootComponent,
-  State
+  State,
+  t,
+  p
 } from '@bearer/core'
 import '@bearer/ui'
 import { File } from './types'
@@ -196,7 +198,7 @@ export class FeatureAction {
 
   renderUnauthorized: any = () => (
     <connect-action
-      text-unauthenticated='Attach a file'
+      text-unauthenticated={p('btn.main_action', this.multi ? 2 : 1, 'Attach a file')}
       onClick={() => {
         this.openPopoverOnceLoggedIn = true
       }}
