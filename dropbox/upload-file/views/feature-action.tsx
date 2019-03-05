@@ -173,9 +173,9 @@ export class FeatureAction {
 
     //TODO need to handle uploading files to google drive using axios
 
-    if (this.fileURL) {
+    if (this.fileUrl) {
       this.uploadFile({
-        fileUrl: this.fileURL,
+        fileUrl: this.fileUrl,
         folderId: this.selectedFolder ? this.selectedFolder.id : root.path_display
       })
         .then(() => {
