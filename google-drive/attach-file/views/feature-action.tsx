@@ -24,7 +24,7 @@ import IconClose from './icons/icon-close'
 
 export type TAuthorizedPayload = { authId: string }
 
-enum InterfaceState {
+export enum InterfaceState {
   Unauthenticated,
   Authenticated,
   Folder,
