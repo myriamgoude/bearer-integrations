@@ -1,5 +1,5 @@
 import { Component, Prop } from '@bearer/core'
-import IconStripe from './icon-dropbox'
+import IconProvider from './icon-dropbox'
 
 @Component({
   tag: 'icon-button',
@@ -13,7 +13,7 @@ export class IconButton {
     return (
       <bearer-button kind='embed'>
         <span>
-          <IconStripe />
+          <IconProvider />
           {this.text}
         </span>
       </bearer-button>

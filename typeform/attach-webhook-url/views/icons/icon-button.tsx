@@ -1,5 +1,5 @@
 import { Component, Prop } from '@bearer/core'
-import IconStripe from './icon-typeform'
+import IconProvider from './icon-typeform'
 
 @Component({
   tag: 'icon-button',
@@ -7,14 +7,16 @@ import IconStripe from './icon-typeform'
   shadow: true
 })
 export class IconButton {
-  @Prop() text: string;
+  @Prop() text: string
 
   render() {
-    return (<bearer-button kind="embed">
-      <span>
-      <IconStripe />
-        {this.text}
-      </span>
-    </bearer-button>)
+    return (
+      <bearer-button kind='embed'>
+        <span>
+          <IconProvider />
+          {this.text}
+        </span>
+      </bearer-button>
+    )
   }
 }
