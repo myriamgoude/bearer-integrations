@@ -1,5 +1,5 @@
 /*
-  The purpose of this component is to deal with scenario navigation between each views.
+  The purpose of this component is to deal with auhentication.
 */
 
 import Bearer, { RootComponent, Event, Events, EventEmitter, Prop, Element, State } from '@bearer/core'

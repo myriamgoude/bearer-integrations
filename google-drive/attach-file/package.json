@@ -1,5 +1,5 @@
 {
-  "name": "attach-file",
+  "name": "google-attach-file",
   "version": "0.0.1",
   "description": "AttachFile",
   "main": "dist/index.js",
@@ -14,9 +14,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "@bearer/core": "beta5",
-    "@bearer/intents": "beta5",
-    "@bearer/ui": "beta5",
+    "@bearer/core": "next",
+    "@bearer/intents": "next",
+    "@bearer/ui": "next",
+    "@bearer/js": "next",
     "axios": "^0.18.0",
     "ionicons": "^4.5.0-3",
     "lodash": "^4.17.11"

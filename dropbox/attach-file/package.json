@@ -16,7 +16,7 @@
   "dependencies": {
     "@bearer/core": "next",
     "@bearer/intents": "next",
-    "@bearer/ui": "^0.98",
+    "@bearer/ui": "next",
     "@bearer/js": "next",
     "axios": "^0.18.0",
     "ionicons": "^4.5.0-3",

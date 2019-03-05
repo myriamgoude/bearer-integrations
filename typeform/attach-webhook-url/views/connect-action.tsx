@@ -1,5 +1,5 @@
 /*
-  The purpose of this component is to deal with scenario navigation between each views.
+  The purpose of this component is to deal with auhentication.
 */
 
 import Bearer, { RootComponent, Event, Events, EventEmitter, Prop, Element, State } from '@bearer/core'
@@ -20,13 +20,13 @@ export class ConnectAction {
   @Event()
   revoked: EventEmitter<TAuthorizedPayload>
 
-  providerName = "Typeform"
-  @Prop() textUnauthenticated: string = "Connect to " + this.providerName 
-  @Prop() textAuthenticated: string = "Disconnect from " + this.providerName 
-  @Prop() kind: string = "embed"
+  provider: string = 'Typeform'
+  @Prop() textUnauthenticated: string = 'Connect to ' + this.provider
+  @Prop() textAuthenticated: string = 'Disconnect from ' + this.provider
+  @Prop() kind: string = 'embed'
   @Prop() icon: string
 
-  @Prop({ mutable: true }) authId: string = null
+  @Prop({ mutable: true }) authId: string
 
   @State()
   authIdInternal: string
@@ -47,7 +47,7 @@ export class ConnectAction {
     })
   }
 
-  renderUnauthorized = ({ authenticate }) => (<icon-button onClick={authenticate} text={this.textUnauthenticated} />)
+  renderUnauthorized = ({ authenticate }) => <icon-button onClick={authenticate} text={this.textUnauthenticated} />
 
   renderUnauthorizedIfAuthId = () => this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
 
@@ -60,7 +60,14 @@ export class ConnectAction {
       <bearer-authorized
         renderUnauthorized={this.renderUnauthorizedIfAuthId}
         renderAuthorized={({ revoke }) =>
-          this.authIdInternal && (<icon-button text={this.textAuthenticated} onClick={revoke}/>)
+          this.authIdInternal && (
+            <icon-button
+              text={this.textAuthenticated}
+              onClick={() => {
+                revoke(this.authIdInternal)
+              }}
+            />
+          )
         }
       />,
       !this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
