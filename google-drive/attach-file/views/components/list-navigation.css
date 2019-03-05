@@ -1,8 +1,8 @@
-.loading {	
-  height: 16px;	
-  opacity: 0.56;	
+.loading {
+  height: 16px;
+  opacity: 0.56;
   border-radius: 7px;
-  background: linear-gradient(270deg, #E1E5F8 0%, #F0F1F5 100%);
+  background: linear-gradient(270deg, #e1e5f8 0%, #f0f1f5 100%);
 }
 
 ul {
@@ -18,7 +18,7 @@ ul {
 }
 
 ::-webkit-scrollbar {
-    width: 0;
+  width: 0;
 }
 
 li {
@@ -34,7 +34,7 @@ span.label {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  color: #030D36;
+  color: #030d36;
 }
 
 .no-results-content {
@@ -43,19 +43,13 @@ span.label {
   align-items: center;
 }
 
-.search-icon {
-    margin: 32px;
-  font-size: 40px;
-}
-
 .no-results-label {
-    color: #030D36;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 19px;
+  color: #030d36;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
 }
 
 .no-results-icon {
   margin-bottom: 8px;
 }
-
