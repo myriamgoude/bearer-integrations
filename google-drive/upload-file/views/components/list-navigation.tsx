@@ -1,5 +1,6 @@
 import { Component, Prop } from '@bearer/core'
-import IconNoResults from '../icons/icon-no-results'
+import IconNoResult from '../icons/icon-no-results'
+import IconPath from '../icons/icon-path'
 import 'ionicons'
 
 const iconStyle = {
@@ -43,7 +44,7 @@ export class ListNavigation {
   }
 
   getNextArrow = () => {
-    return this.showNextIcon ? <icon-chevron direction='right' style={{ marginLeft: '20px' }} /> : null
+    return this.showNextIcon ? <IconPath /> : null
   }
 
   randomWidthStyle() {
@@ -80,7 +81,7 @@ export class ListNavigation {
       return (
         <div class='no-results-content'>
           <div class='background'>
-            <IconNoResults />
+            <IconNoResult />
           </div>
           <span class='no-results-label'>This is final destination</span>
         </div>

@@ -1,7 +1,7 @@
 import { Component, Prop } from '@bearer/core'
-import 'ionicons'
 import { File } from '../types'
-import NoResultIcon from '../icons/icon-no-result'
+import IconNoResult from '../icons/icon-no-result'
+import IconPath from '../icons/icon-path'
 
 const iconStyle = {
   alignSelf: 'center',
@@ -46,7 +46,7 @@ export class ListNavigation {
 
   getNextArrow = (data: File) => {
     if (data.mimeType === 'application/vnd.google-apps.folder') {
-      return this.showNextIcon ? <icon-chevron direction='right' style={{ marginLeft: '20px' }} /> : null
+      return this.showNextIcon ? <IconPath /> : null
     }
   }
 
@@ -84,7 +84,7 @@ export class ListNavigation {
       return (
         <div class='no-results-content'>
           <div class='no-results-icon'>
-            <NoResultIcon />
+            <IconNoResult />
           </div>
           <span class='no-results-label'>No data found</span>
           <bearer-button kind='secondary' onClick={this.onBackClicked}>
