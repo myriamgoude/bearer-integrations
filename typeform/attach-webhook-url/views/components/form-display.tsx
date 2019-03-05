@@ -1,6 +1,6 @@
 import { Component, Prop } from '@bearer/core'
 import { Forms } from '../types'
-import ViewIcon from './icons/icon-view'
+import ViewIcon from '../icons/icon-view'
 
 @Component({
   tag: 'form-display',

@@ -3,241 +3,268 @@
 
 */
 
-import Bearer, {BearerFetch, Element, Intent, Events, Event, EventEmitter, Output, Prop, RootComponent, State} from '@bearer/core';
-import '@bearer/ui';
-import { Forms } from "./types";
+import Bearer, {
+  BearerFetch,
+  Element,
+  Intent,
+  Events,
+  Event,
+  EventEmitter,
+  Output,
+  Prop,
+  RootComponent,
+  State
+} from '@bearer/core'
+import '@bearer/ui'
+import { Forms } from './types'
 
-import IconSettings from "./components/icons/icon-settings";
-import IconClose from "./components/icons/icon-close";
+import IconSettings from './icons/icon-settings'
+import IconClose from './icons/icon-close'
 
 export type TAuthorizedPayload = { authId: string }
 
 enum InterfaceState {
-    Unauthenticated,
-    Authenticated,
-    Forms,
-    Settings,
-    Error,
+  Unauthenticated,
+  Authenticated,
+  Forms,
+  Settings,
+  Error
 }
 
 const StateTitles = {
-    [InterfaceState.Forms]: 'Select a form',
-    [InterfaceState.Error]: 'Something went wrong',
-    [InterfaceState.Settings]:'Settings',
-};
+  [InterfaceState.Forms]: 'Select a form',
+  [InterfaceState.Error]: 'Something went wrong',
+  [InterfaceState.Settings]: 'Settings'
+}
 
 @RootComponent({
-    role: 'action',
-    group: 'feature'
+  role: 'action',
+  group: 'feature'
 })
 export class FeatureAction {
-    @Prop() autoClose: boolean = true;
-    @Prop() authId: string;
-    @Prop() webhookUrl: string;
+  @Prop() autoClose: boolean = true
+  @Prop() authId: string
+  @Prop() webhookUrl: string
 
-    @State() tag: string = 'bearer'; // TODO - add a uniq tag (setupid ?)
+  @State() tag: string = 'bearer' // TODO - add a uniq tag (setupid ?)
 
-    @Intent('listData') getData: BearerFetch;
-    @Intent('searchData') searchData: BearerFetch;
-    @Intent('attachWebhookUrl') attachWebhookUrl: BearerFetch;
+  @Intent('listData') getData: BearerFetch
+  @Intent('searchData') searchData: BearerFetch
+  @Intent('attachWebhookUrl') attachWebhookUrl: BearerFetch
 
-    @State() ui: InterfaceState = InterfaceState.Unauthenticated;
-    @State() errorMessage: string | undefined;
-    @State() isAuthorized: boolean = false;
-    @State() openPopoverOnceLoggedIn: boolean = false
+  @State() ui: InterfaceState = InterfaceState.Unauthenticated
+  @State() errorMessage: string | undefined
+  @State() isAuthorized: boolean = false
+  @State() openPopoverOnceLoggedIn: boolean = false
 
-    @State() formsData: Forms[] | undefined;
-    @State() selectedForm: Forms | undefined;
-    @State() formsSearchResults: Forms[] | undefined;
-    @State() buttonText: string = "Create a webhook";
+  @State() formsData: Forms[] | undefined
+  @State() selectedForm: Forms | undefined
+  @State() formsSearchResults: Forms[] | undefined
+  @State() buttonText: string = 'Create a webhook'
 
-    @Event() authorized: EventEmitter<TAuthorizedPayload>
-    @Event() revoked: EventEmitter<TAuthorizedPayload>
+  @Event() authorized: EventEmitter<TAuthorizedPayload>
+  @Event() revoked: EventEmitter<TAuthorizedPayload>
 
-    @Output() forms: Forms[];
+  @Output() forms: Forms[]
 
-    @Element() el: HTMLElement;
+  @Element() el: HTMLElement
 
-    handleRetry = () => {
-        this.ui = InterfaceState.Authenticated;
-        this.togglePopover()
-    };
+  handleRetry = () => {
+    this.ui = InterfaceState.Authenticated
+    this.togglePopover()
+  }
 
-    togglePopover = () => {
-        if(this.ui > InterfaceState.Authenticated){
-            this.ui = InterfaceState.Authenticated;
-            return
+  togglePopover = () => {
+    if (this.ui > InterfaceState.Authenticated) {
+      this.ui = InterfaceState.Authenticated
+      return
+    }
+    this.selectedForm = undefined
+    this.errorMessage = undefined
+    this.ui = InterfaceState.Forms
+    this.getData({ authId: this.authId })
+      .then(({ data }: { data: Forms[] }) => {
+        this.formsData = data
+      })
+      .catch(this.handleError)
+  }
+
+  handleSearchQuery = (query: string) => {
+    this.formsData = undefined
+    this.formsSearchResults = undefined
+    const req =
+      query.length > 3 ? this.searchData({ authId: this.authId, query }) : this.getData({ authId: this.authId })
+    req
+      .then(({ data }: { data: Forms[] }) => {
+        this.formsSearchResults = data
+      })
+      .catch(this.handleError)
+  }
+
+  handleError = error => {
+    this.ui = InterfaceState.Error
+    this.errorMessage = error.error
+  }
+
+  handleWorkflowBack = () => {
+    switch (this.ui) {
+      case InterfaceState.Settings:
+        this.ui = InterfaceState.Forms
+        break
+      case InterfaceState.Forms:
+        break
+      case InterfaceState.Error:
+        this.ui = InterfaceState.Authenticated
+        break
+    }
+  }
+
+  attachForm = (form: Forms) => {
+    this.selectedForm = form
+  }
+
+  attachWebhook = (form: Forms) => {
+    this.attachWebhookUrl({ formId: form.id, tag: this.tag, webhookUrl: this.webhookUrl })
+      .then(() => {
+        this.forms = [form]
+        if (this.autoClose) {
+          this.ui = InterfaceState.Authenticated
         }
-        this.selectedForm = undefined;
-        this.errorMessage = undefined;
-        this.ui = InterfaceState.Forms;
-        this.getData({ authId: this.authId })
-            .then(({data}:{data: Forms[]}) => {
-                this.formsData = data;
-            }).catch(this.handleError)
-    };
+      })
+      .catch(this.handleError)
+  }
 
-    handleSearchQuery = (query: string) => {
-        this.formsData = undefined;
-        this.formsSearchResults = undefined;
-        const req = (query.length > 3) ? this.searchData({authId: this.authId, query}) : this.getData({ authId: this.authId });
-        req.then(({data}: {data: Forms[]}) => {
-            this.formsSearchResults = data;
-        }).catch(this.handleError);
-    };
+  handleMenu = () => {
+    this.ui = InterfaceState.Settings
+  }
 
-    handleError = error => {
-        this.ui = InterfaceState.Error;
-        this.errorMessage = error.error;
-    };
+  handleLogout = () => {
+    // if(this.revoke){ this.revoke() }
+    // this.revoke = undefined;
+    this.ui = InterfaceState.Unauthenticated
+  }
 
-    handleWorkflowBack = () => {
-        switch(this.ui) {
-            case InterfaceState.Settings:
-                this.ui = InterfaceState.Forms;
-                break;
-            case InterfaceState.Forms:
-                break;
-            case InterfaceState.Error:
-                this.ui = InterfaceState.Authenticated;
-                break;
-        }
-    };
+  renderUnauthorized: any = () => (
+    <connect-action
+      text-unauthenticated={this.buttonText}
+      onClick={() => {
+        this.openPopoverOnceLoggedIn = true
+      }}
+    />
+  )
 
-    attachForm = (form: Forms) => {
-        this.selectedForm = form;
-    };
+  renderAuthorized: any = () => {
+    if (this.openPopoverOnceLoggedIn) {
+      this.openPopoverOnceLoggedIn = false
+      this.togglePopover()
+    }
 
-    attachWebhook = (form: Forms) => {
-        this.attachWebhookUrl({formId: form.id, tag: this.tag, webhookUrl: this.webhookUrl}).then(() => {
-            this.forms = [form];
-            if(this.autoClose) {
-                this.ui = InterfaceState.Authenticated;
-            }
-        }).catch(this.handleError);
-    };
-
-    handleMenu = () => {
-        this.ui = InterfaceState.Settings
-    };
-
-    handleLogout = () => {
-        // if(this.revoke){ this.revoke() }
-        // this.revoke = undefined;
-        this.ui = InterfaceState.Unauthenticated
-    };
-
-    renderUnauthorized: any = () => (
-        <connect-action text-unauthenticated={this.buttonText} onClick={() => { this.openPopoverOnceLoggedIn = true; }}/>
+    return (
+      <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
+        <icon-button slot='popover-toggler' onClick={this.togglePopover} text={this.buttonText} />
+        {this.renderWorkflow()}
+      </bearer-popover>
     )
+  }
 
-    renderAuthorized: any = () => {
+  renderWorkflow = () => {
+    if (this.ui <= InterfaceState.Authenticated) {
+      return null
+    }
 
-        if (this.openPopoverOnceLoggedIn) {
-            this.openPopoverOnceLoggedIn = false;
-            this.togglePopover();
-        }
+    console.log(this.webhookUrl)
+    if (!this.webhookUrl) {
+      this.ui = InterfaceState.Error
+      this.errorMessage = 'Webhook URL is not set'
+    }
 
+    const heading = StateTitles[this.ui] || ''
+    const subHeading = undefined
+    const handleBack = this.ui === InterfaceState.Settings && this.handleWorkflowBack
+    const handleClose = this.closePopover
+    const handleMenu = this.handleMenu
+
+    return [
+      <div slot='popover-header'>
+        <div class='popover-header'>
+          {handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={handleBack} />}
+          <div class='popover-title'>
+            <h3>{heading}</h3>
+            {subHeading && <span class='popover-subtitle'>{subHeading}</span>}
+          </div>
+        </div>
+        <div class='popover-controls'>
+          {handleMenu && (
+            <button class='popover-control' onClick={handleMenu}>
+              <IconSettings />
+            </button>
+          )}
+          {handleClose && (
+            <button class='popover-control' onClick={handleClose}>
+              <IconClose />
+            </button>
+          )}
+        </div>
+      </div>,
+      <div style={{ width: '300px' }}>{this.renderWorkflowContent()}</div>
+    ]
+  }
+
+  renderWorkflowContent = () => {
+    switch (this.ui) {
+      case InterfaceState.Error:
+        return <error-message message={this.errorMessage} onRetry={this.handleRetry} />
+      case InterfaceState.Settings:
+        return <connect-action authId={this.authId} text-authenticated='Logout' icon='ios-log-out' />
+      case InterfaceState.Forms:
+        const options =
+          this.formsSearchResults && this.formsSearchResults.length !== 0 ? this.formsSearchResults : this.formsData
         return (
-            <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
-                <icon-button slot="popover-toggler" onClick={this.togglePopover} text={this.buttonText} />
-                {this.renderWorkflow()}
-            </bearer-popover>
+          <div>
+            <list-navigation
+              options={options}
+              attributeName={'title'}
+              onSearchQuery={this.handleSearchQuery}
+              onSubmitted={this.attachWebhook}
+              showNextIcon={true}
+            />
+          </div>
         )
-    };
-
-    renderWorkflow = () => {
-        if(this.ui <= InterfaceState.Authenticated) {
-            return null;
-        }
-        
-        console.log(this.webhookUrl);
-        if (!this.webhookUrl) {
-            this.ui = InterfaceState.Error;
-            this.errorMessage = "Webhook URL is not set";
-        }
-    
-        const heading = StateTitles[this.ui] || "";
-        const subHeading = undefined;
-        const handleBack = (this.ui === InterfaceState.Settings) && this.handleWorkflowBack;
-        const handleClose = this.closePopover;
-        const handleMenu = this.handleMenu;
-
-        return [
-            <div slot="popover-header">
-                <div class="popover-header">
-                {(handleBack) && <icon-chevron class="popover-back-nav" direction="left" onClick={handleBack} />}
-                <div class="popover-title">
-                    <h3>{heading}</h3>
-                    {(subHeading) && <span class="popover-subtitle">{subHeading}</span>}
-                </div>
-                </div>
-                <div class="popover-controls">
-                {(handleMenu) && <button class='popover-control' onClick={handleMenu}><IconSettings/></button>}
-                {(handleClose) && <button class='popover-control' onClick={handleClose}><IconClose/></button>}
-                </div>
-            </div>,
-            <div style={{width: "300px"}}>{this.renderWorkflowContent()}</div>
-        ]
-    };
-
-    renderWorkflowContent = () => {
-        switch(this.ui){
-            case InterfaceState.Error:
-                return <error-message
-                    message={this.errorMessage}
-                    onRetry={this.handleRetry}
-                />;
-            case InterfaceState.Settings:
-                return (<connect-action authId={this.authId} text-authenticated="Logout" icon="ios-log-out" />);
-            case InterfaceState.Forms:
-                const options = (this.formsSearchResults && this.formsSearchResults.length !== 0)
-                ? this.formsSearchResults : this.formsData;
-                return (
-                    <div>
-                        <list-navigation
-                            options={options}
-                            attributeName={'title'}
-                            onSearchQuery={this.handleSearchQuery}
-                            onSubmitted={this.attachWebhook}
-                            showNextIcon={true}/>
-                    </div>
-                );
-        }
-        return null
-    };
-
-    closePopover = (_e:Event) => {
-        this.formsData = undefined;
-        this.selectedForm = undefined;
-        this.formsSearchResults = undefined;
-        if(this.ui != InterfaceState.Unauthenticated){
-            this.ui = InterfaceState.Authenticated
-        }
-    };
-
-    handleInternalClick = (e:Event) => {
-        e.stopImmediatePropagation()
-    };
-
-    componentDidLoad() {
-        this.el.addEventListener("click", this.handleInternalClick);
-        document.addEventListener("click", this.closePopover);
-
-        Bearer.emitter.addListener(Events.AUTHORIZED, () => {
-            this.isAuthorized = true;
-            if (this.ui < InterfaceState.Authenticated) {
-                this.ui = InterfaceState.Authenticated;
-            }
-        })
-
-        Bearer.emitter.addListener(Events.REVOKED, () => {
-            this.isAuthorized = false;
-            this.ui = InterfaceState.Unauthenticated;
-        })
     }
+    return null
+  }
 
-    render() {
-        return ( this.isAuthorized ? this.renderAuthorized() : this.renderUnauthorized() )
+  closePopover = (_e: Event) => {
+    this.formsData = undefined
+    this.selectedForm = undefined
+    this.formsSearchResults = undefined
+    if (this.ui != InterfaceState.Unauthenticated) {
+      this.ui = InterfaceState.Authenticated
     }
+  }
+
+  handleInternalClick = (e: Event) => {
+    e.stopImmediatePropagation()
+  }
+
+  componentDidLoad() {
+    this.el.addEventListener('click', this.handleInternalClick)
+    document.addEventListener('click', this.closePopover)
+
+    Bearer.emitter.addListener(Events.AUTHORIZED, () => {
+      this.isAuthorized = true
+      if (this.ui < InterfaceState.Authenticated) {
+        this.ui = InterfaceState.Authenticated
+      }
+    })
+
+    Bearer.emitter.addListener(Events.REVOKED, () => {
+      this.isAuthorized = false
+      this.ui = InterfaceState.Unauthenticated
+    })
+  }
+
+  render() {
+    return this.isAuthorized ? this.renderAuthorized() : this.renderUnauthorized()
+  }
 }
