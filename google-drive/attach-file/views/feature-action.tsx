@@ -264,29 +264,15 @@ export class FeatureAction {
       case InterfaceState.Settings:
         return <connect-action authId={this.authId} text-authenticated='Logout' icon='ios-log-out' />
       case InterfaceState.Folder:
-        if (this.filesSearchResults) {
-          return (
-            <div>
-              <list-navigation
-                options={this.filesSearchResults}
-                attributeName={'name'}
-                onSearchQuery={this.handleSearchQuery}
-                onBackClicked={this.handleWorkflowBack}
-                showNextIcon={true}
-                onOptionClicked={this.handleItemSelect}
-              />
-            </div>
-          )
-        }
         return (
           <div>
             <list-navigation
-              options={this.data}
+              items={this.filesSearchResults ? this.filesSearchResults : this.data}
               attributeName={'name'}
-              onSearchQuery={this.handleSearchQuery}
               showNextIcon={true}
-              onBackClicked={this.handleWorkflowBack}
-              onOptionClicked={this.handleItemSelect}
+              onSelectHandler={this.handleItemSelect}
+              onSearchHandler={this.handleSearchQuery}
+              onBackHandler={this.handleWorkflowBack}
             />
           </div>
         )

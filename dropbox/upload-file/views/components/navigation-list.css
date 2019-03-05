@@ -15,12 +15,21 @@ ul.navigation-list {
   cursor: pointer;
 }
 
-li.navigation-item {
+li.navigation-item,
+li.navigation-item > label {
   line-height: 16px;
   display: flex;
   flex: 1;
-  margin-bottom: 16px;
   justify-content: flex-end;
+  cursor: pointer;
+}
+
+li.navigation-item {
+  margin-bottom: 16px;
+}
+
+li.navigation-item:last-child {
+  margin-bottom: 0;
 }
 
 span.label {
@@ -40,6 +49,7 @@ span.label {
 }
 
 .no-results-label {
+  margin: 8px 0;
   color: #030d36;
   font-size: 16px;
   font-weight: 600;
@@ -48,4 +58,9 @@ span.label {
 
 .no-results-icon {
   margin-bottom: 8px;
+}
+
+.navigation-submit {
+  margin-top: 16px;
+  text-align: right;
 }

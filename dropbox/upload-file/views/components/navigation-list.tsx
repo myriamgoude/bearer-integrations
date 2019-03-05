@@ -1,7 +1,8 @@
-import { Component, Prop } from '@bearer/core'
+import { Component, Prop, t } from '@bearer/core'
+import { NavigationItem } from '../types'
+
 import IconNoResults from '../icons/icon-no-results'
 import IconPath from '../icons/icon-path'
-import { NavigationItem } from '../types'
 
 @Component({ tag: 'navigation-list', styleUrl: 'navigation-list.css' })
 export class NavigationList {
@@ -25,7 +26,7 @@ export class NavigationList {
           <div class='no-results-icon'>
             <IconNoResults />
           </div>
-          <span class='no-results-label'>'No data found</span>
+          <span class='no-results-label'>{t('state.empty_results', 'No data found')}</span>
         </div>
       )
     }

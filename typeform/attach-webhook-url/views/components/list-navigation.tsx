@@ -1,6 +1,7 @@
-import { Element, Component, Prop, State } from '@bearer/core'
-import IconNoResults from '../icons/icon-no-results'
+import { Element, Component, Prop, State, t } from '@bearer/core'
 import { Forms } from '../types'
+
+import IconNoResults from '../icons/icon-no-results'
 
 @Component({
   tag: 'list-navigation',
@@ -8,13 +9,16 @@ import { Forms } from '../types'
   styleUrl: 'list-navigation.css'
 })
 export class ListNavigation {
-  @Prop() options: any[] | undefined
+  @Prop() items: any[] | undefined
   @Prop() attributeName: string | undefined
   @Prop() showNextIcon: boolean = true
 
   @Prop() formatLabel: (option: any) => JSX.Element
-  @Prop() onSearchQuery: (query: string) => void
-  @Prop() onSubmitted: (form: Forms) => void
+
+  @Prop() onSearchHandler: (query: string) => void
+  @Prop() onSelectHandler: (option: any) => void
+  @Prop() onSubmitHandler: (option: any) => void
+  @Prop() onBackHandler: (option: any) => void
 
   @Element() el: HTMLElement
   @State() selection: Forms
@@ -33,13 +37,8 @@ export class ListNavigation {
     return this.getName(element)
   }
 
-  randomWidthStyle() {
-    const ammount = Math.random() * 150 + 100
-    return { width: `${ammount}px` }
-  }
-
   renderSearch() {
-    return this.onSearchQuery ? <navigation-search onSearchQuery={this.onSearchQuery} /> : null
+    return this.onSearchHandler ? <navigation-search onSearchQuery={this.onSearchHandler} /> : null
   }
 
   handleSubmit = (e: MouseEvent) => {
@@ -49,7 +48,7 @@ export class ListNavigation {
     // @ts-ignore (inputChecked.value is not ts-compliant)
     this.selection = { id: inputChecked.value, name: null }
 
-    this.onSubmitted(this.selection)
+    this.onSubmitHandler(this.selection)
   }
 
   render() {
@@ -62,44 +61,35 @@ export class ListNavigation {
   }
 
   renderContents = () => {
-    if (this.options == undefined) {
-      return (
-        <ul>
-          {Array(4)
-            .fill(true)
-            .map(() => (
-              <li class='loading' style={this.randomWidthStyle()} />
-            ))}
-        </ul>
-      )
+    if (!this.items) {
+      return <navigation-loader />
     }
-    if (this.options.length == 0) {
+
+    if (this.items.length == 0) {
       return (
         <div class='no-results-content'>
-          <div class='background'>
+          <div class='no-results-icon'>
             <IconNoResults />
           </div>
-          <span class='no-results-label'>No data found</span>
+          <h4 class='no-results-label'>{t('state.empty_results', 'No data found')}</h4>
         </div>
       )
     }
 
     return (
       <form>
-        <ul>
-          {this.options.map(data => (
-            <li>
+        <ul class='navigation-list'>
+          {this.items.map(item => (
+            <li class='navigation-item'>
               <label>
-                <span class='label'>{this.getLabel(data)}</span>
-                <input type='radio' name='selectedForm' class='bearer-radiobox' value={data.id} />
+                <span class='label'>{this.getLabel(item)}</span>
+                <input type='radio' name='selectedForm' class='bearer-radiobox' value={item.id} />
               </label>
             </li>
           ))}
         </ul>
-        <div style={{ textAlign: 'right' }}>
-          <bearer-button slot='popover-action' onClick={this.handleSubmit}>
-            Select
-          </bearer-button>
+        <div class='navigation-submit'>
+          <bearer-button onClick={this.handleSubmit}>Select</bearer-button>
         </div>
       </form>
     )

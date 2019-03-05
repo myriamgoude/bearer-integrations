@@ -212,10 +212,10 @@ export class FeatureAction {
           this.formsSearchResults && this.formsSearchResults.length !== 0 ? this.formsSearchResults : this.formsData
         return (
           <list-navigation
-            options={options}
+            items={options}
             attributeName={'email'}
-            onSearchQuery={this.handleSearchQuery}
-            onSubmitted={this.attachCustomer}
+            onSearchHandler={this.handleSearchQuery}
+            onSubmitHandler={this.attachCustomer}
             // onSubmitted={this.fetchInvoices}
             showNextIcon={true}
           />

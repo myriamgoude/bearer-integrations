@@ -25,7 +25,7 @@ export class NavigationList {
           <div class='no-results-icon'>
             <IconNoResults />
           </div>
-          <span class='no-results-label'>{t('state.no_data', 'No data found')}</span>
+          <span class='no-results-label'>{t('state.empty_results', 'No data found')}</span>
         </div>
       )
     }

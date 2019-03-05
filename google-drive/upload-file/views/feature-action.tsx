@@ -49,7 +49,7 @@ export class FeatureAction {
   @Prop() multi: boolean = true
   @Prop() authId: string
 
-  @Prop() fileURL: string = 'http://www.pdf995.com/samples/pdf.pdf'
+  @Prop() fileUrl: string
 
   @Intent('listData') getData: BearerFetch
   @Intent('searchData') searchData: BearerFetch
@@ -65,7 +65,6 @@ export class FeatureAction {
   @State() selectedFolder: File | undefined
   @State() foldersSearchResults: File[] | undefined
   @State() rootFolder = false
-  @State() showButton = true
 
   @Event() authorized: EventEmitter<TAuthorizedPayload>
   @Event() revoked: EventEmitter<TAuthorizedPayload>
@@ -195,8 +194,8 @@ export class FeatureAction {
   }
 
   uploadFile = () => {
-    if (this.fileURL) {
-      this.uploadFileIntent({ fileUrl: this.fileURL, folderId: this.selectedFolder.id })
+    if (this.fileUrl) {
+      this.uploadFileIntent({ fileUrl: this.fileUrl, folderId: this.selectedFolder.id })
         .then(() => {
           console.log('success')
         })
@@ -246,7 +245,6 @@ export class FeatureAction {
     //     showSaveButton={this.showButton}
     //     selectedFolder={this.selectedFolder}
     //     rootFolder={this.rootFolder}
-    //     onClose={this.handleExternalClick}
     //     onSaveClicked={this.handleAttachFolder}
     //   >
     //     {this.renderWorkflowContent()}
@@ -291,35 +289,20 @@ export class FeatureAction {
     switch (this.ui) {
       case InterfaceState.Error:
         this.rootFolder = false
-        this.showButton = false
         return <error-message message={this.errorMessage} onRetry={this.handleRetry} />
       case InterfaceState.Settings:
         return <connect-action authId={this.authId} text-authenticated='Logout' icon='ios-log-out' />
 
       case InterfaceState.Folder:
-        if (this.foldersSearchResults) {
-          return (
-            <div>
-              <list-navigation
-                options={this.foldersSearchResults}
-                attributeName={'name'}
-                onSearchQuery={this.handleSearchQuery}
-                showNextIcon={true}
-                onOptionClicked={this.handleItemSelect}
-              />
-            </div>
-          )
-        }
         return (
-          <div>
-            <list-navigation
-              options={this.foldersData}
-              attributeName={'name'}
-              onSearchQuery={this.handleSearchQuery}
-              showNextIcon={true}
-              onOptionClicked={this.handleItemSelect}
-            />
-          </div>
+          <list-navigation
+            items={this.foldersSearchResults ? this.foldersSearchResults : this.foldersData}
+            attributeName={'name'}
+            showNextIcon={true}
+            onSearchHandler={this.handleSearchQuery}
+            onSelectHandler={this.handleItemSelect}
+            onSubmitHandler={this.handleAttachFolder}
+          />
         )
     }
     return null

@@ -31,7 +31,7 @@ export class NavigationSearch {
           class='search-input'
           type='text'
           onKeyUp={this.searchHandler}
-          placeholder={t('state.search', 'Search folder')}
+          placeholder={t('state.search', 'Search a folder')}
           value={this.query}
         />
       </div>

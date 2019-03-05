@@ -228,10 +228,10 @@ export class FeatureAction {
         return (
           <div>
             <list-navigation
-              options={options}
+              items={options}
               attributeName={'title'}
-              onSearchQuery={this.handleSearchQuery}
-              onSubmitted={this.attachWebhook}
+              onSearchHandler={this.handleSearchQuery}
+              onSubmitHandler={this.attachWebhook}
               showNextIcon={true}
             />
           </div>

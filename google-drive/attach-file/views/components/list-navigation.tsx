@@ -1,13 +1,8 @@
-import { Component, Prop } from '@bearer/core'
+import { Component, Prop, t } from '@bearer/core'
 import { File } from '../types'
-import IconNoResult from '../icons/icon-no-result'
-import IconPath from '../icons/icon-path'
 
-const iconStyle = {
-  alignSelf: 'center',
-  marginRight: '10px',
-  fontSize: '1.2em'
-}
+import IconNoResults from '../icons/icon-no-results'
+import IconPath from '../icons/icon-path'
 
 @Component({
   tag: 'list-navigation',
@@ -15,13 +10,16 @@ const iconStyle = {
   styleUrl: 'list-navigation.css'
 })
 export class ListNavigation {
-  @Prop() options: any[] | undefined
-  @Prop() onOptionClicked: (option: any) => void
-  @Prop() onBackClicked: () => void
-  @Prop() attributeName: string | undefined
-  @Prop() formatLabel: (option: any) => JSX.Element
-  @Prop() onSearchQuery: (query: string) => void
+  @Prop() items: any[] | undefined
   @Prop() showNextIcon: boolean = true
+  @Prop() attributeName: string | undefined
+
+  @Prop() formatLabel: (option: any) => JSX.Element
+
+  @Prop() onSearchHandler: (query: string) => void
+  @Prop() onSelectHandler: (option: any) => void
+  @Prop() onSubmitHandler: (option: any) => void
+  @Prop() onBackHandler: (option: any) => void
 
   getName = (element: any) => {
     if (this.attributeName) {
@@ -37,73 +35,54 @@ export class ListNavigation {
     return this.getName(element)
   }
 
-  getIcon = (element: any) => {
-    if (element.icon) {
-      return <ion-icon name={element.icon} style={iconStyle} />
-    }
-    return null
-  }
-
-  getNextArrow = (data: File) => {
-    if (data.mimeType === 'application/vnd.google-apps.folder') {
+  getNextArrow = (item: File) => {
+    if (item.mimeType === 'application/vnd.google-apps.folder') {
       return this.showNextIcon ? <IconPath /> : null
     }
   }
 
-  randomWidthStyle() {
-    const ammount = Math.random() * 150 + 100
-    return { width: `${ammount}px` }
-  }
-
   renderSearch() {
-    return this.onSearchQuery ? <navigation-search onSearchQuery={this.onSearchQuery} /> : null
+    return this.onSearchHandler ? <navigation-search onSearchQuery={this.onSearchHandler} /> : null
   }
 
   render() {
     return (
       <div>
-        {this.options && this.options.length > 0 && this.renderSearch()}
+        {this.renderSearch()}
         <div class='scroll'>{this.renderContents()}</div>
       </div>
     )
   }
 
   renderContents = () => {
-    if (this.options == undefined) {
-      return (
-        <ul>
-          {Array(4)
-            .fill(true)
-            .map(() => (
-              <li class='loading' style={this.randomWidthStyle()} />
-            ))}
-        </ul>
-      )
+    if (!this.items) {
+      return <navigation-loader />
     }
-    if (this.options.length == 0) {
+
+    if (this.items.length == 0) {
       return (
         <div class='no-results-content'>
           <div class='no-results-icon'>
-            <IconNoResult />
+            <IconNoResults />
           </div>
-          <span class='no-results-label'>No data found</span>
-          <bearer-button kind='secondary' onClick={this.onBackClicked}>
-            Back
+          <h4 class='no-results-label'>{t('state.empty_results', 'No data found')}</h4>
+          <bearer-button kind='secondary' onClick={this.onBackHandler}>
+            {t('btn.go_back', 'Back')}
           </bearer-button>
         </div>
       )
     }
     return (
-      <ul>
-        {this.options.map(data => (
+      <ul class='navigation-list'>
+        {this.items.map(item => (
           <li
+            class='navigation-item'
             onClick={() => {
-              this.onOptionClicked(data)
+              this.onSelectHandler(item)
             }}
           >
-            {this.getIcon(data)}
-            <span class='label'>{this.getLabel(data)}</span>
-            {this.getNextArrow(data)}
+            <span class='label'>{this.getLabel(item)}</span>
+            {this.getNextArrow(item)}
           </li>
         ))}
       </ul>
