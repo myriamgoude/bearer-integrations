@@ -1,15 +1,16 @@
-import { Component, State, Prop } from '@bearer/core'
-import InputSearchIcon from '../icons/icon-search'
+import { Component, State, Prop, t } from '@bearer/core'
+import InputSearchIcon from '../icons/icon-input-search'
 
 const TIMEOUT_DURATION = 500
 
 @Component({
-  tag: 'br-search',
-  styleUrl: 'br-search.css'
+  tag: 'navigation-search',
+  styleUrl: 'navigation-search.css'
 })
-export class BrSearch {
+export class NavigationSearch {
   @State() query: string = ''
   @State() debouner: number
+
   @Prop() onSearchQuery: (query: string) => void
 
   searchHandler = (e: any) => {
@@ -22,15 +23,15 @@ export class BrSearch {
 
   render() {
     return (
-      <div class='br-search-wrapper'>
-        <span class='br-search-icon'>
+      <div class='search-wrapper'>
+        <span class='search-icon'>
           <InputSearchIcon />
         </span>
         <input
-          class='br-search-input'
+          class='search-input'
           type='text'
           onKeyUp={this.searchHandler}
-          placeholder='Search file'
+          placeholder={t('state.search', 'Search file')}
           value={this.query}
         />
       </div>

@@ -1,4 +1,4 @@
-import { Component, State, Prop } from '@bearer/core'
+import { Component, State, Prop, t } from '@bearer/core'
 import InputSearchIcon from '../icons/icon-input-search'
 
 const TIMEOUT_DURATION = 500
@@ -31,7 +31,7 @@ export class NavigationSearch {
           class='search-input'
           type='text'
           onKeyUp={this.searchHandler}
-          placeholder={'Search file'}
+          placeholder={t('state.search', 'Search folder')}
           value={this.query}
         />
       </div>

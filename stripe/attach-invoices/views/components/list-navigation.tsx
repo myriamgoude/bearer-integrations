@@ -39,7 +39,7 @@ export class ListNavigation {
   }
 
   renderSearch() {
-    return this.onSearchQuery ? <br-search onSearchQuery={this.onSearchQuery} /> : null
+    return this.onSearchQuery ? <navigation-search onSearchQuery={this.onSearchQuery} /> : null
   }
 
   handleSubmit = (e: MouseEvent) => {
