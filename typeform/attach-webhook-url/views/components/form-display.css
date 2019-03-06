@@ -1,0 +1,52 @@
+.list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  align-items: center;
+}
+
+.list-item:last-child {
+  margin-bottom: 0;
+}
+
+.list-item > a {
+  padding: 20px;
+  color: #59607b;
+}
+
+.list-item div {
+  display: flex;
+  flex-flow: column;
+}
+
+.list-item div.preview {
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  background-color: #f3f5ff;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  margin-left: 16px;
+}
+
+a {
+  color: #898b92;
+  font-size: 12px;
+  letter-spacing: 0.1px;
+  line-height: 14px;
+  padding-top: 5px;
+}
+
+p {
+  color: #6b7083;
+  margin: 0;
+  font-size: 14px;
+}
+
+.file-size {
+  padding-left: 10px;
+}

@@ -1,0 +1,32 @@
+.search-wrapper {
+  border-radius: 4px;
+  background-color: #f5f7ff;
+  padding: 10px;
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.search-icon {
+  padding-top: 3px;
+  padding-left: 4px;
+}
+
+.search-input {
+  height: 20px;
+  color: #030d36;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding-left: 8px;
+  font-family: inherit;
+}
+
+.search-input::placeholder {
+  font-weight: 400;
+  font-size: 14px;
+  color: #6a7397;
+}

@@ -7,14 +7,16 @@ import { Component, Prop } from '@bearer/core'
 })
 export class ErrorMessage {
   //callback with matching hashkeys
-  @Prop() onRetry: (e:Event) => void;
-  @Prop() message: string;
+  @Prop() onRetry: (e: Event) => void
+  @Prop() message: string
 
   render() {
     return (
       <div>
         <p>{this.message}</p>
-        <button onClick={this.onRetry}>Retry</button>
+        <button onClick={this.onRetry}>
+          <bearer-i18n key="buttons.retry" default="Retry" />
+        </button>
       </div>
     )
   }

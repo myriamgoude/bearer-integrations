@@ -1,104 +1,92 @@
-import { Component, Prop } from '@bearer/core';
-import IconNoResults from './icon-no-results';
-import 'ionicons';
-
-const iconStyle ={
-  alignSelf: 'center',
-  marginRight: '10px',
-  fontSize: '1.2em',
-};
+import { Component, Prop, t } from '@bearer/core'
+import IconNoResults from '../icons/icon-no-results'
+import IconPath from '../icons/icon-path'
 
 @Component({
   tag: 'list-navigation',
   shadow: true,
   styleUrl: 'list-navigation.css'
 })
-
 export class ListNavigation {
-  @Prop() options: any[] | undefined;
-  @Prop() onOptionClicked: (option: any) => void;
-  @Prop() attributeName: string | undefined;
-  @Prop() formatLabel: (option: any) => JSX.Element;
-  @Prop() onSearchQuery: (query: string) => void;
-  @Prop() showNextIcon: boolean = true;
+  @Prop() items: any[] | undefined
+  @Prop() showNextIcon: boolean = true
+  @Prop() attributeName: string | undefined
 
-  getName = (element:any) =>{
-    if(this.attributeName){
+  @Prop() formatLabel: (option: any) => JSX.Element
+
+  @Prop() onSearchHandler: (query: string) => void
+  @Prop() onSelectHandler: (option: any) => void
+  @Prop() onSubmitHandler: (option: any) => void
+
+  getName = (element: any) => {
+    if (this.attributeName) {
       return element[this.attributeName]
     }
     return element
-  };
+  }
 
   getLabel = (element: any) => {
-    if(this.formatLabel){
-      return this.formatLabel(element);
+    if (this.formatLabel) {
+      return this.formatLabel(element)
     }
     return this.getName(element)
-  };
-
-  getIcon = (element: any) => {
-    if(element.icon){
-      return <ion-icon name={element.icon} style={iconStyle} />
-    }
-    return null
-  };
+  }
 
   getNextArrow = () => {
-    return (this.showNextIcon) ? <icon-chevron direction='right' style={{marginLeft:'20px'}} /> : null
-  };
-
-  randomWidthStyle(){
-    const ammount = (Math.random()*150)+100;
-    return { width: `${ammount}px` }
-  };
+    return this.showNextIcon ? <IconPath /> : null
+  }
 
   renderSearch() {
-    return (this.onSearchQuery) ? <br-search onSearchQuery={this.onSearchQuery}/> : null
-  };
+    return this.onSearchHandler ? <navigation-search onSearchQuery={this.onSearchHandler} /> : null
+  }
 
   render() {
     return (
       <div>
         {this.renderSearch()}
-        <div class='scroll'>
-            {this.renderContents()}
-        </div>
+        <div class='scroll'>{this.renderContents()}</div>
       </div>
     )
-  };
+  }
 
   renderContents = () => {
-    if(this.options == undefined){
-      return (
-        <ul>
-          {Array(4).fill(true).map(()=>(<li class="loading" style={this.randomWidthStyle()}></li>))}
-        </ul>
-      )
+    if (!this.items) {
+      return <navigation-loader />
     }
-    if(this.options.length == 0){
+
+    if (this.items.length == 0) {
       return (
-          <div class="no-results-content">
-            <div class="background">
-              <IconNoResults />
-            </div>
-            <span class='no-results-label'>This is final destination</span>
+        <div class='no-results-content'>
+          <div class='no-results-icon'>
+            <IconNoResults />
           </div>
+          <h4 class='no-results-label'>{t('state.empty_results', 'This is final destination')}</h4>
+          <div class='navigation-submit'>
+            <bearer-button onClick={this.onSubmitHandler}>Save here</bearer-button>
+          </div>
+        </div>
       )
     }
     return (
-        <div>
-          <ul>
-            {this.options.map((data) => (
-                <li onClick={() => {
-                  this.onOptionClicked(data)
-                }}>
-                  {this.getIcon(data)}
-                  <span class='label'>{this.getLabel(data)}</span>
-                  {this.getNextArrow()}
-                </li>
-            ))}
-          </ul>
+      <div>
+        <ul class='navigation-list'>
+          {this.items.map(item => (
+            <li
+              class='navigation-item'
+              onClick={() => {
+                this.onSelectHandler(item)
+              }}
+            >
+              <span class='label'>{this.getLabel(item)}</span>
+              {this.getNextArrow()}
+            </li>
+          ))}
+        </ul>
+
+        <div class='navigation-submit'>
+          <bearer-button onClick={this.onSubmitHandler}>Save here</bearer-button>
         </div>
+      </div>
     )
   }
 }

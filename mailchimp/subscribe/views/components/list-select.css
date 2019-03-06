@@ -1,3 +1,10 @@
+.loading {
+  height: 16px;	
+  opacity: 0.56;	
+  border-radius: 7px;	
+  background: linear-gradient(270deg, #E1E5F8 0%, #F0F1F5 100%);
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -11,15 +18,15 @@ li {
   justify-content: flex-end;
 }
 
-label {
+.label {
   flex:1;
+  white-space: nowrap;
 }
 
-.scroll {
-  max-height: 300px;
-  overflow: scroll;
-  margin: 10px;
-}
+.checkbox {
+  text-align: right;
+  justify-content: flex-end;
+} 
 
 .button {
   border-radius: 4px;
