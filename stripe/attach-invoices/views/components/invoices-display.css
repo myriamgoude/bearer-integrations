@@ -1,0 +1,109 @@
+:host {
+  color: #030d36;
+  font-size: 14px;
+}
+
+ol {
+  margin: 48px;
+  padding: 0;
+  list-style: none;
+}
+
+.list-item {
+  display: flex;
+  margin: 0 0 24px 0;
+  flex-direction: column;
+}
+
+.list-item:last-child {
+  margin-bottom: 0;
+}
+
+.list-item div.preview {
+  width: 31px;
+  height: 31px;
+  border-radius: 50%;
+  background-color: #f3f5ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  margin-left: 16px;
+}
+
+.content {
+  border: 1px solid #eaebf3;
+  border-radius: 4px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px 0 rgba(3, 13, 54, 0.08);
+  min-height: 200px;
+  width: 300px;
+}
+
+.content .remove {
+  float: right;
+  font-size: 10px;
+  text-decoration: underline;
+  color: #898b92;
+  margin: 8px;
+  cursor: pointer;
+}
+
+.status-box {
+  margin-right: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  letter-spacing: 0.16px;
+  line-height: 16px;
+  padding: 4px;
+  border: 1px solid #dc4c4c;
+  color: #dc4c4c;
+}
+
+.status-box.paid {
+  border-color: #b8e986;
+  color: #b8e986;
+}
+
+.status-box.open {
+  border-color: #ffc400;
+  color: #ffc400;
+}
+
+.invoice-number {
+  font-size: 18px;
+}
+
+.price {
+  font-size: 14px;
+}
+
+.download-link {
+  color: #898b92;
+  font-size: 10px;
+  letter-spacing: 0.08px;
+  line-height: 12px;
+  text-decoration: underline;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.icon-inline {
+  display: inline-block;
+}
+
+.icon-inline svg {
+  text-decoration: none;
+  height: 1rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.icon-before svg {
+  margin-right: 4px;
+}
+
+.icon-after svg {
+  margin-left: 4px;
+}

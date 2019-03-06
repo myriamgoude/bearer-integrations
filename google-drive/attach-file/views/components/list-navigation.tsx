@@ -1,101 +1,101 @@
-import {Element, Component, Prop, State} from '@bearer/core';
-import IconNoResults from './icons/icon-no-results';
-import { File } from "../types";
+import { Component, State, Element, Prop, t } from '@bearer/core'
+import { File } from '../types'
+
+import IconNoResults from '../icons/icon-no-results'
+import IconPath from '../icons/icon-path'
 
 @Component({
   tag: 'list-navigation',
   shadow: true,
   styleUrl: 'list-navigation.css'
 })
-
 export class ListNavigation {
-  @Prop() options: any[] | undefined;
-  @Prop() attributeName: string | undefined;
-  @Prop() showNextIcon: boolean = true;
+  @Prop() items: any[] | undefined
+  @Prop() showNextIcon: boolean = true
+  @Prop() attributeName: string | undefined
 
-  @Prop() formatLabel: (option: any) => JSX.Element;
-  @Prop() onSearchQuery: (query: string) => void;
-  @Prop() onBackClicked: () => void;
-  @Prop() onSubmitted: (form: File) => void;
+  @Prop() formatLabel: (option: any) => JSX.Element
 
-  @Element() el: HTMLElement;
-  @State() selection: File;
+  @Prop() onSearchHandler: (query: string) => void
+  @Prop() onSelectHandler: (option: any) => void
+  @Prop() onSubmitHandler: (option: any) => void
+  @Prop() onBackHandler: (option: any) => void
 
-  getName = (element:any) =>{
-    if(this.attributeName){
+  @Element() el: HTMLElement
+  @State() selection: File
+
+  getName = (element: any) => {
+    if (this.attributeName) {
       return element[this.attributeName]
     }
     return element
-  };
+  }
 
   getLabel = (element: any) => {
-    if(this.formatLabel){
-      return this.formatLabel(element);
+    if (this.formatLabel) {
+      return this.formatLabel(element)
     }
     return this.getName(element)
-  };
+  }
 
-  getNextArrow = (data: File) => {
-    if (data.mimeType === 'application/vnd.google-apps.folder') {
-      return (this.showNextIcon) ? <icon-chevron direction='right' style={{marginLeft:'20px'}} /> : null
+  getNextArrow = (item: File) => {
+    if (item.mimeType === 'application/vnd.google-apps.folder') {
+      return this.showNextIcon ? <IconPath /> : null
     }
-  };
-
-  randomWidthStyle(){
-    const ammount = (Math.random()*150)+100;
-    return { width: `${ammount}px` }
-  };
+  }
 
   renderSearch() {
-    return (this.onSearchQuery) ? <br-search onSearchQuery={this.onSearchQuery}/> : null
-  };
+    return this.onSearchHandler ? <navigation-search onSearchQuery={this.onSearchHandler} /> : null
+  }
 
   handleSubmit = (e: MouseEvent) => {
-    e.preventDefault();
-    
-    const inputChecked = this.el.shadowRoot.querySelector("input[type=radio]:checked");
+    e.preventDefault()
+
+    const inputChecked = this.el.shadowRoot.querySelector('input[type=radio]:checked')
     // @ts-ignore (inputChecked.value is not ts-compliant)
-    this.selection = { id: inputChecked.value, name: null };
-    
-    this.onSubmitted(this.selection);
+    this.selection = { id: inputChecked.value, name: null }
+
+    this.onSubmitHandler(this.selection)
   }
 
   render() {
     return (
       <div>
         {this.renderSearch()}
-        <div class='scroll'>
-            {this.renderContents()}
-        </div>
+        <div class='scroll'>{this.renderContents()}</div>
       </div>
     )
-  };
+  }
 
   renderContents = () => {
-    if(this.options == undefined){
-      return (
-        <ul>
-          {Array(4).fill(true).map(()=>(<li class="loading" style={this.randomWidthStyle()}></li>))}
-        </ul>
-      )
+    if (!this.items) {
+      return <navigation-loader />
     }
-    if(this.options.length == 0){
+
+    if (this.items.length == 0) {
       return (
-          <div class="no-results-content">
-              <div class="no-results-icon">
-                <IconNoResults />
-              </div>
-            <span class='no-results-label'>No data found</span>
-            <bearer-button kind="secondary" onClick={this.onBackClicked}>Back</bearer-button>
+        <div class='no-results-content'>
+          <div class='no-results-icon'>
+            <IconNoResults />
           </div>
+          <h4 class='no-results-label'>{t('state.empty_results', 'No data found')}</h4>
+          <bearer-button kind='secondary' onClick={this.onBackHandler}>
+            {t('btn.go_back', 'Back')}
+          </bearer-button>
+        </div>
       )
     }
     return (
-      <ul>
-        {this.options.map((data) =>(
-          <li onClick={()=>{this.onSubmitted(data)}}>
-            <span class='label'>{this.getLabel(data)}</span>
-            {this.getNextArrow(data)}
+      <ul class='navigation-list'>
+        {this.items.map(item => (
+          <li
+            class='navigation-item'
+            onClick={() => {
+              this.onSelectHandler(item)
+            }}
+          >
+            <span class='label'>{this.getLabel(item)}</span>
+            {this.getNextArrow(item)}
           </li>
         ))}
       </ul>

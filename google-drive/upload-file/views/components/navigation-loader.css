@@ -1,0 +1,26 @@
+.navigation-loader {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navigation-loader > li {
+  margin-bottom: 10px;
+  height: 16px;
+  opacity: 0.8;
+  border-radius: 7px;
+  background: linear-gradient(270deg, #e1e5f8 0%, #f0f1f5 100%);
+  animation-duration: 1s;
+  animation-name: lightblink;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes lightblink {
+  0% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}

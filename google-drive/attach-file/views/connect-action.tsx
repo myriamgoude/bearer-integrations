@@ -1,9 +1,8 @@
 /*
-  The purpose of this component is to deal with scenario navigation between each views.
-
+  The purpose of this component is to deal with auhentication.
 */
 
-import Bearer, { RootComponent, Event, Events, EventEmitter, Prop, Element, State } from '@bearer/core'
+import Bearer, { RootComponent, Event, Events, EventEmitter, Prop, Element, State, t } from '@bearer/core'
 import '@bearer/ui'
 
 export type TAuthorizedPayload = { authId: string }
@@ -21,9 +20,10 @@ export class ConnectAction {
   @Event()
   revoked: EventEmitter<TAuthorizedPayload>
 
-  @Prop() textUnauthenticated: string = "Connect to Google Drive"
-  @Prop() textAuthenticated: string = "Log out from Google Drive"
-  @Prop() kind: string = "embed"
+  provider: string = 'Google Drive'
+  @Prop() textUnauthenticated: string = t('connect.login', 'Connect to ' + this.provider)
+  @Prop() textAuthenticated: string = t('connect.logout', 'Disconnect from ' + this.provider)
+  @Prop() kind: string = 'embed'
   @Prop() icon: string
 
   @Prop({ mutable: true }) authId: string
@@ -47,7 +47,7 @@ export class ConnectAction {
     })
   }
 
-  renderUnauthorized = ({ authenticate }) => (<icon-button onClick={authenticate} text={this.textUnauthenticated} />)
+  renderUnauthorized = ({ authenticate }) => <icon-button onClick={authenticate} text={this.textUnauthenticated} />
 
   renderUnauthorizedIfAuthId = () => this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
 
@@ -60,7 +60,14 @@ export class ConnectAction {
       <bearer-authorized
         renderUnauthorized={this.renderUnauthorizedIfAuthId}
         renderAuthorized={({ revoke }) =>
-          this.authIdInternal && (<icon-button text={this.textAuthenticated} onClick={revoke}/>)
+          this.authIdInternal && (
+            <icon-button
+              text={this.textAuthenticated}
+              onClick={() => {
+                revoke(this.authIdInternal)
+              }}
+            />
+          )
         }
       />,
       !this.authIdInternal && this.renderUnauthorized({ authenticate: this.authenticate })
