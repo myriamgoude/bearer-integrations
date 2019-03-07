@@ -19,9 +19,6 @@ import Bearer, {
 import '@bearer/ui'
 import { Customer } from './types'
 
-// import IconSettings from './icons/icon-settings'
-// import IconClose from './icons/icon-close'
-
 export type TAuthorizedPayload = { authId: string }
 
 export enum InterfaceState {
@@ -150,7 +147,6 @@ export class FeatureAction {
     }
 
     const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
-    // const subHeading = undefined
     const handleBack = this.ui === InterfaceState.Settings && this.handleWorkflowBack
     const handleClose = this.handleExternalClick
     const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
