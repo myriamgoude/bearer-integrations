@@ -19,8 +19,8 @@ import Bearer, {
 import '@bearer/ui'
 import { Customer } from './types'
 
-import IconSettings from './icons/icon-settings'
-import IconClose from './icons/icon-close'
+// import IconSettings from './icons/icon-settings'
+// import IconClose from './icons/icon-close'
 
 export type TAuthorizedPayload = { authId: string }
 
@@ -149,79 +149,28 @@ export class FeatureAction {
       this.handleAttachClick()
     }
 
-    return (
-      <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
-        <icon-button slot='popover-toggler' onClick={this.handleAttachClick} text='Get invoices' />
-        {this.renderWorkflow()}
-      </bearer-popover>
-    )
-  }
-
-  renderWorkflow = () => {
-    if (this.ui <= InterfaceState.Authenticated) {
-      return null
-    }
-
     const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
-    const subHeading = undefined
+    // const subHeading = undefined
     const handleBack = this.ui === InterfaceState.Settings && this.handleWorkflowBack
     const handleClose = this.handleExternalClick
     const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
 
-    return [
-      <div slot='popover-header'>
-        <div class='popover-header'>
-          {handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={handleBack} />}
-          <div class='popover-title'>
-            <h3>{heading}</h3>
-            {subHeading && <span class='popover-subtitle'>{subHeading}</span>}
-          </div>
-        </div>
-        <div class='popover-controls'>
-          {handleMenu && (
-            <button class='popover-control' onClick={handleMenu}>
-              <IconSettings />
-            </button>
-          )}
-          {handleClose && (
-            <button class='popover-control' onClick={handleClose}>
-              <IconClose />
-            </button>
-          )}
-        </div>
-      </div>,
-      <div style={{ width: '300px' }}>{this.renderWorkflowContent()}</div>
-    ]
-  }
-
-  renderWorkflowContent = () => {
-    switch (this.ui) {
-      case InterfaceState.Error:
-        return <error-message message={this.errorMessage} onRetry={this.handleRetry} />
-      case InterfaceState.Settings:
-        return (
-          <connect-action
-            onClick={this.handleLogout}
+    return (
+        <popover-screen
+            ui={this.ui}
             authId={this.authId}
-            text-authenticated='Logout'
-            icon='ios-log-out'
-          />
-        )
-      case InterfaceState.Users:
-        const options =
-          this.formsSearchResults && this.formsSearchResults.length !== 0 ? this.formsSearchResults : this.formsData
-        return (
-          <list-navigation
-            items={options}
-            attributeName={'email'}
-            onSearchHandler={this.handleSearchQuery}
-            onSubmitHandler={this.attachCustomer}
-            // onSubmitted={this.fetchInvoices}
-            showNextIcon={true}
-          />
-        )
-    }
-    return null
+            heading={heading}
+            errorMessage={this.errorMessage}
+            items={this.formsData}
+            handleSearchQuery={this.handleSearchQuery}
+            handleBack={handleBack}
+            handleClose={handleClose}
+            handleMenu={handleMenu}
+            handlePopoverToggler={this.handleAttachClick}
+            handleItemSelection={this.attachCustomer}
+            handleRetry={this.handleRetry}
+        />
+    )
   }
 
   handleExternalClick = (_e: Event) => {
