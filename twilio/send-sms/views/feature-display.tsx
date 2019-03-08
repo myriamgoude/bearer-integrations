@@ -3,7 +3,7 @@
   Its responsibility is to retrieve the scenario state from a previous action
   of a user.
 */
-import {RootComponent, Listen, State} from '@bearer/core'
+import { RootComponent, Listen, State } from '@bearer/core'
 import '@bearer/ui'
 
 @RootComponent({
@@ -11,21 +11,23 @@ import '@bearer/ui'
   group: 'feature'
 })
 export class FeatureDisplay {
-  @State() receiverNumber: string;
+  @State() toNumber: string
 
   @Listen('body:feature-sent')
   smsSentHandler(e: CustomEvent) {
-    this.receiverNumber = e.detail;
+    this.toNumber = decodeURIComponent(e.detail.toNumber)
   }
 
   render() {
-    if(this.receiverNumber) {
-      return (
-          <div class="displayed-text">
-            <i>I</i>
-            <span>Thank you! SMS sent to <strong>{this.receiverNumber}</strong></span>
-          </div>
-      )
+    if (!this.toNumber) {
+      return
     }
+    return (
+      <div class='displayed-text'>
+        <span>
+          Thank you! SMS has been sent to <strong>{this.toNumber}</strong>
+        </span>
+      </div>
+    )
   }
 }
