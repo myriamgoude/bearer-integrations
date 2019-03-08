@@ -4,11 +4,11 @@ import { Forms } from '../types'
 import IconNoResults from '../icons/icon-no-results'
 
 @Component({
-  tag: 'list-navigation',
+  tag: 'navigation-list',
   shadow: true,
-  styleUrl: 'list-navigation.css'
+  styleUrl: 'navigation-list.css'
 })
-export class ListNavigation {
+export class NavigationList {
   @Prop() items: any[] | undefined
   @Prop() attributeName: string | undefined
   @Prop() showNextIcon: boolean = true
@@ -82,7 +82,7 @@ export class ListNavigation {
           {this.items.map(item => (
             <li class='navigation-item'>
               <label>
-                <span class='label'>{this.getLabel(item)}</span>
+                <span class='label'>{item.title}</span>
                 <input type='radio' name='selectedForm' class='bearer-radiobox' value={item.id} />
               </label>
             </li>
