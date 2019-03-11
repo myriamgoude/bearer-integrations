@@ -5,19 +5,20 @@ import Client from './client'
 export default class SendSMSIntent extends FetchData implements FetchData<ReturnedData, any, TBASICAuthContext> {
   async action(event: TFetchActionEvent<Params, TBASICAuthContext>): TFetchPromise<ReturnedData> {
     const { username, password } = event.context.authAccess
-    console.log(event.params)
+
     try {
       const { data } = await Client(username, password).post(
         '/Messages.json',
         qs.stringify({
-          From: event.params.fromNumber,
-          To: event.params.toNumber,
+          From: decodeURIComponent(event.params.fromNumber),
+          To: decodeURIComponent(event.params.toNumber),
           Body: event.params.messageBody
         })
       )
 
       return { data }
     } catch (error) {
+      console.error(error)
       if (error.response && error.response.data) {
         return { error: { code: error.response.status, message: error.response.data.message } }
       }
