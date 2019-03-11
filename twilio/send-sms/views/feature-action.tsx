@@ -90,7 +90,7 @@ export class FeatureAction {
       type: tooltip.type,
       timer: setTimeout(() => {
         this.tooltip = null
-      }, 3200)
+      }, 6200)
     }
   }
 
