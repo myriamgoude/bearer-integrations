@@ -2,11 +2,12 @@ import { TBASICAuthContext, FetchData, TFetchActionEvent, TFetchPromise } from '
 import qs from 'qs'
 import Client from './client'
 
-export default class SendSMSIntent extends FetchData implements FetchData<ReturnedData, any, TBASICAuthContext> {
+export default class SendSmsIntent extends FetchData implements FetchData<ReturnedData, any, TBASICAuthContext> {
   async action(event: TFetchActionEvent<Params, TBASICAuthContext>): TFetchPromise<ReturnedData> {
-    const { username, password } = event.context.authAccess
-
     try {
+      console.log(event)
+      const { username, password } = event.context.authAccess
+
       const { data } = await Client(username, password).post(
         '/Messages.json',
         qs.stringify({
