@@ -15,7 +15,8 @@ export class PopoverScreen {
   @Prop() multi: boolean = false
 
   @Prop() heading: string
-  @Prop() subHeading: string
+  // @Prop() subHeading: string
+  @Prop() subHeading: string = "My subtitle"
   @Prop() errorMessage: string
 
   @Prop() items: NavigationItem[]
@@ -72,12 +73,17 @@ export class PopoverScreen {
           onClick={this.handlePopoverToggler}
           text={p('btn.main_action', this.multi ? 2 : 1, 'Create a webhook')}
         />
+
+
+
         <div slot='popover-header'>
-          <div class='popover-header'>
-            {this.handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={this.handleBack} />}
+          <div {...{class : this.subHeading ? 'popover-header' : 'popover-header-no-sub'}} >
+            <div>{this.handleBack && <icon-chevron {...{class : this.subHeading ? 'popover-back-nav baseline-align' : 'popover-back-nav'}} direction='left' onClick={this.handleBack} />}</div>
             <div class='popover-title'>
-              <h3>{this.heading}</h3>
-              {this.subHeading && <span class='popover-subtitle'>{this.subHeading}</span>}
+              <div>
+                <h3>{this.heading}</h3>
+                {this.subHeading && <span class='popover-subtitle'>{this.subHeading}</span>}
+              </div>
             </div>
           </div>
           <div class='popover-controls'>
@@ -93,6 +99,10 @@ export class PopoverScreen {
             )}
           </div>
         </div>
+
+
+
+
         <div class='popover-content'>{this.renderNavigation()}</div>
       </bearer-popover>
     )

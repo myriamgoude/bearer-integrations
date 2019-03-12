@@ -158,8 +158,7 @@ export class FeatureAction {
       this.togglePopover()
     }
 
-      console.log(this.webhookUrl)
-      if (!this.webhookUrl) {
+    if (!this.webhookUrl) {
           this.ui = InterfaceState.Error
           this.errorMessage = 'Webhook URL is not set'
       }
@@ -185,6 +184,30 @@ export class FeatureAction {
               handleRetry={this.handleRetry}
           />
       )
+  }
+
+  renderWorkflowContent = () => {
+    switch (this.ui) {
+      case InterfaceState.Error:
+        return <error-message message={this.errorMessage} onRetry={this.handleRetry} />
+      case InterfaceState.Settings:
+        return <connect-action authId={this.authId} text-authenticated='Logout' icon='ios-log-out' />
+      case InterfaceState.Forms:
+        const options =
+            this.formsSearchResults && this.formsSearchResults.length !== 0 ? this.formsSearchResults : this.formsData
+        return (
+            <div>
+              <list-navigation
+                  items={options}
+                  attributeName={'title'}
+                  onSearchHandler={this.handleSearchQuery}
+                  onSubmitHandler={this.attachWebhook}
+                  showNextIcon={true}
+              />
+            </div>
+        )
+    }
+    return null
   }
 
   handleExternalClick = (_e: Event) => {
