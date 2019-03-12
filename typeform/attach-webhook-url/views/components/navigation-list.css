@@ -17,11 +17,12 @@ ul.navigation-list {
 
 li.navigation-item,
 li.navigation-item > label {
-  line-height: 16px;
+  line-height: 20px;
   display: flex;
   flex: 1;
   justify-content: flex-end;
   cursor: pointer;
+  text-overflow: ellipsis;
 }
 
 li.navigation-item {
@@ -39,8 +40,24 @@ span.label {
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #030d36;
+  max-width: 235px;
 }
 
+span.label-subtitle {
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.17px;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #6A7397;
+  max-width: 235px;
+}
+
+.display-type {
+  display: grid;
+}
 .no-results-content {
   margin: 16px auto;
   display: flex;
@@ -73,9 +90,9 @@ span.label {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  margin: 0;
-  height: 18px;
-  width: 18px;
+  margin: 0 0 0 8px;
+  height: 20px;
+  width: 20px;
   border-radius: 50%;
   border: 1px solid #eaebf2;
   background-color: #ffffff;
