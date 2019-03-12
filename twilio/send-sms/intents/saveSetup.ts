@@ -1,7 +1,9 @@
 import { TBASICAuthContext, SaveState, TSaveActionEvent, TSavePromise } from '@bearer/intents'
 
-export default class SaveSetupIntent extends SaveState implements SaveState<State, ReturnedData, any, TBASICAuthContext> {
+export default class SaveSetupIntent extends SaveState
+  implements SaveState<State, ReturnedData, any, TBASICAuthContext> {
   async action(event: TSaveActionEvent<State, Params, TBASICAuthContext>): TSavePromise<State, ReturnedData> {
+    console.log(event.params)
     return { state: event.params.setup, data: [] }
   }
 }

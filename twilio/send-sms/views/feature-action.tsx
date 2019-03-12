@@ -28,7 +28,7 @@ export class FeatureAction {
   internalToNumber: SMS['fromNumber']
   internalMessageBody: SMS['fromNumber']
 
-  @Intent('sendSms') sendSMS: BearerFetch
+  @Intent('send-sms') sendSms: BearerFetch
 
   @Event({ eventName: 'sent' })
   sent: EventEmitter<any>
@@ -53,7 +53,7 @@ export class FeatureAction {
 
       this.hideTooltip()
 
-      this.sendSMS(this.SMS)
+      this.sendSms(this.SMS)
         .then(() => {
           this.showTooltip({ content: 'Message sent!', type: 'success' })
           this.sent.emit(this.SMS)
