@@ -73,11 +73,13 @@ export class PopoverScreen {
           text={p('btn.main_action', this.multi ? 2 : 1, 'Get invoices')}
         />
         <div slot='popover-header'>
-          <div class='popover-header'>
-            {this.handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={this.handleBack} />}
+          <div {...{class : this.subHeading ? 'popover-header' : 'popover-header-no-sub'}} >
+            <div>{this.handleBack && <icon-chevron {...{class : this.subHeading ? 'popover-back-nav baseline-align' : 'popover-back-nav'}} direction='left' onClick={this.handleBack} />}</div>
             <div class='popover-title'>
+              <div>
               <h3>{this.heading}</h3>
               {this.subHeading && <span class='popover-subtitle'>{this.subHeading}</span>}
+              </div>
             </div>
           </div>
           <div class='popover-controls'>
