@@ -6,7 +6,7 @@ span::before {
 	height: 12px;
 	left: 2px;
 	position: relative;
-	top: -1px;
+	top: -2px;
 	transform: rotate(-45deg);
 	vertical-align: middle;
 	width: 12px;
