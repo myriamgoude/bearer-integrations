@@ -14,7 +14,6 @@ export class NavigationList {
   @Prop() showNextIcon: boolean = true
 
   @Prop() testSubtitle: string | undefined
-  @Prop() formatLabel: (option: any) => JSX.Element
 
   @Prop() onSearchHandler: (query: string) => void
   @Prop() onSelectHandler: (option: any) => void
@@ -23,20 +22,6 @@ export class NavigationList {
 
   @Element() el: HTMLElement
   @State() selection: Forms
-
-  getName = (element: any) => {
-    if (this.attributeName) {
-      return element[this.attributeName]
-    }
-    return element
-  }
-
-  getLabel = (element: any) => {
-    if (this.formatLabel) {
-      return this.formatLabel(element)
-    }
-    return this.getName(element)
-  }
 
   renderSearch() {
     return this.onSearchHandler ? <navigation-search onSearchQuery={this.onSearchHandler} /> : null
