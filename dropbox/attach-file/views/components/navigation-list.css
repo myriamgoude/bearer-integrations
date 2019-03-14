@@ -40,7 +40,7 @@ span.label {
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #030d36;
-  max-width: 235px;
+  width: 235px;
   margin-right: 8px;
 }
 
