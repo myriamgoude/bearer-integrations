@@ -13,6 +13,7 @@ export class NavigationList {
   @Prop() showNextIcon: boolean = true
 
   @Prop() formatLabel: (option: any) => JSX.Element
+  @Prop() testSubtitle: string | undefined
 
   @Prop() onSearchHandler: (query: string) => void
   @Prop() onSelectHandler: (option: any) => void
@@ -67,8 +68,13 @@ export class NavigationList {
           {this.items.map(item => (
             <li class='navigation-item'>
               <label>
+                <div class="display-type">
                 <span class='label'>{item.email}</span>
+                <span class='label-subtitle'>{this.testSubtitle}</span>
+                </div>
+              <div>
                 <input type='radio' name='selectedForm' class='bearer-radiobox' value={item.id} />
+              </div>
               </label>
             </li>
           ))}

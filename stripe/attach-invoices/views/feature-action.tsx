@@ -133,6 +133,7 @@ export class FeatureAction {
 
   renderUnauthorized: any = () => (
     <connect-action
+        authId={this.authId}
       text-unauthenticated={t('btn.main_action', 'Get invoices')}
       onClick={() => {
         this.openPopoverOnceLoggedIn = true
