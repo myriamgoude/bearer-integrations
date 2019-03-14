@@ -30,7 +30,7 @@ export class PopoverScreen {
   @Element() el: HTMLElement
 
   clearSearch = () => {
-    const search = this.el.querySelector('navigation-search')
+    const search = this.el.querySelector('#navigation-search') as any
     if (search) {
       search.clearValue()
     }
@@ -49,7 +49,7 @@ export class PopoverScreen {
 
       case InterfaceState.Users:
         return [
-          <navigation-search onSearchQuery={this.handleSearchQuery} />,
+          <navigation-search id='navigation-search' onSearchQuery={this.handleSearchQuery} />,
           <navigation-list items={this.items} onSubmitHandler={this.onItemSelected} />
         ]
 
@@ -73,12 +73,20 @@ export class PopoverScreen {
           text={p('btn.main_action', this.multi ? 2 : 1, 'Get invoices')}
         />
         <div slot='popover-header'>
-          <div {...{class : this.subHeading ? 'popover-header' : 'popover-header-no-sub'}} >
-            <div>{this.handleBack && <icon-chevron {...{class : this.subHeading ? 'popover-back-nav baseline-align' : 'popover-back-nav'}} direction='left' onClick={this.handleBack} />}</div>
+          <div {...{ class: this.subHeading ? 'popover-header' : 'popover-header-no-sub' }}>
+            <div>
+              {this.handleBack && (
+                <icon-chevron
+                  {...{ class: this.subHeading ? 'popover-back-nav baseline-align' : 'popover-back-nav' }}
+                  direction='left'
+                  onClick={this.handleBack}
+                />
+              )}
+            </div>
             <div class='popover-title'>
               <div>
-              <h3>{this.heading}</h3>
-              {this.subHeading && <span class='popover-subtitle'>{this.subHeading}</span>}
+                <h3>{this.heading}</h3>
+                {this.subHeading && <span class='popover-subtitle'>{this.subHeading}</span>}
               </div>
             </div>
           </div>
