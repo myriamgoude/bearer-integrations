@@ -13,3 +13,5 @@ export type Forms = {
 export type TAuthSavedPayload = {
     authId: string
 }
+
+export type NavigationItem = Forms

@@ -1,16 +1,15 @@
-import { Element, Component, Prop, State, t } from '@bearer/core'
-import { Forms } from '../types'
+import { Component, Prop, State, Element, t } from '@bearer/core'
+import { Customer } from '../types'
 
 import IconNoResults from '../icons/icon-no-results'
 
 @Component({
-  tag: 'list-navigation',
+  tag: 'navigation-list',
   shadow: true,
-  styleUrl: 'list-navigation.css'
+  styleUrl: 'navigation-list.css'
 })
-export class ListNavigation {
+export class NavigationList {
   @Prop() items: any[] | undefined
-  @Prop() attributeName: string | undefined
   @Prop() showNextIcon: boolean = true
 
   @Prop() formatLabel: (option: any) => JSX.Element
@@ -21,21 +20,7 @@ export class ListNavigation {
   @Prop() onBackHandler: (option: any) => void
 
   @Element() el: HTMLElement
-  @State() selection: Forms
-
-  getName = (element: any) => {
-    if (this.attributeName) {
-      return element[this.attributeName]
-    }
-    return element
-  }
-
-  getLabel = (element: any) => {
-    if (this.formatLabel) {
-      return this.formatLabel(element)
-    }
-    return this.getName(element)
-  }
+  @State() selection: Customer
 
   renderSearch() {
     return this.onSearchHandler ? <navigation-search onSearchQuery={this.onSearchHandler} /> : null
@@ -82,7 +67,7 @@ export class ListNavigation {
           {this.items.map(item => (
             <li class='navigation-item'>
               <label>
-                <span class='label'>{this.getLabel(item)}</span>
+                <span class='label'>{item.email}</span>
                 <input type='radio' name='selectedForm' class='bearer-radiobox' value={item.id} />
               </label>
             </li>
