@@ -91,11 +91,15 @@ export class FeatureAction {
     this.selectedFolder = undefined
     this.errorMessage = undefined
     this.ui = InterfaceState.Folder
+    this.listData();
+  }
+
+  listData = () => {
     this.getData({ authId: this.authId })
-      .then(({ data }: { data: File[] }) => {
-        this.data = data
-      })
-      .catch(this.handleError)
+        .then(({ data }: { data: File[] }) => {
+          this.data = data
+        })
+        .catch(this.handleError)
   }
 
   handleSearchQuery = (query: string) => {
@@ -210,7 +214,7 @@ export class FeatureAction {
 
     const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
     const subHeading = this.selectedFolder && this.ui !== InterfaceState.Settings ? `From ${this.selectedFolder.name}` : undefined
-    const handleBack = this.rootFolder && this.handleWorkflowBack
+    const handleBack = (this.rootFolder && subHeading && this.handleWorkflowBack) || (this.ui === InterfaceState.Settings && this.handleWorkflowBack)
     const handleClose = this.handleExternalClick
     const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
 
