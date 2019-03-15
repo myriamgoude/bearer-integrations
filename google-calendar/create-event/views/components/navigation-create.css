@@ -1,0 +1,11 @@
+ul.navigation-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+}

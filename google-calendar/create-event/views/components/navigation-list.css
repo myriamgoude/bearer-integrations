@@ -1,0 +1,80 @@
+.scroll {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+ul.navigation-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+li.navigation-item,
+li.navigation-item > label {
+  line-height: 16px;
+  display: flex;
+  flex: 1;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+li.navigation-item {
+  margin-bottom: 16px;
+}
+
+li.navigation-item:last-child {
+  margin-bottom: 0;
+}
+
+span.label {
+  font-size: 14px;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #030d36;
+}
+
+span.date {
+  font-size: 12px;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #6A7397;
+}
+
+div.event-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.no-results-content {
+  margin: 16px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-results-label {
+  margin: 8px 0;
+  color: #030d36;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+}
+
+.no-results-icon {
+  margin-bottom: 8px;
+}
+
+.navigation-submit {
+  margin-top: 16px;
+  text-align: right;
+}
