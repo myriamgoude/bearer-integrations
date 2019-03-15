@@ -183,7 +183,8 @@ export class FeatureAction {
 
     const parentFolder = this.path.length && this.path[this.path.length - 1]
     const subHeading = parentFolder && this.ui !== InterfaceState.Settings ? `From ${parentFolder.name}` : undefined
-
+    const handleBack = (parentFolder ? this.handleWorkflowBack : null) || (this.ui === InterfaceState.Settings && this.handleWorkflowBack)
+    // parentFolder ? this.handleWorkflowBack : null
     return (
       <popover-screen
         ui={this.ui}
@@ -193,7 +194,7 @@ export class FeatureAction {
         errorMessage={this.errorMessage}
         items={this.items}
         handleSearchQuery={this.handleSearchQuery}
-        handleBack={parentFolder ? this.handleWorkflowBack : null}
+        handleBack={handleBack}
         handleClose={this.handleExternalClick}
         handleMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
         handlePopoverToggler={this.togglePopover}
