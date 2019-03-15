@@ -1,0 +1,59 @@
+.popover-header {
+  display: flex;
+}
+
+.popover-back-nav {
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.popover-title h3 {
+  font-weight: bold;
+  color: #030d36;
+  margin: 0;
+  font-size: 16px;
+  line-height: 16px;
+}
+
+.popover-title .popover-subtitle {
+  font-weight: normal;
+  color: #030d36;
+  font-size: 12px;
+}
+
+.popover-controls {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.popover-control {
+  color: #aeb2c3;
+  font-size: 1.5em;
+  height: 16px;
+  width: 16px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin: 8px 4px;
+  padding: 0;
+}
+
+.popover-control:last-child {
+  margin-right: 8px;
+}
+
+.popover-control > svg {
+  vertical-align: top;
+}
+
+.back {
+  background: none;
+  border: none;
+  font-size: 2em;
+  outline: none;
+  cursor: pointer;
+  margin-top: 7px;
+}
