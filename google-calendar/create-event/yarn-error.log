@@ -1,0 +1,72 @@
+Arguments: 
+  /usr/local/bin/node /usr/share/yarn/bin/yarn.js
+
+PATH: 
+  /home/pputko/projects/integrations/google-calendar/list-event/node_modules/.bin:/home/pputko/bin:/home/pputko/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+
+Yarn version: 
+  1.13.0
+
+Node version: 
+  10.15.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  SyntaxError: /home/pputko/projects/integrations/google-calendar/list-event/package.json: Unexpected token } in JSON at position 593
+      at JSON.parse (<anonymous>)
+      at /usr/share/yarn/lib/cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (/usr/share/yarn/lib/cli.js:304:30)
+      at /usr/share/yarn/lib/cli.js:315:13
+
+npm manifest: 
+  {
+    "name": "dropbox-attach-file",
+    "version": "0.0.1",
+    "description": "AttachFile",
+    "main": "dist/index.js",
+    "types": "dist/types/components.d.ts",
+    "module": "dist/esm/index.js",
+    "collection": "dist/collection/collection-manifest.json",
+    "scripts": {
+      "push": "bearer push",
+      "start": "bearer start",
+      "invoke": "bearer invoke",
+      "generate": "bearer invoke",
+      "test": "jest"
+    },
+    "dependencies": {
+      "@bearer/core": "next",
+      "@bearer/intents": "next",
+      "@bearer/ui": "next",
+      "@bearer/js": "next",
+      "axios": "^0.18.0",
+      "ionicons": "^4.5.0-3",
+    },
+    "devDependencies": {
+      "@bearer/cli": "beta5",
+      "@types/node": "^10.12.25"
+    },
+    "license": "MIT",
+    "jest": {
+      "transform": {
+        "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/@stencil/core/testing/jest.preprocessor.js"
+      },
+      "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(tsx?|jsx?)$",
+      "moduleFileExtensions": [
+        "ts",
+        "tsx",
+        "js",
+        "json",
+        "jsx"
+      ]
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

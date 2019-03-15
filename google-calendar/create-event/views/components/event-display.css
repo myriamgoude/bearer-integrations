@@ -1,0 +1,16 @@
+.event-created-msg {
+  display: flex;
+  align-items: center;
+}
+
+span {
+  margin-left: 16px;
+  color: #5B6176;
+  font-size: 14px;
+  letter-spacing: 0.12px;
+  line-height: 17px;
+}
+
+a {
+  margin-left: 32px;
+}

@@ -1,0 +1,11 @@
+ul.navigation-form {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.navigation-form-group {
+  display: flex;
+  justify-content: space-between;
+}
