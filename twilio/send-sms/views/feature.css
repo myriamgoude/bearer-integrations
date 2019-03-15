@@ -1,0 +1,39 @@
+input[type='tel'] {
+  height: 40px;
+  width: 188px;
+  border: 1px solid #dcdfe8;
+  border-radius: 2px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px 0 rgba(3, 13, 54, 0.06);
+  padding-left: 15px;
+  margin-right: 11px;
+}
+
+.submit-button-icon {
+  padding: 0 12px 0 17px;
+  width: 16px;
+  height: 16px;
+}
+
+.displayed-text {
+  font-family: 'Proxima Nova', sans-serif;
+  display: inline-block;
+  height: 17px;
+  color: #030d36;
+  font-size: 14px;
+  letter-spacing: 0.12px;
+  line-height: 17px;
+}
+
+.displayed-text i {
+  padding-right: 9px;
+}
+
+svg {
+  height: 16px;
+  width: 16px;
+  padding-right: 5px;
+  margin-bottom: -2px;
+  color: #3e75c3;
+  font-size: 1.2em;
+}

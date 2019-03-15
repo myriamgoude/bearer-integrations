@@ -21,3 +21,5 @@ export type Customer = {
 export type TAuthSavedPayload = {
     authId: string
 }
+
+export type NavigationItem = Customer

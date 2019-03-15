@@ -47,10 +47,10 @@ export class PopoverScreen {
         this.clearSearch()
         return <navigation-loader />
 
-      case InterfaceState.Folder:
+      case InterfaceState.Users:
         return [
           <navigation-search id='navigation-search' onSearchQuery={this.handleSearchQuery} />,
-          <navigation-list items={this.items} onSubmitted={this.onItemSelected} />
+          <navigation-list items={this.items} onSubmitHandler={this.onItemSelected} />
         ]
 
       case InterfaceState.Settings:
@@ -70,14 +70,24 @@ export class PopoverScreen {
         <icon-button
           slot='popover-toggler'
           onClick={this.handlePopoverToggler}
-          text={p('btn.main_action', this.multi ? 2 : 1, 'Attach a file')}
+          text={p('btn.main_action', this.multi ? 2 : 1, 'Get invoices')}
         />
         <div slot='popover-header'>
-          <div class='popover-header'>
-            {this.handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={this.handleBack} />}
+          <div {...{ class: this.subHeading ? 'popover-header' : 'popover-header-no-sub' }}>
+            <div>
+              {this.handleBack && (
+                <icon-chevron
+                  {...{ class: this.subHeading ? 'popover-back-nav baseline-align' : 'popover-back-nav' }}
+                  direction='left'
+                  onClick={this.handleBack}
+                />
+              )}
+            </div>
             <div class='popover-title'>
-              <h3>{this.heading}</h3>
-              {this.subHeading && <span class='popover-subtitle'>{this.subHeading}</span>}
+              <div>
+                <h3>{this.heading}</h3>
+                {this.subHeading && <span class='popover-subtitle'>{this.subHeading}</span>}
+              </div>
             </div>
           </div>
           <div class='popover-controls'>
