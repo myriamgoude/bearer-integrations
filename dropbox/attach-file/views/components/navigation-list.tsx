@@ -7,6 +7,7 @@ import { NavigationItem } from '../types'
 export class NavigationList {
   @Prop() items: NavigationItem[] = []
   @Prop() onSubmitted: any
+  @Prop() onBackHandler: (option: any) => void
 
   handleSubmit(selection: NavigationItem) {
     if (this.onSubmitted) {
@@ -26,6 +27,9 @@ export class NavigationList {
             <IconNoResults />
           </div>
           <span class='no-results-label'>{t('state.empty_results', 'No data found')}</span>
+          <bearer-button kind='secondary' onClick={this.onBackHandler}>
+            {t('btn.go_back', 'Back')}
+          </bearer-button>
         </div>
       )
     }

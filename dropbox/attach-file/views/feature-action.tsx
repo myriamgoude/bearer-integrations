@@ -184,7 +184,7 @@ export class FeatureAction {
     const parentFolder = this.path.length && this.path[this.path.length - 1]
     const subHeading = parentFolder && this.ui !== InterfaceState.Settings ? `From ${parentFolder.name}` : undefined
     const handleBack = (parentFolder ? this.handleWorkflowBack : null) || (this.ui === InterfaceState.Settings && this.handleWorkflowBack)
-    // parentFolder ? this.handleWorkflowBack : null
+
     return (
       <popover-screen
         ui={this.ui}

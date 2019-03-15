@@ -50,7 +50,7 @@ export class PopoverScreen {
       case InterfaceState.Folder:
         return [
           <navigation-search id='navigation-search' onSearchQuery={this.handleSearchQuery} />,
-          <navigation-list items={this.items} onSubmitted={this.onItemSelected} />
+          <navigation-list items={this.items} onSubmitted={this.onItemSelected} onBackHandler={this.handleBack}/>
         ]
 
       case InterfaceState.Settings:
