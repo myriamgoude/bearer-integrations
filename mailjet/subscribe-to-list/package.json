@@ -1,0 +1,26 @@
+{
+  "name": "subscribe-to-list",
+  "version": "0.0.1",
+  "description": "SubscribeToList",
+  "main": "dist/index.js",
+  "types": "dist/types/components.d.ts",
+  "module": "dist/esm/index.js",
+  "collection": "dist/collection/collection-manifest.json",
+  "scripts": {
+    "push": "bearer push",
+    "start": "bearer start",
+    "invoke": "bearer invoke",
+    "generate": "bearer generate"
+  },
+  "dependencies": {
+    "@bearer/core": "beta5",
+    "@bearer/intents": "beta5",
+    "@bearer/ui": "beta5",
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "@bearer/cli": "beta5",
+    "@types/node": "^10.12.25"
+  },
+  "license": "MIT"
+}
