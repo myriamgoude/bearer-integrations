@@ -40,7 +40,8 @@ span.label {
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #030d36;
-  width: 250px;
+  width: 235px;
+  margin-right: 8px;
 }
 
 span.label-subtitle {
@@ -53,6 +54,7 @@ span.label-subtitle {
   text-overflow: ellipsis;
   color: #6A7397;
   width: 235px;
+  margin-right: 8px;
 }
 
 .display-type {

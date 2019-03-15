@@ -109,7 +109,7 @@ export class FeatureAction {
       query.length > 3 ? this.searchData({ authId: this.authId, query }) : this.getData({ authId: this.authId })
     req
       .then(({ data }: { data: File[] }) => {
-        this.filesSearchResults = data
+        this.data = data
       })
       .catch(this.handleError)
   }
@@ -156,10 +156,11 @@ export class FeatureAction {
   }
 
   fetchPreviousFolderData = () => {
+    this.ui = InterfaceState.Folder
     if (!this.selectedFolder || !this.selectedFolder.parents) {
       this.data = undefined
       this.filesSearchResults = undefined
-      this.ui = InterfaceState.Authenticated
+      this.listData();
       return
     }
     this.data = undefined
