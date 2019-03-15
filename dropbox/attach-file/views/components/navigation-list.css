@@ -54,6 +54,7 @@ span.label-subtitle {
   text-overflow: ellipsis;
   color: #030d36;
   max-width: 235px;
+  margin-right: 8px;
 }
 
 .display-type {

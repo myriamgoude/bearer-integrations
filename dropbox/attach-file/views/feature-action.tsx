@@ -111,8 +111,9 @@ export class FeatureAction {
     this.rootFolder = false
     this.items = undefined
 
-    this.searchData({ authId: this.authId, query })
-      .then(({ data }: { data: File[] }) => {
+    const req = query.length > 3 ? this.searchData({authId: this.authId, query}) : this.getData({ authId: this.authId})
+
+      req.then(({ data }: { data: File[] }) => {
         this.items = data
       })
       .catch(this.handleError)

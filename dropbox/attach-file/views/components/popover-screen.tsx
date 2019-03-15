@@ -30,7 +30,7 @@ export class PopoverScreen {
   @Element() el: HTMLElement
 
   clearSearch = () => {
-    const search = this.el.querySelector('navigation-search')
+    const search = this.el.querySelector('#navigation-search') as any
     if (search) {
       search.clearValue()
     }
@@ -49,7 +49,7 @@ export class PopoverScreen {
 
       case InterfaceState.Folder:
         return [
-          <navigation-search onSearchQuery={this.handleSearchQuery} />,
+          <navigation-search id='navigation-search' onSearchQuery={this.handleSearchQuery} />,
           <navigation-list items={this.items} onSubmitted={this.onItemSelected} />
         ]
 
