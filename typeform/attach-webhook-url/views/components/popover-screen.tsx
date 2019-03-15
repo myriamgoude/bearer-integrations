@@ -47,7 +47,7 @@ export class PopoverScreen {
         this.clearSearch()
         return <navigation-loader />
 
-      case InterfaceState.Users:
+      case InterfaceState.Forms:
         return [
           <navigation-search id='navigation-search' onSearchQuery={this.handleSearchQuery} />,
           <navigation-list items={this.items} onSubmitHandler={this.onItemSelected} />
@@ -70,7 +70,7 @@ export class PopoverScreen {
         <icon-button
           slot='popover-toggler'
           onClick={this.handlePopoverToggler}
-          text={p('btn.main_action', this.multi ? 2 : 1, 'Get invoices')}
+          text={p('btn.main_action', this.multi ? 2 : 1, 'Create a webhook')}
         />
         <div slot='popover-header'>
           <div {...{ class: this.subHeading ? 'popover-header' : 'popover-header-no-sub' }}>
