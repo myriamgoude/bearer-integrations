@@ -9,9 +9,11 @@ export type File = {
   parents: string[]
 }
 
+export type Folder = File
+
 export type Sheet = {
-  spreadsheetId: string;
-  spreadsheetUrl: string;
+  spreadsheetId: string
+  spreadsheetUrl: string
   properties: {
     title: string
   }

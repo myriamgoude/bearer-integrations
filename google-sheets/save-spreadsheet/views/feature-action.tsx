@@ -10,7 +10,6 @@ import Bearer, {
   Events,
   EventEmitter,
   Intent,
-  Output,
   Prop,
   RootComponent,
   State,
@@ -45,10 +44,10 @@ const StateTitles = {
   group: 'feature'
 })
 export class FeatureAction {
-  @Prop() autoClose: boolean = true;
-  @Prop() authId: string;
-  @Prop() data: string;
-  @Prop() sheetName: string = 'data';
+  @Prop() autoClose: boolean = true
+  @Prop() authId: string
+  @Prop() data: string
+  @Prop() sheetName: string = 'data'
   @Intent('listData') getData: BearerFetch
   @Intent('searchData') searchData: BearerFetch
   @Intent('createSheet') createSheet: BearerFetch
@@ -59,7 +58,6 @@ export class FeatureAction {
   @State() foldersSearchResults: File[] | undefined
   @State() showButton = true
 
-  //
   @State() ui: InterfaceState = InterfaceState.Unauthenticated
   @State() errorMessage: string | undefined
   @State() isAuthorized: boolean = false
@@ -71,10 +69,8 @@ export class FeatureAction {
 
   @Event() authorized: EventEmitter<TAuthorizedPayload>
   @Event() revoked: EventEmitter<TAuthorizedPayload>
-  @Event({eventName: 'created', bubbles: true})
-  created: EventEmitter<File>;
-
-  @Output() folders: File[]
+  @Event({ eventName: 'created', bubbles: true })
+  created: EventEmitter<{ file: File; folder: Folder }>
 
   @Element() el: HTMLElement
 
@@ -84,10 +80,8 @@ export class FeatureAction {
   }
 
   togglePopover = () => {
-    console.log('this.togglePopover', this.ui)
     if (this.ui > InterfaceState.Authenticated) {
       this.ui = InterfaceState.Authenticated
-      console.log(this.ui)
       return
     }
     this.selectedFolder = undefined
@@ -97,12 +91,12 @@ export class FeatureAction {
     this.listRootFolder()
   }
 
-  listFolder = (back) => {
+  listFolder = back => {
     this.items = undefined
     this.errorMessage = undefined
     let params = {} as { folderId: string }
 
-    params.folderId = back ? this.selectedFolder.parents[0] : this.selectedFolder.id;
+    params.folderId = back ? this.selectedFolder.parents[0] : this.selectedFolder.id
 
     this.getData({ authId: this.authId, ...params })
       .then(({ data }: { data: File[] }) => {
@@ -114,11 +108,11 @@ export class FeatureAction {
 
   listRootFolder = () => {
     this.getData({ authId: this.authId })
-        .then(({ data }: { data: File[] }) => {
-          this.items = data
-          this.ui = InterfaceState.Folder
-        })
-        .catch(this.handleError)
+      .then(({ data }: { data: File[] }) => {
+        this.items = data
+        this.ui = InterfaceState.Folder
+      })
+      .catch(this.handleError)
   }
 
   handleSearchQuery = (query: string) => {
@@ -133,29 +127,32 @@ export class FeatureAction {
   }
 
   handleFolderSelection = (selectedItem: File) => {
-    this.selectedFolder = selectedItem;
-    this.rootFolder = false;
+    this.selectedFolder = selectedItem
+    this.rootFolder = false
     this.listFolder(false)
   }
 
   handleSheetCreate = () => {
-    this.ui = InterfaceState.Creating;
-    this.createSheet({sheetName: this.sheetName, data: this.data}).then(({data}: {data: Sheet}) => {
-      if (!this.rootFolder) {
-        this.updateSheet(data);
-        return;
-      }
-      this.ui = InterfaceState.Success
-    }).catch(this.handleError)
+    this.ui = InterfaceState.Creating
+    this.createSheet({ sheetName: this.sheetName, data: this.data })
+      .then(({ data }: { data: Sheet }) => {
+        if (!this.rootFolder) {
+          this.updateSheet(data)
+          return
+        }
+        this.ui = InterfaceState.Success
+      })
+      .catch(this.handleError)
   }
 
   updateSheet = (sheet: Sheet) => {
-    this.updateFile({sheetId: sheet.spreadsheetId, folderId: this.selectedFolder.id}).then(({data}) => {
-      this.ui = InterfaceState.Success;
-      this.created.emit(data);
-      console.log(data);
-    }).catch(this.handleError);
-  };
+    this.updateFile({ sheetId: sheet.spreadsheetId, folderId: this.selectedFolder.id })
+      .then(({ data }) => {
+        this.ui = InterfaceState.Success
+        this.created.emit({ file: data, folder: this.selectedFolder })
+      })
+      .catch(this.handleError)
+  }
 
   handleError = error => {
     this.ui = InterfaceState.Error

@@ -1,5 +1,5 @@
 import { Component, Prop } from '@bearer/core'
-import { File } from '../types'
+import { File, Folder } from '../types'
 import IconView from '../icons/icon-view'
 
 @Component({
@@ -8,21 +8,28 @@ import IconView from '../icons/icon-view'
   shadow: true
 })
 export class FolderDisplay {
-  @Prop() item: File
+  @Prop() file: File
+  @Prop() folder: Folder
 
   render() {
-    if (!this.item) {
+    if (!this.file) {
       return null
     }
 
+    console.log(this.file)
+
     return (
-        <div class="display-container">
-          <div class="display-text">
-            <span><strong>{this.item.name}</strong></span>
-            <span>{this.item.name}</span>
-          </div>
-          <a href={this.item.webViewLink}><IconView /></a>
+      <div class='display-container'>
+        <div class='display-text'>
+          <span>
+            <strong>{this.file.name}</strong>
+          </span>
+          <span>{this.folder && this.folder.name}</span>
         </div>
+        <a href={this.file.webViewLink}>
+          <IconView />
+        </a>
+      </div>
     )
   }
 }
