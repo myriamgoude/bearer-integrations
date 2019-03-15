@@ -20,7 +20,7 @@ export class ConnectAction {
   @Event()
   revoked: EventEmitter<TAuthorizedPayload>
 
-  provider: string = 'Dropbox'
+  provider: string = 'Google'
   @Prop() textUnauthenticated: string = t('connect.login', 'Connect to ' + this.provider)
   @Prop() textAuthenticated: string = t('connect.logout', 'Disconnect from ' + this.provider)
   @Prop() kind: string = 'embed'
