@@ -1,0 +1,35 @@
+.create-container {
+    display: flex;
+    flex-direction: column;
+}
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+.loader {
+    transform: translate(50%, -50%);
+    width: 100px;
+    height: 10px;
+    background: #0FE49B;
+    border-radius: 5px;
+    animation: load 1.7s ease-in-out infinite;
+}
+
+.loader:before, .loader:after {
+               position: absolute;
+               display: block;
+               content: "";
+               animation: load 1.8s ease-in-out infinite;
+               height: 10px;
+               border-radius: 5px;
+           }
+
+@keyframes load {
+    0% {
+        transform: translateX(-40px);
+    }
+    100% {
+        transform: translateX(40px);
+    }
+}
