@@ -140,8 +140,8 @@ export class FeatureAction {
           this.updateSheet(data)
           return
         }
-        // this.ui = InterfaceState.Creating
-        this.ui = InterfaceState.Success
+        this.ui = InterfaceState.Creating
+        // this.ui = InterfaceState.Success
       })
       .catch(this.handleError)
   }
@@ -149,8 +149,8 @@ export class FeatureAction {
   updateSheet = (sheet: Sheet) => {
     this.updateFile({ sheetId: sheet.spreadsheetId, folderId: this.selectedFolder.id })
       .then(({ data }) => {
-        // this.ui = InterfaceState.Creating
-        this.ui = InterfaceState.Success
+        this.ui = InterfaceState.Creating
+        // this.ui = InterfaceState.Success
         this.created.emit({ file: data, folder: this.selectedFolder })
       })
       .catch(this.handleError)

@@ -1,9 +1,10 @@
 .create-container {
     display: flex;
     flex-direction: column;
+
 }
 
-span {
+.text-span  {
     height: 17px;
     width: 139px;
     color: #030D36;
@@ -24,9 +25,8 @@ span {
     border-radius: 5.5px;
     animation: load 1.7s ease-in-out infinite;
     margin-top: 19px;
-    position: absolute;
-    top: 104px;
-    left: 33px;
+    position: relative;
+    top: -19px;
 }
 
 .loader-background {
