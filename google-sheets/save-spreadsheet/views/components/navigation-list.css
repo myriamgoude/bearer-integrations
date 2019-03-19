@@ -17,11 +17,12 @@ ul.navigation-list {
 
 li.navigation-item,
 li.navigation-item > label {
-  line-height: 16px;
+  line-height: 15px;
   display: flex;
   flex: 1;
-  justify-content: flex-end;
+  justify-content: space-between;
   cursor: pointer;
+  text-overflow: ellipsis;
 }
 
 li.navigation-item {
@@ -39,6 +40,25 @@ span.label {
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #030d36;
+  width: 235px;
+  margin-right: 8px;
+}
+
+span.label-subtitle {
+  font-size: 14px;
+  line-height: 17px;
+  letter-spacing: 0.17px;
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #030d36;
+  max-width: 235px;
+  margin-right: 8px;
+}
+
+.display-type {
+  display: grid;
 }
 
 .no-results-content {
@@ -49,11 +69,11 @@ span.label {
 }
 
 .no-results-label {
-  margin: 8px 0;
   color: #030d36;
   font-size: 16px;
   font-weight: 600;
   line-height: 19px;
+  margin: 8px 0 15px;
 }
 
 .no-results-icon {

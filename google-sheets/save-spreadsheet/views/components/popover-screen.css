@@ -1,8 +1,19 @@
 .popover-header {
   display: flex;
+  align-items: flex-start;
+}
+
+.popover-header-no-sub {
+  display: flex;
+  align-items: baseline;
+}
+
+.baseline-align {
+  margin-top: 4px;
 }
 
 .popover-back-nav {
+  cursor: pointer;
   display: inline-block;
   margin-right: 8px;
 }
@@ -36,16 +47,16 @@
   border: none;
   outline: none;
   cursor: pointer;
-  margin: 8px 4px;
+  margin: 8px;
   padding: 0;
 }
 
 .popover-control:last-child {
-  margin-right: 8px;
+  padding-top: 0;
 }
 
 .popover-control > svg {
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .back {

@@ -9,7 +9,9 @@ export class NavigationCreating {
             <div class="create-container">
                 <span>Exporting data to</span>
                 <span><strong>{this.folder}</strong></span>
+                <div class="loader-background">
                 <div class="loader"></div>
+                </div>
             </div>
         )
     }
