@@ -4,7 +4,6 @@
     align-items: center;
     text-align: center;
     margin-bottom: 34px;
-    width: auto;
 }
 
 .text-span {
@@ -13,5 +12,5 @@
     font-size: 14px;
     letter-spacing: 0.17px;
     line-height: 17px;
-    width: auto;
+    width: fit-content;
 }

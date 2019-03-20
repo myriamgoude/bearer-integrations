@@ -116,14 +116,14 @@ export class FeatureAction {
   }
 
   handleSearchQuery = (query: string) => {
-    this.rootFolder = false
     this.items = undefined
-
-    this.searchData({ authId: this.authId, query })
-      .then(({ data }: { data: File[] }) => {
-        this.items = data
-      })
-      .catch(this.handleError)
+    const req =
+        query.length > 3 ? this.searchData({ authId: this.authId, query }) : this.getData({ authId: this.authId })
+    req
+        .then(({ data }: { data: File[] }) => {
+          this.items = data
+        })
+        .catch(this.handleError)
   }
 
   handleFolderSelection = (selectedItem: File) => {
@@ -134,23 +134,23 @@ export class FeatureAction {
 
   handleSheetCreate = () => {
     this.ui = InterfaceState.Creating
-    this.createSheet({ sheetName: this.sheetName, data: this.data })
+    this.createSheet({ authId: this.authId, sheetName: this.sheetName, data: this.data })
       .then(({ data }: { data: Sheet }) => {
         if (!this.rootFolder) {
           this.updateSheet(data)
           return
         }
-        this.ui = InterfaceState.Creating
-        // this.ui = InterfaceState.Success
+        // this.ui = InterfaceState.Creating
+        this.ui = InterfaceState.Success
       })
       .catch(this.handleError)
   }
 
   updateSheet = (sheet: Sheet) => {
-    this.updateFile({ sheetId: sheet.spreadsheetId, folderId: this.selectedFolder.id })
+    this.updateFile({ authId: this.authId, sheetId: sheet.spreadsheetId, folderId: this.selectedFolder.id })
       .then(({ data }) => {
-        this.ui = InterfaceState.Creating
-        // this.ui = InterfaceState.Success
+        // this.ui = InterfaceState.Creating
+        this.ui = InterfaceState.Success
         this.created.emit({ file: data, folder: this.selectedFolder })
       })
       .catch(this.handleError)
@@ -194,16 +194,20 @@ export class FeatureAction {
       this.togglePopover()
     }
 
+    const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
+    const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
+    const handleBack = this.rootFolder ? null : this.handleWorkflowBack
+
     return (
       <popover-screen
         ui={this.ui}
         authId={this.authId}
-        heading={t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''}
+        heading={heading}
         errorMessage={this.errorMessage}
         items={this.items}
-        handleBack={this.rootFolder ? null : this.handleWorkflowBack}
+        handleBack={handleBack}
         handleClose={this.handleExternalClick}
-        handleMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
+        handleMenu={handleMenu}
         handlePopoverToggler={this.togglePopover}
         handleSearchQuery={this.handleSearchQuery}
         handleItemSelection={this.handleFolderSelection}
