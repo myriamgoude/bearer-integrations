@@ -10,11 +10,30 @@ import IconSuccess from '../icons/icon-success';
 export class EventDisplay {
   @Prop() item: any = undefined;
 
+  getLink = () => {
+    let id = `${this.item.type}Id`;
+    if (this.item.type === 'contact') {
+      return this.item.data['profile-url']
+    }
+    return `https://app.hubspot.com/contacts/${this.item.data.portalId}/${this.item.type}/${this.item.data[id]}`
+  };
+
+  renderMessage = () => {
+    switch (this.item.type) {
+      case 'company':
+        return `${this.item.data.properties.name.value}`;
+      case 'deal':
+        return `${this.item.data.properties.dealname.value}`;
+      case 'contact':
+        return `${this.item.data.properties.firstname.value} ${this.item.data.properties.lastname.value}`;
+    }
+  }
+
   render() {
     return this.item ? <div class="event-created-msg">
       <IconSuccess />
-      <span>Your event "{this.item.summary}" has been created</span>
-      <a href={this.item.htmlLink} target="_blank">
+      <span>Your {this.item.type} "<strong>{this.renderMessage()}</strong>" has been created</span>
+      <a href={this.getLink()} target="_blank">
         <IconView />
       </a>
     </div> : null;

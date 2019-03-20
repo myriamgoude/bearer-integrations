@@ -47,33 +47,66 @@
               <h1 class="page-title">Action component</h1>
             </div>
             <div class="card">
-              <form id="eventForm">
+
+              <select onchange="handleFormChange()" name="" id="typeSelect">
+                <option value="deal">Deal</option>
+                <option value="contact">Contact</option>
+                <option value="company">Company</option>
+              </select>
+
+              <form id="dealForm">
                   <div class="list-item">
-                    <label for="summary">Title</label>
-                    <input id="summary" name="summary" type="text" value="Bearer" />
+                    <label>Deal name</label>
+                    <input name="summary" type="text" value="Bearer" />
                   </div>
                   <div class="list-item">
-                    <label for="date">Date</label>
-                    <input id="date" name="date" type="date" value="" />
+                    <label>Deal stage</label>
+                    <input name="date" type="text" value="" />
                   </div>
                   <div class="list-item">
-                    <label for="startTime">Starting hour</label>
-                    <input id="startTime" name="startTime" type="time" value="" />
+                    <label>Amount</label>
+                    <input name="startTime" type="number" value="" />
                   </div>
-                  <div class="list-item">
-                    <label for="endTime">Ending hour</label>
-                    <input id="endTime" name="endTime" type="time" value="" />
-                  </div>
-                  <div class="list-item">
-                    <label for="location">Location</label>
-                    <input id="location" name="location" type="text" value="Neoteric" />
-                  </div>
-                  <div class="list-item">
-                    <label for="attendees">Attendees</label>
-                    <input id="attendees" name="attendees" type="text" value="pawel.putko@neoteirc.eu;pawelputko@gmail.com" />
-                  </div>
-                <input value="pawelputko@gmail.com" type="text" id="calendarId" placeholder="Calendar ID" />
               </form>
+
+              <form id="contactForm" style="display: none">
+                <div class="list-item">
+                  <label>First Name</label>
+                  <input  name="summary" type="text" value="Bearer" />
+                </div>
+                <div class="list-item">
+                  <label>Last Name</label>
+                  <input  name="date" type="text" value="" />
+                </div>
+                <div class="list-item">
+                  <label>Email</label>
+                  <input  name="startTime" type="text" value="" />
+                </div>
+                <div class="list-item">
+                  <label>Website</label>
+                  <input  name="endTime" type="text" value="" />
+                </div>
+                <div class="list-item">
+                  <label>Company</label>
+                  <input  name="location" type="text" value="Neoteric" />
+                </div>
+                <div class="list-item">
+                  <label>Address</label>
+                  <input name="attendees" type="text" value="" />
+                </div>
+              </form>
+
+              <form id="companyForm" style="display: none">
+                <div class="list-item">
+                  <label>Company name</label>
+                  <input  name="summary" type="text" value="Bearer" />
+                </div>
+                <div class="list-item">
+                  <label>Description</label>
+                  <input  name="date" type="date" value="" />
+                </div>
+              </form>
+              <input type="text" placeholder="Entry ID" />
               <button onclick="handleForm()">Save</button>
 
               <script>
@@ -101,6 +134,27 @@
 
                   document.getElementById('featureAction').setAttribute('event', JSON.stringify(event));
                   document.getElementById('featureAction').setAttribute('calendarId', document.getElementById('calendarId').value);
+                }
+
+                function handleFormChange() {
+                  const select = document.getElementById('typeSelect');
+                  switch(select.value) {
+                    case 'deal':
+                      document.getElementById('dealForm').style.display = 'block';
+                      document.getElementById('contactForm').style.display = 'none';
+                      document.getElementById('companyForm').style.display = 'none';
+                      break;
+                    case 'contact':
+                      document.getElementById('dealForm').style.display = 'none';
+                      document.getElementById('contactForm').style.display = 'block';
+                      document.getElementById('companyForm').style.display = 'none';
+                      break;
+                    case 'company':
+                      document.getElementById('dealForm').style.display = 'none';
+                      document.getElementById('contactForm').style.display = 'none';
+                      document.getElementById('companyForm').style.display = 'block';
+                      break;
+                  }
                 }
               </script>
 

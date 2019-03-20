@@ -58,7 +58,7 @@ export class NavigationCreate {
             <form id="companyForm">
                 <div class="form-group">
                     <label>Company name</label>
-                    <input name="name" type="text"/>
+                    <input required name="name" type="text"/>
                 </div>
 
                 <div class="form-group">
@@ -74,17 +74,17 @@ export class NavigationCreate {
             <form id="contactForm">
                 <div class="form-group">
                     <label>First name</label>
-                    <input name="firstname" type="text"/>
+                    <input required name="firstname" type="text"/>
                 </div>
 
                 <div class="form-group">
                     <label>Last name</label>
-                    <input name="lastname" type="text"/>
+                    <input required name="lastname" type="text"/>
                 </div>
 
                 <div class="form-group">
                     <label>Email</label>
-                    <input name="email" type="text"/>
+                    <input required name="email" type="text"/>
                 </div>
 
                 <div class="form-group">
@@ -130,11 +130,11 @@ export class NavigationCreate {
             <form id="dealForm">
                 <div class="form-group">
                     <label>Deal name</label>
-                    <input name="dealname" type="text"/>
+                    <input required name="dealname" type="text"/>
                 </div>
                 <div class="form-group">
                     <label>Deal stage</label>
-                    <select name="dealstage">
+                    <select required name="dealstage">
                         <option value="appointmentscheduled">Appointment Scheduled</option>
                         <option value="qualifiedtobuy">Qualified To Buy</option>
                         <option value="presentationscheduled">Presentation Scheduled</option>

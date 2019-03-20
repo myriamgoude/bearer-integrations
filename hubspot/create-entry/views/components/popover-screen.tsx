@@ -53,7 +53,7 @@ export class PopoverScreen {
         <icon-button
           slot='popover-toggler'
           onClick={this.handlePopoverToggler}
-          text={this.calendarId ? p('btn.main_action', 0, 'Create event') : p('btn.main_action', 0, 'Show meetings')}
+          text={this.calendarId ? p('btn.main_action', 0, 'Create event') : p('btn.main_action', 0, 'Sync informations')}
         />
         <div slot='popover-header'>
           <div class='popover-header'>

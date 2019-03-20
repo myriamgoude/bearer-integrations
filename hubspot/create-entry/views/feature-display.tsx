@@ -16,7 +16,6 @@ export class FeatureDisplay {
 
   @Listen('body:feature-created')
   resolveEvent(e) {
-    debugger
     this.event = e.detail;
   }
 

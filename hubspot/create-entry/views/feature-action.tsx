@@ -83,10 +83,10 @@ export class FeatureAction {
     this.errorMessage = error.error
   }
 
-  handleEntryCreation = (data) => {
-    this.createEntry({data: JSON.stringify(data.body), type: data.type}).then(({ data }: { data: any }) => {
+  handleEntryCreation = (entry) => {
+    this.createEntry({data: JSON.stringify(entry.body), type: entry.type}).then(({ data }: { data: any }) => {
       this.ui = InterfaceState.Authenticated;
-      this.created.emit(data);
+      this.created.emit({data, type: entry.type});
     }).catch(this.handleError)
   }
 
@@ -108,7 +108,7 @@ export class FeatureAction {
 
   renderUnauthorized: any = () => (
     <connect-action
-      text-unauthenticated={p('btn.main_action', 0, 'Create event')}
+      text-unauthenticated={p('btn.main_action', 0, 'Sync informations')}
       onClick={() => {
         this.openPopoverOnceLoggedIn = true
       }}
