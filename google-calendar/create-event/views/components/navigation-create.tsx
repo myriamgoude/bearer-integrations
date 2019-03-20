@@ -80,7 +80,7 @@ export class NavigationCreate {
             <input type='email' value={this.form.attendees} onInput={event => this.handleChange(event, 'attendees')} />
           </li>
         </ul>
-        <bearer-button onClick={this.handleSubmit}>{t('form.create', 'Create event')}</bearer-button>
+        <bearer-button onClick={this.handleSubmit}>{t('form.create', 'Save')}</bearer-button>
       </form>
     )
   }
