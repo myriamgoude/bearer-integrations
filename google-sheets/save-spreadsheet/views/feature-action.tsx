@@ -143,26 +143,25 @@ export class FeatureAction {
   }
 
   handleFolderSelection = (selectedItem: File) => {
-    this.subHeading = selectedItem
-        ? t('texts.selectedFolder', 'From {{name}}', {name: selectedItem.name})
-        : undefined;
+    // this.subHeading = selectedItem
+    //     ? t('texts.selectedFolder', 'From {{name}}', {name: selectedItem.name})
+    //     : undefined;
     this.selectedFolder = selectedItem
-    this.folders.push(selectedItem)
+    // this.folders.push(selectedItem)
     this.rootFolder = false
     this.listFolder(false)
   }
 
   handleSheetCreate = () => {
     this.subHeading = undefined;
-    this.rootFolder = true
     this.ui = InterfaceState.Creating
     this.createSheet({ authId: this.authId, sheetName: this.sheetName, data: this.data })
       .then(({ data }: { data: Sheet }) => {
         if (!this.rootFolder) {
           this.updateSheet(data)
+
           return
         }
-        // this.ui = InterfaceState.Creating
         this.createSubHeading = "Google Drive"
         this.ui = InterfaceState.Success
       })
@@ -172,7 +171,6 @@ export class FeatureAction {
   updateSheet = (sheet: Sheet) => {
     this.updateFile({ authId: this.authId, sheetId: sheet.spreadsheetId, folderId: this.selectedFolder.id })
       .then(({ data }) => {
-        // this.ui = InterfaceState.Creating
         this.ui = InterfaceState.Success
         this.created.emit({ file: data, folder: this.selectedFolder })
       })
@@ -180,7 +178,6 @@ export class FeatureAction {
   }
 
   handleError = error => {
-    debugger
     this.ui = InterfaceState.Error
     this.errorMessage = error.error
   }
@@ -200,6 +197,7 @@ export class FeatureAction {
   handleMenu = () => {
     this.ui = InterfaceState.Settings
     this.selectedFolder = undefined
+    this.subHeading = undefined
   }
 
   renderUnauthorized: any = () => (
@@ -220,11 +218,11 @@ export class FeatureAction {
     }
 
     const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
-    // const subHeading = this.selectedFolder
-    //     ? t('texts.selectedFolder', 'From {{name}}', {name: this.selectedFolder.name})
-    //     : undefined
     const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
     const handleBack = (this.rootFolder ? null : this.handleWorkflowBack) || (this.ui === InterfaceState.Settings && this.handleWorkflowBack)
+    // const subHeading = this.foldersData
+    //     ? t('texts.selectedFolder', 'From {{name}}', {name: this.foldersData.name})
+    //     : undefined;
 
     return (
       <popover-screen

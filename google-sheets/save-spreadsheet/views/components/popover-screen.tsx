@@ -15,12 +15,9 @@ export class PopoverScreen {
   @Prop() multi: boolean = false
 
   @Prop() heading: string
-  // @Prop() subHeading: string = "The test folder"
   @Prop() subHeading: string
   @Prop() errorMessage: string
-
   @Prop() createSubHeading: string
-
 
   @Prop() items: NavigationItem[]
   @Prop() handleClose: any
