@@ -10,7 +10,7 @@ export class NavigationList {
   @Prop() onSubmitted: any
   @Prop() onSaveClicked: any
 
-    @State() selectedFolder: File;
+  @State() selectedFolder: File;
 
   handleSubmit(selection: NavigationItem) {
     if (this.onSubmitted) {

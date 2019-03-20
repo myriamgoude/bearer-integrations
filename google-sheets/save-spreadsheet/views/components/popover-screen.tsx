@@ -15,8 +15,12 @@ export class PopoverScreen {
   @Prop() multi: boolean = false
 
   @Prop() heading: string
-  @Prop() subHeading: string = "The test folder"
+  // @Prop() subHeading: string = "The test folder"
+  @Prop() subHeading: string
   @Prop() errorMessage: string
+
+  @Prop() createSubHeading: string
+
 
   @Prop() items: NavigationItem[]
   @Prop() handleClose: any
@@ -48,7 +52,7 @@ export class PopoverScreen {
         return <navigation-error message={this.errorMessage} onRetry={this.handleRetry} />
 
       case InterfaceState.Creating:
-        return <navigation-creating folder={this.subHeading} />
+        return <navigation-creating folder={this.createSubHeading} />
 
       case InterfaceState.Success:
         return <navigation-success />

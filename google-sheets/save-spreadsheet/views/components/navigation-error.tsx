@@ -8,9 +8,11 @@ export class NavigationError {
   render() {
     return [
       <div class='alert error'>{this.message}</div>,
+        <div class="position">
       <bearer-button kind='secondary' onClick={this.onRetry}>
         {'Retry'}
       </bearer-button>
-    ]
+        </div>
+          ]
   }
 }

@@ -57,6 +57,8 @@ export class FeatureAction {
   @State() selectedFolder: File | undefined
   @State() foldersSearchResults: File[] | undefined
   @State() showButton = true
+  @State() subHeading: any;
+  @State() createSubHeading: string = "Google Drive"
 
   @State() ui: InterfaceState = InterfaceState.Unauthenticated
   @State() errorMessage: string | undefined
@@ -64,13 +66,14 @@ export class FeatureAction {
 
   @State() items: File[] | undefined
 
+  folders: any[] = [];
   rootFolder: boolean = true
   openPopoverOnceLoggedIn: boolean = false
 
   @Event() authorized: EventEmitter<TAuthorizedPayload>
   @Event() revoked: EventEmitter<TAuthorizedPayload>
   @Event({ eventName: 'created', bubbles: true })
-  created: EventEmitter<{ file: File; folder: Folder }>
+  created: EventEmitter<{ file: File; folder: any }>
 
   @Element() el: HTMLElement
 
@@ -92,16 +95,29 @@ export class FeatureAction {
   }
 
   listFolder = back => {
+    console.log(back)
+    this.subHeading = this.selectedFolder
+        ? t('texts.selectedFolder', 'From {{name}}', {name: this.selectedFolder.name})
+        : undefined;
+    this.createSubHeading = this.selectedFolder
+        ? t('texts.selectedFolder', '{{name}}', {name: this.selectedFolder.name})
+        : undefined;
+
     this.items = undefined
     this.errorMessage = undefined
     let params = {} as { folderId: string }
 
-    params.folderId = back ? this.selectedFolder.parents[0] : this.selectedFolder.id
+    params.folderId = this.selectedFolder ? this.selectedFolder.id : null;
 
     this.getData({ authId: this.authId, ...params })
       .then(({ data }: { data: File[] }) => {
         this.items = data
         this.ui = InterfaceState.Folder
+        if (this.selectedFolder) {
+          this.selectedFolder = this.folders.find(item => item.id === this.selectedFolder.parents[0]);
+        } else {
+          this.rootFolder = true
+        }
       })
       .catch(this.handleError)
   }
@@ -127,12 +143,18 @@ export class FeatureAction {
   }
 
   handleFolderSelection = (selectedItem: File) => {
+    this.subHeading = selectedItem
+        ? t('texts.selectedFolder', 'From {{name}}', {name: selectedItem.name})
+        : undefined;
     this.selectedFolder = selectedItem
+    this.folders.push(selectedItem)
     this.rootFolder = false
     this.listFolder(false)
   }
 
   handleSheetCreate = () => {
+    this.subHeading = undefined;
+    this.rootFolder = true
     this.ui = InterfaceState.Creating
     this.createSheet({ authId: this.authId, sheetName: this.sheetName, data: this.data })
       .then(({ data }: { data: Sheet }) => {
@@ -141,6 +163,7 @@ export class FeatureAction {
           return
         }
         // this.ui = InterfaceState.Creating
+        this.createSubHeading = "Google Drive"
         this.ui = InterfaceState.Success
       })
       .catch(this.handleError)
@@ -157,6 +180,7 @@ export class FeatureAction {
   }
 
   handleError = error => {
+    debugger
     this.ui = InterfaceState.Error
     this.errorMessage = error.error
   }
@@ -175,6 +199,7 @@ export class FeatureAction {
 
   handleMenu = () => {
     this.ui = InterfaceState.Settings
+    this.selectedFolder = undefined
   }
 
   renderUnauthorized: any = () => (
@@ -195,14 +220,19 @@ export class FeatureAction {
     }
 
     const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
+    // const subHeading = this.selectedFolder
+    //     ? t('texts.selectedFolder', 'From {{name}}', {name: this.selectedFolder.name})
+    //     : undefined
     const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
-    const handleBack = this.rootFolder ? null : this.handleWorkflowBack
+    const handleBack = (this.rootFolder ? null : this.handleWorkflowBack) || (this.ui === InterfaceState.Settings && this.handleWorkflowBack)
 
     return (
       <popover-screen
         ui={this.ui}
         authId={this.authId}
         heading={heading}
+        subHeading={this.subHeading}
+        createSubHeading={this.createSubHeading}
         errorMessage={this.errorMessage}
         items={this.items}
         handleBack={handleBack}
@@ -219,6 +249,7 @@ export class FeatureAction {
 
   handleExternalClick = (_e: Event) => {
     this.items = undefined
+    this.folders = [];
     this.rootFolder = true
     if (this.ui != InterfaceState.Unauthenticated) {
       this.ui = InterfaceState.Authenticated
