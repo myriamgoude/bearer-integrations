@@ -22,6 +22,7 @@ li.navigation-item > label {
   flex: 1;
   cursor: pointer;
   justify-content: space-between;
+  text-overflow: ellipsis;
 }
 
 li.navigation-item {
@@ -39,6 +40,8 @@ span.label {
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #030d36;
+  margin-bottom: 20px;
+  width: auto;
 }
 
 span.date {

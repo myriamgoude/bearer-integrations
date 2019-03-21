@@ -1,1 +1,23 @@
-export default () => (<svg height="100%" width="100%" class="svg-icon" xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" ><path fill="#AEB2C3" d="M23,50c0,5-4,9-9,9s-9-4-9-9c0-5,4-9,9-9S23,45,23,50z M86,41c-5,0-9,4-9,9c0,5,4,9,9,9s9-4,9-9C95,45,91,41,86,41z M51,41  c-5,0-9,4-9,9c0,5,4,9,9,9c5,0,9-4,9-9C60,45,56,41,51,41z"/></svg>)
+export default () => (
+    <svg width="18px" height="4px" viewBox="0 0 18 5" version="1.1" x="0px" y="0px" xmlns="http://www.w3.org/2000/svg">
+        <title>2CF6C750-3016-4324-B4A8-199A2C3E5D38@3x</title>
+        <desc>Created with sketchtool.</desc>
+        <g id="Scenarios" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+            <g id="Stripe-attachinvoices" transform="translate(-531.000000, -313.000000)" fill="#AEB2C3" fill-rule="nonzero">
+                <g id="Group-2" transform="translate(268.000000, 300.000000)">
+                    <g id="Components/popin/default">
+                        <g id="Group">
+                            <g id="Components/List/HeadBack">
+                                <g id="Components/moreSettings" transform="translate(263.000000, 12.478261)">
+                                    <circle id="Oval" cx="16" cy="2.9130435" r="2"></circle>
+                                    <circle id="Oval" cx="9" cy="2.9130435" r="2"></circle>
+                                    <circle id="Oval" cx="2" cy="2.9130435" r="2"></circle>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </svg>
+)

@@ -56,7 +56,7 @@ export class NavigationCreate {
         <ul class='navigation-form'>
           <li class='navigation-form-group'>
             <span>{t('form.title', 'Title')}</span>
-            <input type='text' value={this.form.summary} onInput={event => this.handleChange(event, 'summary')} />
+            <input type='text' value={this.form.summary} onInput={event => this.handleChange(event, 'summary')} placeholder="Name of the event" />
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.date', 'Date')}</span>
@@ -65,22 +65,24 @@ export class NavigationCreate {
           <li class='navigation-form-group'>
             <span>{t('form.date_starting_hour', 'Starting hour')}</span>
 
-            <input type='time' value={this.form.startHour} onInput={event => this.handleChange(event, 'startHour')} />
+            <input type='time' value={this.form.startHour} onInput={event => this.handleChange(event, 'startHour')} placeholder="Pick an hour" />
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.date_ending_hour', 'Ending hour')}</span>
-            <input type='time' value={this.form.endHour} onInput={event => this.handleChange(event, 'endHour')} />
+            <input type='time' value={this.form.endHour} onInput={event => this.handleChange(event, 'endHour')} placeholder="Pick an hour" />
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.location', 'Location')}</span>
-            <input type='text' value={this.form.location} onInput={event => this.handleChange(event, 'location')} />
+            <input type='text' value={this.form.location} onInput={event => this.handleChange(event, 'location')} placeholder="Location and/or link" />
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.attendees', 'Attendees')}</span>
-            <input type='email' value={this.form.attendees} onInput={event => this.handleChange(event, 'attendees')} />
+            <input type='email' value={this.form.attendees} onInput={event => this.handleChange(event, 'attendees')} placeholder="fill in emails" />
           </li>
         </ul>
-        <bearer-button onClick={this.handleSubmit}>{t('form.create', 'Save')}</bearer-button>
+        <div class="btn-position">
+          <bearer-button onClick={this.handleSubmit}>{t('form.create', 'Save')}</bearer-button>
+        </div>
       </form>
     )
   }

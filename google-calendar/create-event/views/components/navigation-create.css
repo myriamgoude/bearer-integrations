@@ -9,3 +9,31 @@ ul.navigation-form {
   display: flex;
   justify-content: space-between;
 }
+
+.btn-position {
+  margin-top: 45px;
+  float: right;
+}
+
+span {
+  height: 17px;
+  width: 100.37px;
+  color: #030D36;
+  font-size: 14px;
+  letter-spacing: 0.17px;
+  line-height: 17px;
+  margin-bottom: 20px;
+}
+
+input {
+  height: 17px;
+  width: 160.18px;
+  color: #C2C7DA;
+  font-size: 14px;
+  letter-spacing: 0.17px;
+  line-height: 17px;
+  text-align: right;
+  margin-bottom: 20px;
+  border: none;
+
+}
