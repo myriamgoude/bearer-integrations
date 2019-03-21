@@ -26,7 +26,8 @@ li.navigation-item > label {
 }
 
 li.navigation-item {
-  margin-bottom: 16px;
+  /*margin-bottom: 16px;*/
+  /*margin-bottom: 20px;*/
 }
 
 li.navigation-item:last-child {

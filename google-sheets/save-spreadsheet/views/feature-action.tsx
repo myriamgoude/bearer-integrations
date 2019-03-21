@@ -143,11 +143,11 @@ export class FeatureAction {
   }
 
   handleFolderSelection = (selectedItem: File) => {
-    // this.subHeading = selectedItem
-    //     ? t('texts.selectedFolder', 'From {{name}}', {name: selectedItem.name})
-    //     : undefined;
+    this.subHeading = selectedItem
+        ? t('texts.selectedFolder', 'From {{name}}', {name: selectedItem.name})
+        : undefined;
     this.selectedFolder = selectedItem
-    // this.folders.push(selectedItem)
+    this.folders.push(selectedItem)
     this.rootFolder = false
     this.listFolder(false)
   }

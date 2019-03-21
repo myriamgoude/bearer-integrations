@@ -25,7 +25,12 @@ export class NavigationCreate {
   constructor() {
     const now = new Date()
     this.form.startHour = `${now.getHours() + 1}:00`
+    // this.form.startHour = `Pick an hour`
     this.form.endHour = `${now.getHours() + 2}:00`
+    // this.form.date = `${now.getFullYear() + "-" + now.getMonth() + "-" + now.getDay()}`
+    this.form.date = `2019-12-12`
+    console.log("TUTEJ " + this.form.date)
+
   }
 
   handleSubmit = () => {
@@ -60,7 +65,7 @@ export class NavigationCreate {
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.date', 'Date')}</span>
-            <input type='date' value={this.form.date} onInput={event => this.handleChange(event, 'date')} />
+            <input id="datePicker" type='date' value={this.form.date} onInput={event => this.handleChange(event, 'date')} />
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.date_starting_hour', 'Starting hour')}</span>
