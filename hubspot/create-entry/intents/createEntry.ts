@@ -6,11 +6,9 @@ export default class ListEventsIntent extends FetchData
   async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
     const token = event.context.authAccess.accessToken;
     const body = event.params;
-    console.log(body);
-    // Client(token, body.type).post('', JSON.parse(body.data)).catch(console.log);
     const { data } = await Client(token, body.type).post('', JSON.parse(body.data));
     if (data.errors) {
-      const message = data.errors.map((e: { message: string }) => e.message).join(', ')
+      const message = data.errors.map((e: { message: string }) => e.message).join(', ');
       return { error: message }
     }
 

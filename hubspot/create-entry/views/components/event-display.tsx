@@ -32,7 +32,7 @@ export class EventDisplay {
   render() {
     return this.item ? <div class="event-created-msg">
       <IconSuccess />
-      <span>Your {this.item.type} "<strong>{this.renderMessage()}</strong>" has been created</span>
+      {this.item.updated ? <span>Your {this.item.type} "<strong>{this.renderMessage()}</strong>" has been updated</span> : <span>Your {this.item.type} "<strong>{this.renderMessage()}</strong>" has been created</span>}
       <a href={this.getLink()} target="_blank">
         <IconView />
       </a>

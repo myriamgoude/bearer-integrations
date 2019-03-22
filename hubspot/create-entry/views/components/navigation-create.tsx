@@ -38,7 +38,6 @@ export class NavigationCreate {
                 })
             }
         });
-        console.log(obj);
         this.onSubmitted({type: this.selectValue, body: obj})
     }
 

@@ -20,6 +20,7 @@ export enum InterfaceState {
   Authenticated = 'Authenticated',
   Loading = 'Loading',
   Entry = 'Entry',
+  Update = 'Update',
   Settings = 'Settings',
   Error = 'Error'
 }
@@ -38,14 +39,18 @@ const StateTitles = {
 export class FeatureAction {
   @Prop() autoClose: boolean = true
   @Prop() authId: string
-  @Prop() event: string
-  @Prop() calendarid: string
+  @Prop() updateentry: string
+  @Prop() entryid: string
 
   @Intent('createEntry') createEntry: BearerFetch
+  @Intent('fetchEntry') fetchEntry: BearerFetch
+  @Intent('updateEntry') updateEntry: BearerFetch
 
   @State() ui: InterfaceState = InterfaceState.Unauthenticated
   @State() errorMessage: string | undefined
   @State() isAuthorized: boolean = false
+  @State() entry;
+  @State() updatedEntry;
 
   openPopoverOnceLoggedIn: boolean = false
 
@@ -68,10 +73,12 @@ export class FeatureAction {
       return
     }
 
-    if (this.event && this.calendarid) {
-      this.createEntry({data: this.event, calendarId: this.calendarid}).then(({ data }: { data: any }) => {
-        this.ui = InterfaceState.Authenticated;
-        this.created.emit(data);
+    if (this.updateentry && this.entryid) {
+      const entry = JSON.parse(this.updateentry);
+      this.updatedEntry = entry;
+      this.fetchEntry({id: this.entryid, type: entry.type}).then(({ data }: { data: any }) => {
+        this.entry = data;
+        this.ui = InterfaceState.Update;
       }).catch(this.handleError)
     } else {
       this.ui = InterfaceState.Entry;
@@ -90,11 +97,18 @@ export class FeatureAction {
     }).catch(this.handleError)
   }
 
+  handleEntryUpdate = () => {
+    this.updateEntry({id: this.entryid, data: JSON.stringify(this.updatedEntry)}).then(({ data }: { data: any }) => {
+      this.ui = InterfaceState.Authenticated;
+      this.created.emit({data, type: this.updatedEntry.type, updated: true});
+    }).catch(this.handleError)
+  }
+
   handleWorkflowBack = () => {
     switch (this.ui) {
       case InterfaceState.Settings:
         this.ui = InterfaceState.Entry;
-        break
+        break;
       case InterfaceState.Error:
       case InterfaceState.Entry:
         this.ui = InterfaceState.Authenticated;
@@ -124,7 +138,8 @@ export class FeatureAction {
     return (
       <popover-screen
         ui={this.ui}
-        calendarId={this.calendarid}
+        entry={this.entry}
+        updateEntry={this.updatedEntry}
         authId={this.authId}
         heading={t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''}
         errorMessage={this.errorMessage}
@@ -133,6 +148,7 @@ export class FeatureAction {
         handleMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
         handlePopoverToggler={this.togglePopover}
         handleEntryCreation={this.handleEntryCreation}
+        handleEntryUpdate={this.handleEntryUpdate}
         handleRetry={this.handleRetry}
       />
     )

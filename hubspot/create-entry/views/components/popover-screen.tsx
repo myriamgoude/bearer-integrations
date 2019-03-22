@@ -11,7 +11,8 @@ import {InterfaceState} from '../feature-action'
 export class PopoverScreen {
   @Prop() ui: InterfaceState
   @Prop() authId: string
-  @Prop() calendarId: string
+  @Prop() entry: any;
+  @Prop() updateEntry: any;
 
   @Prop() heading: string
   @Prop() subHeading: string
@@ -22,12 +23,17 @@ export class PopoverScreen {
   @Prop() handleMenu: any
   @Prop() handlePopoverToggler: any
   @Prop() handleEntryCreation: any
+  @Prop() handleEntryUpdate: any
   @Prop() handleRetry: any
 
   @Element() el: HTMLElement
 
   onEventCreated = (...arg) => {
     this.handleEntryCreation(...arg)
+  }
+
+  onEventUpdated = () => {
+    this.handleEntryUpdate();
   }
 
   renderNavigation = () => {
@@ -37,6 +43,9 @@ export class PopoverScreen {
 
       case InterfaceState.Entry:
         return <navigation-create onSubmitted={this.onEventCreated} />
+
+      case InterfaceState.Update:
+        return <navigation-update updateEntry={this.updateEntry} entry={this.entry} onSubmitted={this.onEventUpdated} />
 
       case InterfaceState.Settings:
         return <connect-action authId={this.authId} text-authenticated={t('btn.logout', 'Logout')} icon='ios-log-out' />
@@ -53,7 +62,7 @@ export class PopoverScreen {
         <icon-button
           slot='popover-toggler'
           onClick={this.handlePopoverToggler}
-          text={this.calendarId ? p('btn.main_action', 0, 'Create event') : p('btn.main_action', 0, 'Sync informations')}
+          text={p('btn.main_action', 0, 'Sync informations')}
         />
         <div slot='popover-header'>
           <div class='popover-header'>
