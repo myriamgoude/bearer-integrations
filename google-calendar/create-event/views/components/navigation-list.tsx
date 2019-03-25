@@ -53,7 +53,9 @@ export class NavigationList {
                             <span class='label'>{item.summary}</span>
                             {item['start'] ? <span class="date">{this.parseDate(item)}</span> : null}
                         </div>
-                        {this.multi ? <IconPath/> : null}
+                        <div class="path-position">
+                            <IconPath/>
+                        </div>
                     </li>
                 ))}
             </ul>
