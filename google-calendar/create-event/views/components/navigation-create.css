@@ -3,6 +3,7 @@ ul.navigation-form {
   margin: 0;
   padding: 0;
   cursor: pointer;
+  margin-top: 20px;
 }
 
 .navigation-form-group {
@@ -28,12 +29,22 @@ span {
 input {
   height: 17px;
   width: 160.18px;
-  color: #C2C7DA;
+  color: #6A7397;
   font-size: 14px;
   letter-spacing: 0.17px;
   line-height: 17px;
   text-align: right;
   margin-bottom: 20px;
   border: none;
-
+  font-weight: 600;
+}
+::placeholder {
+  height: 17px;
+  width: 160.18px;
+  color: #C2C7DA;
+  font-size: 14px;
+  letter-spacing: 0.17px;
+  line-height: 17px;
+  text-align: right;
+  font-weight: normal;
 }

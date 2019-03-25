@@ -21,16 +21,12 @@ export class NavigationCreate {
     location: ''
   }
   @State() form = {} as Data
+  @State() setState = 'text'
 
   constructor() {
     const now = new Date()
     this.form.startHour = `${now.getHours() + 1}:00`
-    // this.form.startHour = `Pick an hour`
     this.form.endHour = `${now.getHours() + 2}:00`
-    // this.form.date = `${now.getFullYear() + "-" + now.getMonth() + "-" + now.getDay()}`
-    this.form.date = `2019-12-12`
-    console.log("TUTEJ " + this.form.date)
-
   }
 
   handleSubmit = () => {
@@ -55,6 +51,14 @@ export class NavigationCreate {
     this.form[type] = event.target.value
   }
 
+  onFocus(event, type) {
+    event.target.type = type;
+  }
+
+  onBlur(event, type) {
+    event.target.type = type;
+  }
+
   render() {
     return (
       <form>
@@ -65,16 +69,15 @@ export class NavigationCreate {
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.date', 'Date')}</span>
-            <input id="datePicker" type='date' value={this.form.date} onInput={event => this.handleChange(event, 'date')} />
+            <input type={ this.setState } onFocus={event =>  this.onFocus(event, 'date') } onBlur={event => this.onBlur(event, 'text') } placeholder="Pick a date" onInput={event => this.handleChange(event, 'date')} />
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.date_starting_hour', 'Starting hour')}</span>
-
-            <input type='time' value={this.form.startHour} onInput={event => this.handleChange(event, 'startHour')} placeholder="Pick an hour" />
+            <input type={ this.setState } onFocus={event =>  this.onFocus(event, 'time') } onBlur={event => this.onBlur(event, 'text') } placeholder="Pick an hour" onInput={event => this.handleChange(event, 'startHour')} />
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.date_ending_hour', 'Ending hour')}</span>
-            <input type='time' value={this.form.endHour} onInput={event => this.handleChange(event, 'endHour')} placeholder="Pick an hour" />
+            <input type={ this.setState }  onFocus={event =>  this.onFocus(event, 'time') } onBlur={event => this.onBlur(event, 'text') } placeholder="Pick an hour" onInput={event => this.handleChange(event, 'endHour')} />
           </li>
           <li class='navigation-form-group'>
             <span>{t('form.location', 'Location')}</span>

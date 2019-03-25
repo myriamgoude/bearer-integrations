@@ -25,11 +25,6 @@ li.navigation-item > label {
   text-overflow: ellipsis;
 }
 
-li.navigation-item {
-  /*margin-bottom: 16px;*/
-  /*margin-bottom: 20px;*/
-}
-
 li.navigation-item:last-child {
   margin-bottom: 0;
 }

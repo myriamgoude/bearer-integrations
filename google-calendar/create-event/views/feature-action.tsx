@@ -149,17 +149,21 @@ export class FeatureAction {
       this.togglePopover()
     }
 
+    const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
+    const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
+    const handleBack = (this.ui === InterfaceState.Settings && this.handleWorkflowBack)  || (this.ui === InterfaceState.Event && this.handleWorkflowBack)
+
     return (
       <popover-screen
         ui={this.ui}
         calendarId={this.calendarid}
         authId={this.authId}
-        heading={t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''}
+        heading={heading}
         errorMessage={this.errorMessage}
         items={this.items}
-        handleBack={this.handleWorkflowBack}
+        handleBack={handleBack}
         handleClose={this.handleExternalClick}
-        handleMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
+        handleMenu={handleMenu}
         handlePopoverToggler={this.togglePopover}
         handleItemSelection={this.handleItemSelectìon}
         handleEventCreation={this.handleEventCreation}
