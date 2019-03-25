@@ -76,7 +76,7 @@ export class FeatureAction {
     }
 
     if (this.event && this.calendarid) {
-      this.createEvent({data: this.event, calendarId: this.calendarid}).then(({ data }: { data: GoogleEvent }) => {
+      this.createEvent({ authId: this.authId, data: this.event, calendarId: this.calendarid}).then(({ data }: { data: GoogleEvent }) => {
         this.ui = InterfaceState.Authenticated;
         this.created.emit(data);
       }).catch(this.handleError)
@@ -109,7 +109,7 @@ export class FeatureAction {
   }
 
   handleEventCreation = (data) => {
-    this.createEvent({data: JSON.stringify(data), calendarId: this.selectedCalendar.id}).then(({ data }: { data: GoogleEvent }) => {
+    this.createEvent({ authId: this.authId, data: JSON.stringify(data), calendarId: this.selectedCalendar.id}).then(({ data }: { data: GoogleEvent }) => {
       this.ui = InterfaceState.Authenticated;
       this.created.emit(data);
     }).catch(this.handleError)
