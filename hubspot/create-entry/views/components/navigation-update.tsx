@@ -11,18 +11,34 @@ export class NavigationUpdate {
             switch (this.updateEntry.type) {
                 case 'deal':
                 case 'company':
-                    if (item.value) {
+                    if (item.value && this.entry.properties[item.name]) {
                         item.same = item.value === this.entry.properties[item.name].value;
                     }
                     break;
                 case 'contact':
-                    if (item.value) {
+                    if (item.value && this.entry.properties[item.property]) {
                         item.same = item.value === this.entry.properties[item.property].value;
                     }
                     break;
             }
         })
     }
+
+    handleInput = (e, name) => {
+        this.updateEntry.properties.map(item => {
+            if (item.name === name) {
+                item.value = e.target.value;
+            }
+        })
+    };
+
+    handleContactInput = (e, name) => {
+        this.updateEntry.properties.map(item => {
+            if (item.property === name) {
+                item.value = e.target.value;
+            }
+        })
+    };
 
     renderDealForm() {
         return (
@@ -33,8 +49,8 @@ export class NavigationUpdate {
                         <label>{prop.name}</label>
                     </div>
                     {prop.same ? <span>{this.entry.properties[prop.name].value}</span> : <div class="values">
-                        <span class="previous-value">{this.entry.properties[prop.name].value}</span>
-                        <span class="value">{prop.value}</span>
+                        {this.entry.properties[prop.name] ? <span class="previous-value">{this.entry.properties[prop.name].value}</span> : null}
+                        <input class="value" value={prop.value} onInput={event => this.handleInput(event, prop.name)}/>
                     </div>}
                 </div>
             ))
@@ -50,8 +66,8 @@ export class NavigationUpdate {
                         <label>{prop.name}</label>
                     </div>
                     {prop.same ? <span>{this.entry.properties[prop.name].value}</span> : <div class="values">
-                        <span class="previous-value">{this.entry.properties[prop.property].value}</span>
-                        <span class="value">{prop.value}</span>
+                        {this.entry.properties[prop.property] ? <span class="previous-value">{this.entry.properties[prop.property].value}</span> : null}
+                        <input class="value" value={prop.value} onInput={event => this.handleContactInput(event, prop.property)} />
                     </div>}
                 </div>
             ))
@@ -67,8 +83,8 @@ export class NavigationUpdate {
                         <label>{prop.name}</label>
                     </div>
                     {prop.same ? <span>{this.entry.properties[prop.name].value}</span> : <div class="values">
-                        <span class="previous-value">{this.entry.properties[prop.name].value}</span>
-                        <span class="value">{prop.value}</span>
+                        {this.entry.properties[prop.name] ? <span class="previous-value">{this.entry.properties[prop.name].value}</span> : null}
+                        <input class="value" value={prop.value} onInput={event => this.handleInput(event, prop.name)}/>
                     </div>}
                 </div>
             ))
