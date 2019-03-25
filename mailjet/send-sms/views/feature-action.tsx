@@ -116,13 +116,13 @@ export class FeatureAction {
         return (
             <div>
                 {!this.senderName && (
-                    <input type='tel' placeholder='Enter name' onChange={e => this.handleChange(e, 'senderName')} />
+                    <input class="input-styling" type='tel' placeholder='Enter name' onChange={e => this.handleChange(e, 'senderName')} />
                 )}
                 {!this.toNumber && (
-                    <input placeholder='Enter the recipient number' type='tel' onChange={e => this.handleChange(e, 'toNumber')} />
+                    <input class="input-styling" placeholder='+xx xxx xxx xxx' type='tel' onChange={e => this.handleChange(e, 'toNumber')} />
                 )}
                 {!this.messageBody && (
-                    <textarea placeholder='Enter message' onChange={e => this.handleChange(e, 'messageBody')} />
+                    <textarea class="textarea-styling" placeholder='Enter message' onChange={e => this.handleChange(e, 'messageBody')} />
                 )}
                 <bearer-button
                     kind='embed'

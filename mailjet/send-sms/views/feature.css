@@ -37,3 +37,33 @@ svg {
     color: #3e75c3;
     font-size: 1.2em;
 }
+
+.input-styling {
+    height: 40px;
+    width: 188px;
+    border: 1px solid #DCDFE8;
+    border-radius: 2px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px 0 rgba(3,13,54,0.06);
+    padding-left: 15px;
+    margin-right: 10px;
+}
+
+::placeholder {
+    height: 17px;
+    color: #9DA3BB;
+    font-size: 14px;
+    letter-spacing: 0.12px;
+    line-height: 17px;
+}
+
+.textarea-styling {
+    height: 40px;
+    width: 188px;
+    border: 1px solid #DCDFE8;
+    border-radius: 2px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px 0 rgba(3,13,54,0.06);
+    padding-left: 15px;
+    margin-right: 10px;
+}
