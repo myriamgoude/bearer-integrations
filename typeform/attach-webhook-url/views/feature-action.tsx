@@ -19,9 +19,6 @@ import Bearer, {
 import '@bearer/ui'
 import { Forms } from './types'
 
-import IconSettings from './icons/icon-settings'
-import IconClose from './icons/icon-close'
-
 export type TAuthorizedPayload = { authId: string }
 
 export enum InterfaceState {
@@ -161,59 +158,32 @@ export class FeatureAction {
       this.togglePopover()
     }
 
-    return (
-      <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
-        <icon-button
-          slot='popover-toggler'
-          onClick={this.togglePopover}
-          text={t('btn.main_action', 'Create a webhook')}
-        />
-        {this.renderWorkflow()}
-      </bearer-popover>
-    )
-  }
-
-  renderWorkflow = () => {
-    if (this.ui <= InterfaceState.Authenticated) {
-      return null
-    }
-
-    console.log(this.webhookUrl)
     if (!this.webhookUrl) {
-      this.ui = InterfaceState.Error
-      this.errorMessage = 'Webhook URL is not set'
-    }
+          this.ui = InterfaceState.Error
+          this.errorMessage = 'Webhook URL is not set'
+      }
 
-    const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
-    const subHeading = undefined
-    const handleBack = this.ui === InterfaceState.Settings && this.handleWorkflowBack
-    const handleClose = this.handleExternalClick
-    const handleMenu = this.handleMenu
+      const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
+      const handleBack = this.ui === InterfaceState.Settings && this.handleWorkflowBack
+      const handleClose = this.handleExternalClick
+      const handleMenu = this.handleMenu
 
-    return [
-      <div slot='popover-header'>
-        <div class='popover-header'>
-          {handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={handleBack} />}
-          <div class='popover-title'>
-            <h3>{heading}</h3>
-            {subHeading && <span class='popover-subtitle'>{subHeading}</span>}
-          </div>
-        </div>
-        <div class='popover-controls'>
-          {handleMenu && (
-            <button class='popover-control' onClick={handleMenu}>
-              <IconSettings />
-            </button>
-          )}
-          {handleClose && (
-            <button class='popover-control' onClick={handleClose}>
-              <IconClose />
-            </button>
-          )}
-        </div>
-      </div>,
-      <div style={{ width: '300px' }}>{this.renderWorkflowContent()}</div>
-    ]
+      return (
+          <popover-screen
+              ui={this.ui}
+              authId={this.authId}
+              heading={heading}
+              errorMessage={this.errorMessage}
+              items={this.formsData}
+              handleSearchQuery={this.handleSearchQuery}
+              handleBack={handleBack}
+              handleClose={handleClose}
+              handleMenu={handleMenu}
+              handlePopoverToggler={this.togglePopover}
+              handleItemSelection={this.attachWebhook}
+              handleRetry={this.handleRetry}
+          />
+      )
   }
 
   renderWorkflowContent = () => {
@@ -224,17 +194,17 @@ export class FeatureAction {
         return <connect-action authId={this.authId} text-authenticated='Logout' icon='ios-log-out' />
       case InterfaceState.Forms:
         const options =
-          this.formsSearchResults && this.formsSearchResults.length !== 0 ? this.formsSearchResults : this.formsData
+            this.formsSearchResults && this.formsSearchResults.length !== 0 ? this.formsSearchResults : this.formsData
         return (
-          <div>
-            <list-navigation
-              items={options}
-              attributeName={'title'}
-              onSearchHandler={this.handleSearchQuery}
-              onSubmitHandler={this.attachWebhook}
-              showNextIcon={true}
-            />
-          </div>
+            <div>
+              <list-navigation
+                  items={options}
+                  attributeName={'title'}
+                  onSearchHandler={this.handleSearchQuery}
+                  onSubmitHandler={this.attachWebhook}
+                  showNextIcon={true}
+              />
+            </div>
         )
     }
     return null

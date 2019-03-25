@@ -1,27 +1,26 @@
 {
-  "name": "slack-reminder",
+  "name": "send-sms",
   "version": "0.0.1",
-  "description": "SlackReminder",
+  "description": "SendSms",
   "main": "dist/index.js",
   "types": "dist/types/components.d.ts",
   "module": "dist/esm/index.js",
   "collection": "dist/collection/collection-manifest.json",
   "scripts": {
-    "start": "bearer start",
-    "test": "jest --no-cache",
     "push": "bearer push",
-    "invoke": "bearer invoke"
+    "start": "bearer start",
+    "invoke": "bearer invoke",
+    "generate": "bearer generate"
   },
   "dependencies": {
     "@bearer/core": "beta5",
     "@bearer/intents": "beta5",
     "@bearer/ui": "beta5",
-    "axios": "^0.18.0",
-    "ionicons": "^4.5.5"
+    "axios": "^0.18.0"
   },
   "devDependencies": {
     "@bearer/cli": "beta5",
-    "@types/node": "latest"
+    "@types/node": "^10.12.25"
   },
   "license": "MIT"
 }
