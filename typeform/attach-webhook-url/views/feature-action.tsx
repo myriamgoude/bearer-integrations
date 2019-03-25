@@ -123,7 +123,7 @@ export class FeatureAction {
   }
 
   attachWebhook = (form: Forms) => {
-    this.attachWebhookUrl({ formId: form.id, tag: this.tag, webhookUrl: this.webhookUrl })
+    this.attachWebhookUrl({ authId: this.authId, formId: form.id, tag: this.tag, webhookUrl: this.webhookUrl })
       .then(() => {
         this.forms = [form]
         if (this.autoClose) {
