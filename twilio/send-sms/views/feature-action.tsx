@@ -121,7 +121,7 @@ export class FeatureAction {
           <input placeholder='Enter the recipient number' type='tel' onChange={e => this.handleChange(e, 'toNumber')} />
         )}
         {!this.messageBody && (
-          <textarea placeholder='Enter message' onChange={e => this.handleChange(e, 'messageBody')} />
+          <textarea class="input-styling" placeholder='Enter message' onChange={e => this.handleChange(e, 'messageBody')} />
         )}
         <bearer-button
           kind='embed'
