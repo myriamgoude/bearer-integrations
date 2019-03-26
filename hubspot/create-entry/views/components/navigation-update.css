@@ -1,0 +1,27 @@
+.green-dot {
+    height: 6px;
+    width: 6px;
+    background-color: #0FE49B;
+    border-radius: 50%;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+}
+
+.previous-value {
+    padding: 0 8px;
+    text-decoration: line-through;
+}
+
+label {
+    font-weight: bold;
+    padding-left: 8px;
+}
