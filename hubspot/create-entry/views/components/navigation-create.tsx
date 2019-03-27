@@ -81,7 +81,7 @@ export class NavigationCreate {
                     <input required name="lastname" type="text" placeholder="Enter last name"/>
                 </div>
 
-                <div class="form-group">
+                <div class="long-form-group">
                     <label>Email</label>
                     <input required name="email" type="text" placeholder="Enter email"/>
                 </div>
@@ -101,9 +101,9 @@ export class NavigationCreate {
                     <input name="phone" type="text" placeholder="Enter phone number"/>
                 </div>
 
-                <div class="form-group">
+                <div class="long-form-group">
                     <label>Address</label>
-                    <input name="address" type="text" placeholder="Enter address"/>
+                    <input class="one-line-element" name="address" type="text" placeholder="Enter address"/>
                 </div>
 
                 <div class="form-group">
