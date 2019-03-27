@@ -151,18 +151,6 @@ export class NavigationCreate {
         )
     }
 
-    // handleChange(event, type) {
-    //     this.form[type] = event.target.value
-    // }
-    //
-    // onFocus(event, type) {
-    //     event.target.type = type;
-    // }
-    //
-    // onBlur(event, type) {
-    //     event.target.type = type;
-    // }
-
     render() {
         return [
             <form>

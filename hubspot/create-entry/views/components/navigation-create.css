@@ -15,21 +15,6 @@ ul.navigation-list {
     justify-content: space-between;
 }
 
-/*form-group > label {*/
-/*    height: 17px;*/
-/*    width: 32px;*/
-/*    color: #030D36;*/
-/*    font-size: 14px;*/
-/*    font-weight: 600;*/
-/*    letter-spacing: 0.17px;*/
-/*    line-height: 17px;*/
-/*}*/
-
-/*input, select {*/
-/*    width: 120px;*/
-/*}*/
-
-/*.select-bar {*/
 select {
     height: 17px;
     width: 130px;
@@ -43,19 +28,6 @@ select {
     font-weight: 600;
     background-color: white;
 }
-
-/*.label-input {*/
-/*    height: 17px;*/
-/*    width: 160.18px;*/
-/*    color: #6A7397;*/
-/*    font-size: 14px;*/
-/*    letter-spacing: 0.17px;*/
-/*    line-height: 17px;*/
-/*    text-align: right;*/
-/*    margin-bottom: 20px;*/
-/*    border: none;*/
-/*    font-weight: 600;*/
-/*}*/
 
 label {
     height: 17px;
