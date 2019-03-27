@@ -1,5 +1,6 @@
 .popover-header {
   display: flex;
+  align-items: baseline;
 }
 
 .popover-back-nav {
@@ -42,11 +43,11 @@
 }
 
 .popover-control:last-child {
-  margin-right: 8px;
+  padding-top: 0;
 }
 
 .popover-control > svg {
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .back {

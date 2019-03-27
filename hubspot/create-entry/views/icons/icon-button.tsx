@@ -1,5 +1,5 @@
 import { Component, Prop } from '@bearer/core'
-import IconProvider from './icon-google'
+import IconProvider from './icon-hubspot'
 
 @Component({
   tag: 'icon-button',
