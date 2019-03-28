@@ -22,10 +22,7 @@ li.navigation-item > label {
   flex: 1;
   cursor: pointer;
   justify-content: space-between;
-}
-
-li.navigation-item {
-  margin-bottom: 16px;
+  text-overflow: ellipsis;
 }
 
 li.navigation-item:last-child {
@@ -39,6 +36,8 @@ span.label {
   white-space: nowrap;
   text-overflow: ellipsis;
   color: #030d36;
+  margin-bottom: 20px;
+  width: auto;
 }
 
 span.date {
@@ -77,4 +76,7 @@ div.event-info {
 .navigation-submit {
   margin-top: 16px;
   text-align: right;
+}
+.path-position {
+  margin-top: 2px;
 }

@@ -10,7 +10,7 @@ export class NavigationList {
   @Prop() onSubmitted: any
   @Prop() onSaveClicked: any
 
-    @State() selectedFolder: File;
+  @State() selectedFolder: File;
 
   handleSubmit(selection: NavigationItem) {
     if (this.onSubmitted) {
@@ -35,6 +35,12 @@ export class NavigationList {
             <IconNoResults />
           </div>
           <span class='no-results-label'>{t('state.empty_results', 'No data found')}</span>
+            <div >
+                <bearer-button onClick={(event) => {
+                    this.handleSave(event)
+                }}>Create here
+                </bearer-button>
+            </div>
         </div>
       )
     }

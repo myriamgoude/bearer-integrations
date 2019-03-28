@@ -7,9 +7,11 @@ export class NavigationCreating {
     render() {
         return (
             <div class="create-container">
-                <span>Exporting data to</span>
-                <span><strong>{this.folder}</strong></span>
+                <span class="text-span">Exporting data to</span>
+                <span class="text-span"><strong>{this.folder}</strong></span>
+                <div class="loader-background">
                 <div class="loader"></div>
+                </div>
             </div>
         )
     }

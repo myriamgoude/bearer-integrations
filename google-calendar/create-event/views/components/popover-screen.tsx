@@ -66,10 +66,12 @@ export class PopoverScreen {
           text={this.calendarId ? p('btn.main_action', 0, 'Create event') : p('btn.main_action', 0, 'Show meetings')}
         />
         <div slot='popover-header'>
-          <div class='popover-header'>
-            {this.handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={this.handleBack} />}
+          <div {...{class : this.subHeading ? 'popover-header' : 'popover-header-no-sub'}} >
+            <div>{this.handleBack && <icon-chevron {...{class : this.subHeading ? 'popover-back-nav baseline-align' : 'popover-back-nav'}} direction='left' onClick={this.handleBack} />}</div>
             <div class='popover-title'>
+              <div>
               <h3>{this.heading}</h3>
+            </div>
             </div>
           </div>
           <div class='popover-controls'>

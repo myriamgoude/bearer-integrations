@@ -17,6 +17,7 @@ export class PopoverScreen {
   @Prop() heading: string
   @Prop() subHeading: string
   @Prop() errorMessage: string
+  @Prop() createSubHeading: string
 
   @Prop() items: NavigationItem[]
   @Prop() handleClose: any
@@ -48,7 +49,7 @@ export class PopoverScreen {
         return <navigation-error message={this.errorMessage} onRetry={this.handleRetry} />
 
       case InterfaceState.Creating:
-        return <navigation-creating folder={this.subHeading} />
+        return <navigation-creating folder={this.createSubHeading} />
 
       case InterfaceState.Success:
         return <navigation-success />
@@ -59,13 +60,18 @@ export class PopoverScreen {
   render() {
     return (
       <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
-        <icon-button slot='popover-toggler' onClick={this.handlePopoverToggler} text={'Export to Spreadsheet'} />
+        <icon-button
+            slot='popover-toggler'
+            onClick={this.handlePopoverToggler}
+            text={'Export to Spreadsheet'} />
         <div slot='popover-header'>
-          <div class='popover-header'>
-            {this.handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={this.handleBack} />}
+          <div {...{class : this.subHeading ? 'popover-header' : 'popover-header-no-sub'}} >
+            <div>{this.handleBack && <icon-chevron {...{class : this.subHeading ? 'popover-back-nav baseline-align' : 'popover-back-nav'}} direction='left' onClick={this.handleBack} />}</div>
             <div class='popover-title'>
+              <div>
               <h3>{this.heading}</h3>
               {this.subHeading && <span class='popover-subtitle'>{this.subHeading}</span>}
+            </div>
             </div>
           </div>
           <div class='popover-controls'>
