@@ -12,3 +12,4 @@ export type File = {
 export type TAuthSavedPayload = {
   authId: string
 }
+export type NavigationItem = File

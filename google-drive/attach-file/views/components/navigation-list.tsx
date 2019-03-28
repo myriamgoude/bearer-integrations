@@ -5,11 +5,11 @@ import IconNoResults from '../icons/icon-no-results'
 import IconPath from '../icons/icon-path'
 
 @Component({
-  tag: 'list-navigation',
+  tag: 'navigation-list',
   shadow: true,
-  styleUrl: 'list-navigation.css'
+  styleUrl: 'navigation-list.css'
 })
-export class ListNavigation {
+export class NavigationList {
   @Prop() items: any[] | undefined
   @Prop() showNextIcon: boolean = true
   @Prop() attributeName: string | undefined
@@ -94,7 +94,7 @@ export class ListNavigation {
               this.onSelectHandler(item)
             }}
           >
-            <span class='label'>{this.getLabel(item)}</span>
+            <span class='label'>{item.name}</span>
             {this.getNextArrow(item)}
           </li>
         ))}

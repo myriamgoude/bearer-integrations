@@ -21,9 +21,6 @@ import Bearer, {
 import '@bearer/ui'
 import { File } from './types'
 
-import IconSettings from './icons/icon-settings'
-import IconClose from './icons/icon-close'
-
 export type TAuthorizedPayload = { authId: string }
 
 export enum InterfaceState {
@@ -94,11 +91,15 @@ export class FeatureAction {
     this.selectedFolder = undefined
     this.errorMessage = undefined
     this.ui = InterfaceState.Folder
+    this.listData();
+  }
+
+  listData = () => {
     this.getData({ authId: this.authId })
-      .then(({ data }: { data: File[] }) => {
-        this.data = data
-      })
-      .catch(this.handleError)
+        .then(({ data }: { data: File[] }) => {
+          this.data = data
+        })
+        .catch(this.handleError)
   }
 
   handleSearchQuery = (query: string) => {
@@ -108,7 +109,7 @@ export class FeatureAction {
       query.length > 3 ? this.searchData({ authId: this.authId, query }) : this.getData({ authId: this.authId })
     req
       .then(({ data }: { data: File[] }) => {
-        this.filesSearchResults = data
+        this.data = data
       })
       .catch(this.handleError)
   }
@@ -155,10 +156,11 @@ export class FeatureAction {
   }
 
   fetchPreviousFolderData = () => {
+    this.ui = InterfaceState.Folder
     if (!this.selectedFolder || !this.selectedFolder.parents) {
       this.data = undefined
       this.filesSearchResults = undefined
-      this.ui = InterfaceState.Authenticated
+      this.listData();
       return
     }
     this.data = undefined
@@ -211,73 +213,29 @@ export class FeatureAction {
       this.handleAttachClick()
     }
 
-    return (
-      <bearer-popover opened={this.ui > InterfaceState.Authenticated}>
-        <icon-button slot='popover-toggler' onClick={this.handleAttachClick} text='Attach a file' />
-        {this.renderWorkflow()}
-      </bearer-popover>
-    )
-  }
-
-  renderWorkflow = () => {
-    if (this.ui <= InterfaceState.Authenticated) {
-      return null
-    }
-
     const heading = t(`headings.step-${this.ui}`, StateTitles[this.ui]) || ''
-    const subHeading =
-      this.selectedFolder && this.ui !== InterfaceState.Settings ? `From ${this.selectedFolder.name}` : undefined
-    const handleBack = this.rootFolder && subHeading && this.handleWorkflowBack
+    const subHeading = this.selectedFolder && this.ui !== InterfaceState.Settings ? `From ${this.selectedFolder.name}` : undefined
+    const handleBack = (this.rootFolder && subHeading && this.handleWorkflowBack) || (this.ui === InterfaceState.Settings && this.handleWorkflowBack)
     const handleClose = this.handleExternalClick
     const handleMenu = this.ui == InterfaceState.Settings ? undefined : this.handleMenu
 
-    return [
-      <div slot='popover-header'>
-        <div class='popover-header'>
-          {handleBack && <icon-chevron class='popover-back-nav' direction='left' onClick={handleBack} />}
-          <div class='popover-title'>
-            <h3>{heading}</h3>
-            {subHeading && <span class='popover-subtitle'>{subHeading}</span>}
-          </div>
-        </div>
-        <div class='popover-controls'>
-          {handleMenu && (
-            <button class='popover-control' onClick={handleMenu}>
-              <IconSettings />
-            </button>
-          )}
-          {handleClose && (
-            <button class='popover-control' onClick={handleClose}>
-              <IconClose />
-            </button>
-          )}
-        </div>
-      </div>,
-      <div style={{ width: '300px' }}>{this.renderWorkflowContent()}</div>
-    ]
-  }
-
-  renderWorkflowContent = () => {
-    switch (this.ui) {
-      case InterfaceState.Error:
-        return <error-message message={this.errorMessage} onRetry={this.handleRetry} />
-      case InterfaceState.Settings:
-        return <connect-action authId={this.authId} text-authenticated='Logout' icon='ios-log-out' />
-      case InterfaceState.Folder:
         return (
-          <div>
-            <list-navigation
-              items={this.filesSearchResults ? this.filesSearchResults : this.data}
-              attributeName={'name'}
-              showNextIcon={true}
-              onSelectHandler={this.handleItemSelect}
-              onSearchHandler={this.handleSearchQuery}
-              onBackHandler={this.handleWorkflowBack}
-            />
-          </div>
+    <popover-screen
+    ui={this.ui}
+    authId={this.authId}
+    heading={heading}
+    subHeading={subHeading}
+    errorMessage={this.errorMessage}
+    items={this.data}
+    handleSearchQuery={this.handleSearchQuery}
+    handleBack={handleBack}
+    handleClose={handleClose}
+    handleMenu={handleMenu}
+    handlePopoverToggler={this.handleAttachClick}
+    handleItemSelection={this.handleItemSelect}
+    handleRetry={this.handleRetry}
+    />
         )
-    }
-    return null
   }
 
   handleRemove = (file: File) => {
