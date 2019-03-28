@@ -111,8 +111,9 @@ export class FeatureAction {
     this.rootFolder = false
     this.items = undefined
 
-    this.searchData({ authId: this.authId, query })
-      .then(({ data }: { data: File[] }) => {
+    const req = query.length > 3 ? this.searchData({authId: this.authId, query}) : this.getData({ authId: this.authId})
+
+      req.then(({ data }: { data: File[] }) => {
         this.items = data
       })
       .catch(this.handleError)
@@ -182,6 +183,7 @@ export class FeatureAction {
 
     const parentFolder = this.path.length && this.path[this.path.length - 1]
     const subHeading = parentFolder && this.ui !== InterfaceState.Settings ? `From ${parentFolder.name}` : undefined
+    const handleBack = (parentFolder ? this.handleWorkflowBack : null) || (this.ui === InterfaceState.Settings && this.handleWorkflowBack)
 
     return (
       <popover-screen
@@ -192,7 +194,7 @@ export class FeatureAction {
         errorMessage={this.errorMessage}
         items={this.items}
         handleSearchQuery={this.handleSearchQuery}
-        handleBack={parentFolder ? this.handleWorkflowBack : null}
+        handleBack={handleBack}
         handleClose={this.handleExternalClick}
         handleMenu={this.ui == InterfaceState.Settings ? undefined : this.handleMenu}
         handlePopoverToggler={this.togglePopover}
