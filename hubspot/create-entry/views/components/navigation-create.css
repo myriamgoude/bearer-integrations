@@ -43,7 +43,7 @@ select {
     background-color: white;
 }
 
-label {
+.form-group > label {
     height: 17px;
     width: 120px;
     color: #030D36;
@@ -53,7 +53,17 @@ label {
     margin-bottom: 20px;
 }
 
-input {
+.long-form-group > label {
+    height: 17px;
+    width: 120px;
+    color: #030D36;
+    font-size: 14px;
+    letter-spacing: 0.17px;
+    line-height: 17px;
+    margin-bottom: 20px;
+}
+
+.form-group > input {
     height: 17px;
     width: 135px;
     color: #6A7397;
@@ -64,6 +74,21 @@ input {
     margin-bottom: 20px;
     border: none;
     font-weight: 600;
+    text-overflow: ellipsis;
+}
+
+.long-form-group > input {
+    height: 17px;
+    width: 100%;
+    color: #6A7397;
+    font-size: 14px;
+    letter-spacing: 0.17px;
+    line-height: 17px;
+    /*text-align: right;*/
+    margin-bottom: 20px;
+    border: none;
+    font-weight: 600;
+    text-overflow: ellipsis;
 }
 
 input::-webkit-outer-spin-button,

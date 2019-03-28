@@ -45,12 +45,12 @@ export class NavigationUpdate {
             this.updateEntry.properties.map(prop => (
                 <div class="content">
                     <div class="label">
-                        {prop.same ? null : <div class="green-dot"></div>}
-                        <label>{prop.name}</label>
+                        {prop.same ? <div class="white-dot"></div> : <div class="green-dot"></div>}
+                        <label class="capital-letter">{prop.name}</label>
                     </div>
                     {prop.same ? <span>{this.entry.properties[prop.name].value}</span> : <div class="values">
                         {this.entry.properties[prop.name] ? <span class="previous-value">{this.entry.properties[prop.name].value}</span> : null}
-                        <input class="value" value={prop.value} onInput={event => this.handleInput(event, prop.name)}/>
+                       <input placeholder="Enter new value" class="value" value={prop.value} onInput={event => this.handleInput(event, prop.name)}/>
                     </div>}
                 </div>
             ))
@@ -62,14 +62,15 @@ export class NavigationUpdate {
             this.updateEntry.properties.map(prop => (
                 <div class="content">
                     <div class="label">
-                        {prop.same ? null : <div class="green-dot"></div>}
-                        <label>{prop.name}</label>
+                        {prop.same ? <div class="white-dot"></div> : <div class="green-dot"></div>}
+                        <label class="capital-letter">{prop.name}</label>
                     </div>
                     {prop.same ? <span>{this.entry.properties[prop.name].value}</span> : <div class="values">
                         {this.entry.properties[prop.property] ? <span class="previous-value">{this.entry.properties[prop.property].value}</span> : null}
-                        <input class="value" value={prop.value} onInput={event => this.handleContactInput(event, prop.property)} />
+                        <input placeholder="Enter new value" class="value" value={prop.value} onInput={event => this.handleContactInput(event, prop.property)} />
                     </div>}
                 </div>
+                    // [prop.property]
             ))
         )
     }
@@ -79,12 +80,12 @@ export class NavigationUpdate {
             this.updateEntry.properties.map(prop => (
                 <div class="content">
                     <div class="label">
-                        {prop.same ? null : <div class="green-dot"></div>}
-                        <label>{prop.name}</label>
+                        {prop.same ? <div class="white-dot"></div> : <div class="green-dot"></div>}
+                        <label class="capital-letter">{prop.name}</label>
                     </div>
                     {prop.same ? <span>{this.entry.properties[prop.name].value}</span> : <div class="values">
                         {this.entry.properties[prop.name] ? <span class="previous-value">{this.entry.properties[prop.name].value}</span> : null}
-                        <input class="value" value={prop.value} onInput={event => this.handleInput(event, prop.name)}/>
+                        <input placeholder="Enter new value" class="value" value={prop.value} onInput={event => this.handleInput(event, prop.name)}/>
                     </div>}
                 </div>
             ))
@@ -105,6 +106,9 @@ export class NavigationUpdate {
     render() {
         this.compareEntry()
         return [this.renderContent(),
-        <bearer-button onClick={this.onSubmitted}>Update</bearer-button>]
+            <div class="btn-position">
+                <bearer-button onClick={this.onSubmitted}>Update</bearer-button>
+            </div>
+        ]
     }
 }

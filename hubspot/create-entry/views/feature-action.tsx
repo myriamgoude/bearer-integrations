@@ -29,7 +29,8 @@ const StateTitles = {
   [InterfaceState.Loading]: 'Loading...',
   [InterfaceState.Entry]: 'Create a new entry',
   [InterfaceState.Error]: 'Something went wrong',
-  [InterfaceState.Settings]: 'Settings'
+  [InterfaceState.Settings]: 'Settings',
+  [InterfaceState.Update]: 'Update entry'
 }
 
 @RootComponent({
