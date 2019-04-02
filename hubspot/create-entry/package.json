@@ -1,7 +1,7 @@
 {
-  "name": "google-calendar-list-event",
+  "name": "hubspot-create",
   "version": "0.0.1",
-  "description": "ListEvent",
+  "description": "HubspotCreate",
   "main": "dist/index.js",
   "types": "dist/types/components.d.ts",
   "module": "dist/esm/index.js",
