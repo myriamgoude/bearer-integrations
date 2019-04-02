@@ -1,7 +1,5 @@
 import { TOAUTH2AuthContext, FetchData, TFetchActionEvent, TFetchPromise } from '@bearer/intents'
-import Client from "./client";
-// Uncomment this line if you need to use Client
-// import Client from './client'
+import Client from "./client"
 
 export default class UpdateEntryIntent extends FetchData implements FetchData<ReturnedData, any, TOAUTH2AuthContext> {
   async action(event: TFetchActionEvent<Params, TOAUTH2AuthContext>): TFetchPromise<ReturnedData> {
