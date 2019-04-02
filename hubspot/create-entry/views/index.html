@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <link href="https://cdn.rawgit.com/tabler/tabler/dev/dist/assets/css/tabler.css" rel="stylesheet" />
+    <title>Hubspot create</title>
+    <script src="https://cdn.jsdelivr.net/npm/@bearer/js@next/lib/bearer.production.min.js"></script>
+    <script src="/build/localhost.js"></script>
+    <style>
+      * {
+        font-family: arial;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="page">
+      <div class="page-main">
+        <div class="header py-4">
+          <div class="container">
+            <div class="d-flex">
+              <a class="header-brand" href="#">
+                <img
+                  src="https://app.bearer.sh/static/media/logo.5b35e2ab.svg"
+                  class="header-brand-img"
+                  alt="Bearer Logo"
+                />
+              </a>
+              <div class="d-flex order-lg-2 ml-auto"></div>
+            </div>
+          </div>
+        </div>
+        <div class="my-3 my-md-5">
+          <div class="container">
+            <div class="page-header">
+              <h1 class="page-title">Setup component</h1>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <setup-action> </setup-action>
+                <hr />
+                <setup-display> </setup-display>
+              </div>
+            </div>
+            <div class="page-header">
+              <h1 class="page-title">Action component</h1>
+            </div>
+            <div class="card">
+
+              <select onchange="handleFormChange()" name="" id="typeSelect">
+                <option value="deal">Deal</option>
+                <option value="contact">Contact</option>
+                <option value="company">Company</option>
+              </select>
+
+              <form id="dealForm">
+                  <div class="list-item">
+                    <label>Deal name</label>
+                    <input name="dealname" type="text" value="Bearer" />
+                  </div>
+                  <div class="list-item">
+                    <label>Deal stage</label>
+                    <select required name="dealstage">
+                      <option value="appointmentscheduled">Appointment Scheduled</option>
+                      <option value="qualifiedtobuy">Qualified To Buy</option>
+                      <option value="presentationscheduled">Presentation Scheduled</option>
+                      <option value="decisionmakerboughtin">Decision Maker Bought-In</option>
+                      <option value="contractsent">Contract Sent</option>
+                      <option value="closedwon">Closed Won</option>
+                      <option value="closedlost">Closed Lost</option>
+                    </select>
+                  </div>
+                  <div class="list-item">
+                    <label>Amount</label>
+                    <input name="amount" type="number" value="" />
+                  </div>
+              </form>
+
+              <form id="contactForm" style="display: none">
+                <div class="list-item">
+                  <label>First Name</label>
+                  <input  name="firstname" type="text" value="Bearer" />
+                </div>
+                <div class="list-item">
+                  <label>Last Name</label>
+                  <input  name="lastname" type="text" value="" />
+                </div>
+                <div class="list-item">
+                  <label>Email</label>
+                  <input  name="email" type="text" value="" />
+                </div>
+                <div class="list-item">
+                  <label>Website</label>
+                  <input  name="website" type="text" value="" />
+                </div>
+                <div class="list-item">
+                  <label>Company</label>
+                  <input  name="company" type="text" value="Neoteric" />
+                </div>
+                <div class="list-item">
+                  <label>Address</label>
+                  <input name="address" type="text" value="" />
+                </div>
+                <div class="list-item">
+                  <label>City</label>
+                  <input name="city" type="text" value="" />
+                </div>
+              </form>
+
+              <form id="companyForm" style="display: none">
+                <div class="list-item">
+                  <label>Company name</label>
+                  <input  name="name" type="text" value="Bearer" />
+                </div>
+                <div class="list-item">
+                  <label>Description</label>
+                  <input  name="description" type="text" value="" />
+                </div>
+              </form>
+              <input id="entryId" type="text" placeholder="Entry ID" />
+              <button onclick="handleForm()">Save</button>
+
+              <script>
+                function handleForm() {
+                  const select = document.getElementById('typeSelect');
+                  const entryForm = document.getElementById(`${select.value}Form`);
+                  const entry = {properties: [], type: select.value};
+                  Object.values(entryForm).forEach(item => {
+                    if (select.value === 'contact') {
+                      entry.properties.push({
+                        property: item.name,
+                        value: item.value
+                      })
+                    } else {
+                      entry.properties.push({
+                        name: item.name,
+                        value: item.value
+                      })
+                    }
+                  });
+
+                  console.log(entry)
+                  console.log(JSON.stringify(entry))
+
+                  document.getElementById('featureAction').setAttribute('updateEntry', JSON.stringify(entry));
+                  document.getElementById('featureAction').setAttribute('entryId', document.getElementById('entryId').value);
+                }
+
+                function handleFormChange() {
+                  const select = document.getElementById('typeSelect');
+                  switch(select.value) {
+                    case 'deal':
+                      document.getElementById('dealForm').style.display = 'block';
+                      document.getElementById('contactForm').style.display = 'none';
+                      document.getElementById('companyForm').style.display = 'none';
+                      break;
+                    case 'contact':
+                      document.getElementById('dealForm').style.display = 'none';
+                      document.getElementById('contactForm').style.display = 'block';
+                      document.getElementById('companyForm').style.display = 'none';
+                      break;
+                    case 'company':
+                      document.getElementById('dealForm').style.display = 'none';
+                      document.getElementById('contactForm').style.display = 'none';
+                      document.getElementById('companyForm').style.display = 'block';
+                      break;
+                  }
+                }
+              </script>
+
+              <div class="card-body">
+                <connect-action setup-id="CHANGE_ME"></connect-action>
+                and/or
+                <feature-action id="featureAction" multi="true" setup-id="CHANGE_ME"> </feature-action>
+              </div>
+            </div>
+
+            <div class="page-header">
+              <h1 class="page-title">Display component</h1>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <feature-display setup-id="CHANGE_ME"> </feature-display>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+.green-dot {
+    height: 6px;
+    width: 6px;
+    background-color: #0FE49B;
+    border-radius: 50%;
+}
+
+.white-dot {
+    height: 6px;
+    width: 6px;
+    background-color: #FFFFFF;
+    border-radius: 50%;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+}
+
+.previous-value {
+    padding: 0 8px;
+    text-decoration: line-through;
+    line-height: 17px;
+    width: 110px;
+    text-overflow: ellipsis;
+    text-align: right;
+    overflow: hidden;
+    white-space:nowrap;
+}
+
+.content > label {
+    font-weight: normal;
+    height: 17px;
+    width: 120px;
+    color: #030D36;
+    font-size: 14px;
+    letter-spacing: 0.17px;
+    line-height: 17px;
+    margin-bottom: 0;
+}
+
+.values > input {
+    float: right;
+    text-align: right;
+    height: 17px;
+    width: 110px;
+    color: #6A7397;
+    font-size: 14px;
+    letter-spacing: 0.17px;
+    line-height: 17px;
+    border: none;
+    font-weight: 600;
+    margin-bottom: 0;
+    text-overflow: ellipsis;
+}
+
+.capital-letter {
+    text-transform: capitalize;
+    padding-left: 8px;
+    height: 17px;
+    color: #030D36;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.17px;
+    line-height: 17px;
+}
+
+.values {
+    width: 260px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-position {
+    float: right;
+    margin-top: -8px;
+}
+
+.value {
+    margin-bottom: 0;
+}
+
+::placeholder {
+    height: 17px;
+    width: 160.18px;
+    color: #C2C7DA;
+    font-size: 14px;
+    letter-spacing: 0.17px;
+    line-height: 17px;
+    text-align: right;
+    font-weight: normal;
+}
