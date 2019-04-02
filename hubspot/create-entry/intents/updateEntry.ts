@@ -13,8 +13,7 @@ export default class UpdateEntryIntent extends FetchData implements FetchData<Re
       promise = await Client(token, JSON.parse(body.data).type).put(body.id, JSON.parse(body.data));
     }
 
-    const { data } = promise;
-    // Put your logic here
+    const { data } = promise
     return { data }
   }
 }
