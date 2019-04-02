@@ -14,7 +14,6 @@ export default class FetchEntryIntent extends FetchData implements FetchData<Ret
     }
 
     const { data } = await Client(token, body.type).get(url);
-    // Put your logic here
     return { data }
   }
 }
