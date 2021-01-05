@@ -16,7 +16,7 @@
     "@bearer/core": "beta5",
     "@bearer/intents": "beta5",
     "@bearer/ui": "beta5",
-    "axios": "^0.18.0"
+    "axios": "^0.21.1"
   },
   "devDependencies": {
     "@bearer/cli": "beta5",
