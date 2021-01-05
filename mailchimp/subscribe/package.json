@@ -15,7 +15,7 @@
     "@bearer/core": "next",
     "@bearer/intents": "next",
     "@bearer/ui": "next",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "ionicons": "^4.5.5"
   },
   "devDependencies": {
